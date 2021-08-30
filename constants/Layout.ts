@@ -9,4 +9,6 @@ export default {
     height,
   },
   isSmallDevice: width < 375,
+  baseRadius: 4,
+  spacing: (x = 1) => x * 8,
 };
