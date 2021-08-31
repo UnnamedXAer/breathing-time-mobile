@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Text, View } from '../components/Themed';
+import { Text, View } from '../../components/Themed';
+import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 
-export default function TabTwoScreen() {
+export default function SummaryScreen({}: ExerciseStackScreenProps<'Summary'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Breathing Exercise</Text>
+      <Text style={styles.title}>Breathing Exercise - Summary</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

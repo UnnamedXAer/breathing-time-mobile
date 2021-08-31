@@ -2,11 +2,12 @@ import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
+import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 
-export default function TabTwoScreen() {
+export default function HoldingOutScreen({}: ExerciseStackScreenProps<'HoldingOut'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Breathing</Text>
+      <Text style={styles.title}>Holding Out</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

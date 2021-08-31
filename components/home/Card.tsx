@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'react-native';
 import Layout from '../../constants/Layout';
 
@@ -7,11 +7,12 @@ interface Props {
   label: string;
   helperLabel?: string;
   image: string;
+  onPress: (event: GestureResponderEvent) => void;
 }
 
-const Card: React.FC<Props> = ({ label, helperLabel, image }) => {
+const Card: React.FC<Props> = ({ label, helperLabel, image, onPress }) => {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image
         style={{
           width: 70,

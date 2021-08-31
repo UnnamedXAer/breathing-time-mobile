@@ -5,25 +5,24 @@ import Card from '../components/home/Card';
 
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
-import { RootTabScreenProps } from '../navigation/types';
+import { RootTabScreenProps } from '../navigation/bottomTab/types';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Card label="Breathing Exercise" image="../assets/icons/coughingAltSvg.svg" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
-        <Card label="Breathing Exercise" image="./non.img" />
+        <Card
+          label="Breathing Exercise"
+          image="../assets/icons/coughingAltSvg.svg"
+          onPress={() =>
+            navigation.navigate('BreathingExerciseStack', {
+              screen: 'Start',
+              params: {
+                someData: 123,
+              },
+            })
+          }
+        />
       </View>
     </ScrollView>
   );
