@@ -6,7 +6,7 @@ import { RootStackParamList } from '../types';
 
 export type RootTabParamList = {
   Home: undefined;
-  BreathingExerciseStack: NavigatorScreenParams<ExerciseStackParamList> | undefined;
+  Settings: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

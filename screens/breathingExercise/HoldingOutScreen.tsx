@@ -1,13 +1,24 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 
-export default function HoldingOutScreen({}: ExerciseStackScreenProps<'HoldingOut'>) {
+export default function HoldingOutScreen({
+  navigation,
+}: ExerciseStackScreenProps<'HoldingOut'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Holding Out</Text>
+      <Button
+        onPress={() =>
+          navigation.navigate('BreathingExerciseStack', {
+            screen: 'HoldingIn',
+          })
+        }
+        title="Holding In"
+      />
+
       <View
         style={styles.separator}
         lightColor="#eee"

@@ -6,6 +6,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootTabParamList } from './bottomTab/types';
+import { ExerciseStackParamList } from './exerciseStack/types';
 
 // declare global {
 //   namespace ReactNavigation {
@@ -17,6 +18,8 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
+  BreathingExerciseStack: NavigatorScreenParams<ExerciseStackParamList> | undefined;
+  BreathingInstruction: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

@@ -8,6 +8,8 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from './types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { RootBottomTabNavigator } from './bottomTab/BottomTab';
+import { BreathingExerciseStackNavigator } from './exerciseStack/ExerciseStack';
+import BreathingInstructionScreen from '../screens/BreathingInstructionScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -34,6 +36,18 @@ function RootNavigator() {
         component={RootBottomTabNavigator}
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+        name="BreathingExerciseStack"
+        component={BreathingExerciseStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="BreathingInstruction"
+        component={BreathingInstructionScreen}
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

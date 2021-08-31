@@ -23,6 +23,11 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
             })
           }
         />
+        <Card
+          label="Breathing Instruction"
+          image="../assets/icons/coughingAltSvg.svg"
+          onPress={() => navigation.navigate('BreathingInstruction')}
+        />
       </View>
     </ScrollView>
   );

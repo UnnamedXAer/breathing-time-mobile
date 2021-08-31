@@ -4,7 +4,9 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import useColorScheme from '../../hooks/useColorScheme';
+import BreathingInstructionScreen from '../../screens/BreathingInstructionScreen';
 import HomeScreen from '../../screens/HomeScreen';
+import SettingsScreen from '../../screens/SettingsScreen';
 import { BreathingExerciseStackNavigator } from '../exerciseStack/ExerciseStack';
 import { RootTabParamList, RootTabScreenProps } from './types';
 
@@ -22,6 +24,7 @@ export function RootBottomTabNavigator() {
       initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        // headerShown: false,
       }}
     >
       <BottomTab.Screen
@@ -29,7 +32,7 @@ export function RootBottomTabNavigator() {
         component={HomeScreen}
         options={({ navigation }: RootTabScreenProps<'Home'>) => ({
           title: 'Home',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate('Modal')}
@@ -48,13 +51,28 @@ export function RootBottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="dashboard" color={color} />,
+        }}
+      />
+      {/* <BottomTab.Screen
         name="BreathingExerciseStack"
         component={BreathingExerciseStackNavigator}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="asterisk" color={color} />,
         }}
       />
+      <BottomTab.Screen
+        name="BreathingInstruction"
+        component={BreathingInstructionScreen}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
+        }}
+      /> */}
     </BottomTab.Navigator>
   );
 }

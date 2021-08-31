@@ -21,6 +21,10 @@ export default function StartScreen({ navigation }: ExerciseStackScreenProps<'St
         }
         title="START"
       />
+      <Button
+        onPress={() => navigation.replace('BreathingInstruction')}
+        title="See Instructions"
+      />
     </View>
   );
 }
