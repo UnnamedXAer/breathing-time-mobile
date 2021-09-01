@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
+import { Button } from 'react-native';
 import Breathing from '../../screens/breathingExercise/BreathingScreen';
 import HoldingIn from '../../screens/breathingExercise/HoldingInScreen';
 import HoldingOut from '../../screens/breathingExercise/HoldingOutScreen';
@@ -12,11 +13,10 @@ const Stack = createNativeStackNavigator<ExerciseStackParamList>();
 export function BreathingExerciseStackNavigator() {
   return (
     <Stack.Navigator
-      screenOptions={
-        {
-          // headerShown: false,
-        }
-      }
+      screenOptions={{
+        // headerShown: false,
+        headerBackVisible: false,
+      }}
     >
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Breathing" component={Breathing} />
