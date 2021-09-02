@@ -22,7 +22,7 @@ import { TimeoutReturn } from '../../types/types';
 interface Props extends ExerciseStackScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
-  const countdownTime = 12313;
+  const countdownTime = 1;
   const [count, setCount] = useState(false);
   const interval = useRef<TimeoutReturn>(void 0);
   const [counter, setCounter, counterRef] = useStateAndRef(countdownTime);

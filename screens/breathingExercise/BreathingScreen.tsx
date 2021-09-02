@@ -1,18 +1,22 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
+import BreathingAnimation from './animation/BreathingAnimation';
 
 export default function BreathingScreen({}: ExerciseStackScreenProps<'Breathing'>) {
+  const dims = useWindowDimensions();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Breathing</Text>
+      <BreathingAnimation dims={dims} />
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
+      <Text style={styles.title}>Breathing</Text>
     </View>
   );
 }
