@@ -78,7 +78,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     if (!count) {
       if (interval.current) {
-        clearInterval(interval.current!);
+        clearInterval(interval.current);
         interval.current = void 0;
       }
       return;
@@ -91,7 +91,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
     interval.current = setInterval(() => {
       if (counterRef.current <= 0) {
-        clearInterval(interval.current!);
+        clearInterval(interval.current as NodeJS.Timer);
         interval.current = void 0;
 
         navigation.replace('Breathing');
@@ -103,7 +103,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
     return () => {
       if (interval.current) {
-        clearInterval(interval.current!);
+        clearInterval(interval.current);
         interval.current = void 0;
       }
     };

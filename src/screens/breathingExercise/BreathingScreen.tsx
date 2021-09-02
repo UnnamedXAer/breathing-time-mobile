@@ -1,12 +1,22 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import BreathingAnimation from './animation/BreathingAnimation';
 
-export default function BreathingScreen({}: ExerciseStackScreenProps<'Breathing'>) {
+export default function BreathingScreen({
+  navigation,
+}: ExerciseStackScreenProps<'Breathing'>) {
   const dims = useWindowDimensions();
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (counter >= 15) {
+      navigation.replace('HoldingOut');
+    }
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -4,10 +4,12 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 
-export default function HoldingInScreen({}: ExerciseStackScreenProps<'HoldingIn'>) {
+interface Props extends ExerciseStackScreenProps<'Summary'> {}
+
+export default function SummaryScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Holding In</Text>
+      <Text style={styles.title}>Breathing Exercise - Summary</Text>
       <View
         style={styles.separator}
         lightColor="#eee"

@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Card from '../components/home/Card';
 
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import Layout from '../constants/Layout';
 import { RootTabScreenProps } from '../navigation/bottomTab/types';
 

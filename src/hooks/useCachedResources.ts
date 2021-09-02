@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
+import { FontSource } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 
@@ -10,23 +11,24 @@ export default function useCachedResources() {
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
-        SplashScreen.preventAutoHideAsync();
+        void SplashScreen.preventAutoHideAsync();
 
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf') as FontSource,
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
       } finally {
         setLoadingComplete(true);
-        SplashScreen.hideAsync();
+        await SplashScreen.hideAsync();
       }
     }
 
-    loadResourcesAndDataAsync();
+    void loadResourcesAndDataAsync();
   }, []);
 
   return isLoadingComplete;

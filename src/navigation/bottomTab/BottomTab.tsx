@@ -2,12 +2,12 @@ import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Pressable } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
-import BreathingInstructionScreen from '../../screens/BreathingInstructionScreen';
+// import BreathingInstructionScreen from '../../screens/BreathingInstructionScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
-import { BreathingExerciseStackNavigator } from '../exerciseStack/ExerciseStack';
+// import { BreathingExerciseStackNavigator } from '../exerciseStack/ExerciseStack';
 import { RootTabParamList, RootTabScreenProps } from './types';
 
 /**
@@ -25,8 +25,7 @@ export function RootBottomTabNavigator() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         // headerShown: false,
-      }}
-    >
+      }}>
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
@@ -38,8 +37,7 @@ export function RootBottomTabNavigator() {
               onPress={() => navigation.navigate('Modal')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
-              })}
-            >
+              })}>
               <FontAwesome
                 name="info-circle"
                 size={25}

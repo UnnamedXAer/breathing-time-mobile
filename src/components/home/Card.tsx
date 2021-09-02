@@ -1,6 +1,12 @@
 import * as React from 'react';
-import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text } from 'react-native';
+import {
+  GestureResponderEvent,
+  Image,
+  ImageRequireSource,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { Text } from 'react-native';
 import Layout from '../../constants/Layout';
 
 interface Props {
@@ -11,6 +17,9 @@ interface Props {
 }
 
 const Card: React.FC<Props> = ({ label, helperLabel, image, onPress }) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const icon = require(image) as ImageRequireSource;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image
@@ -19,7 +28,7 @@ const Card: React.FC<Props> = ({ label, helperLabel, image, onPress }) => {
           height: 70,
           tintColor: 'red',
         }}
-        source={require('../../assets/images/adaptive-icon.png')}
+        source={icon}
       />
       <Text style={styles.label}>
         {label}

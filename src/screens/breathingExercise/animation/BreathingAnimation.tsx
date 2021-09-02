@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ViewStyle } from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Layout from '../../../constants/Layout';
 
 interface Props {
