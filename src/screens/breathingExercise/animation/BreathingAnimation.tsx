@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ViewStyle } from 'react-native';
 import { StyleSheet, View } from 'react-native';
 import Layout from '../../../constants/Layout';
@@ -11,12 +11,7 @@ interface Props {
 }
 
 const BreathingAnimation: React.FC<Props> = ({ dims }) => {
-  const dynamicContainer: ViewStyle = { width: 100 };
-
-  useEffect(() => {
-    dynamicContainer.width = dims.height;
-  }, []);
-
+  const dynamicContainer: ViewStyle = { width: dims.width, height: dims.height };
   return <View style={[styles.container, dynamicContainer]}></View>;
 };
 

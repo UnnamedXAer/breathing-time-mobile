@@ -11,7 +11,7 @@ import { Alert } from 'react-native';
 import { Button, StyleSheet } from 'react-native';
 import Counter from '../../components/Counter';
 
-import { Text, View } from '../../components/Themed';
+import { Text, View } from '../../components/ui/Themed';
 import useStateAndRef from '../../hooks/useStateAndRef';
 import {
   ExerciseStackParamList,

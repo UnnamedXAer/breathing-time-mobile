@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { Text, View } from '../../components/Themed';
+import { Text, View } from '../../components/ui/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 
 interface Props extends ExerciseStackScreenProps<'Summary'> {}

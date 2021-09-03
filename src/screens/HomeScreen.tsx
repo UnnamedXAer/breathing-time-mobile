@@ -3,7 +3,8 @@ import { ScrollView } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Card from '../components/home/Card';
 
-import { View } from '../components/Themed';
+import { View } from '../components/ui/Themed';
+import CoughingSvg from '../components/ui/icons/CoughingSvg';
 import Layout from '../constants/Layout';
 import { RootTabScreenProps } from '../navigation/bottomTab/types';
 
@@ -13,7 +14,6 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
       <View style={styles.container}>
         <Card
           label="Breathing Exercise"
-          image="../assets/icons/coughingAltSvg.svg"
           onPress={() =>
             navigation.navigate('BreathingExerciseStack', {
               screen: 'Start',
@@ -21,13 +21,14 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
                 someData: 123,
               },
             })
-          }
-        />
+          }>
+          <CoughingSvg />
+        </Card>
         <Card
           label="Breathing Instruction"
-          image="../assets/icons/coughingAltSvg.svg"
-          onPress={() => navigation.navigate('BreathingInstruction')}
-        />
+          onPress={() => navigation.navigate('BreathingInstruction')}>
+          <CoughingSvg />
+        </Card>
       </View>
     </ScrollView>
   );
