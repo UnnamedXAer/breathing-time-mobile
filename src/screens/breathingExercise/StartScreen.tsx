@@ -1,23 +1,14 @@
-import {
-  EventListenerCallback,
-  EventMapCore,
-  StackNavigationState,
-} from '@react-navigation/native';
-import { NativeStackNavigationEventMap } from '@react-navigation/native-stack/lib/typescript/src/types';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useRef, useState } from 'react';
-import { Alert } from 'react-native';
-import { Button, StyleSheet } from 'react-native';
+import AppButton from '../../components/ui/Button';
 import Counter from '../../components/Counter';
 
-import { Text, View } from '../../components/ui/Themed';
+import { Text } from '../../components/ui/Themed';
 import useStateAndRef from '../../hooks/useStateAndRef';
-import {
-  ExerciseStackParamList,
-  ExerciseStackScreenProps,
-} from '../../navigation/exerciseStack/types';
+import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import { TimeoutReturn } from '../../types/types';
+import { StyleSheet, View } from 'react-native';
 
 interface Props extends ExerciseStackScreenProps<'Start'> {}
 
@@ -26,54 +17,6 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   const [count, setCount] = useState(false);
   const interval = useRef<TimeoutReturn>(void 0);
   const [counter, setCounter, counterRef] = useStateAndRef(countdownTime);
-
-  useEffect(() => {
-    if (!count) {
-      return;
-    }
-
-    const cb: EventListenerCallback<
-      NativeStackNavigationEventMap &
-        EventMapCore<StackNavigationState<ExerciseStackParamList>>,
-      'beforeRemove'
-    > = (ev) => {
-      if (
-        ((ev.data.action.payload as { name: string } | undefined)?.name as string) ===
-        'Breathing'
-      ) {
-        return;
-      }
-
-      if (!count) {
-        return;
-      }
-
-      setCount(false);
-      ev.preventDefault();
-
-      Alert.alert('Warning!', 'Cancel Exercise?', [
-        {
-          text: 'Yes',
-          onPress: () => {
-            navigation.dispatch(ev.data.action);
-          },
-        },
-        {
-          text: 'No',
-          style: 'cancel',
-          onPress: () => {
-            setCount(true);
-          },
-        },
-      ]);
-    };
-
-    navigation.addListener('beforeRemove', cb);
-
-    return () => {
-      navigation.removeListener('beforeRemove', cb);
-    };
-  }, [navigation, count]);
 
   useEffect(() => {
     if (!count) {
@@ -94,7 +37,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
         clearInterval(interval.current as NodeJS.Timer);
         interval.current = void 0;
 
-        navigation.replace('Breathing');
+        navigation.navigate('Breathing');
 
         return;
       }
@@ -107,7 +50,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
         interval.current = void 0;
       }
     };
-  }, [count]);
+  }, [count, counterRef, navigation, setCounter]);
 
   const startExercise = () => {
     setCounter((v) => v - 1);
@@ -116,34 +59,45 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Breathing Exercise - Start</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <View style={styles.titleWrapper}>
+        <Text style={styles.title}>Breathing Exercise - Start</Text>
+      </View>
 
-      {counter === countdownTime ? (
-        <View>
-          <Button onPress={startExercise} title="START" />
-          <Button
-            onPress={() => navigation.replace('BreathingInstruction')}
-            title="See Instructions"
-          />
-        </View>
-      ) : (
-        <Counter text="Get Ready!" value={counter ? counter : 'Go'} />
-      )}
+      <View>
+        {counter === countdownTime ? (
+          <View>
+            <AppButton
+              onPress={startExercise}
+              title="START"
+              size="large"
+              mode="contained"
+            />
+          </View>
+        ) : (
+          <Counter text="Get Ready!" value={counter ? counter : 'Go'} />
+        )}
+      </View>
+      <View>
+        <AppButton
+          onPress={() => navigation.replace('BreathingInstruction')}
+          size="small"
+          mode="text"
+          title="See Instructions"
+        />
+      </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
+  pressable: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
+  titleWrapper: {},
   title: {
     fontSize: 20,
     fontWeight: 'bold',

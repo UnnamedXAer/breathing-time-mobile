@@ -60,7 +60,7 @@ export default function Button({
 
   const styles = StyleSheet.create({
     touchable: {
-      borderRadius: Layout.baseRadius * 2,
+      borderRadius: 2,
       borderColor: borderColor,
       backgroundColor: mode === 'contained' ? borderColor : undefined,
       borderWidth: 1,

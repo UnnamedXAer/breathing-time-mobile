@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import AppButton from '../../components/ui/Button';
 
 import { Text, View } from '../../components/ui/Themed';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
@@ -14,6 +15,13 @@ export default function SummaryScreen({ navigation }: Props) {
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
+      />
+
+      <AppButton
+        title="Home"
+        onPress={() => {
+          navigation.navigate('Root', { screen: 'Home' });
+        }}
       />
     </View>
   );

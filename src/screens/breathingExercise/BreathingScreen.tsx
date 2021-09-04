@@ -1,49 +1,71 @@
-import { EventListenerCallback, EventMapCore } from '@react-navigation/core';
-import { NativeStackNavigationEventMap } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { StackNavigationState } from '@react-navigation/routers';
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Pressable, StyleSheet, Switch, useWindowDimensions } from 'react-native';
+import { useIsFocused } from '@react-navigation/core';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Pressable, StyleSheet, Switch, useWindowDimensions, View } from 'react-native';
 
-import { Text, View } from '../../components/ui/Themed';
+import { Text } from '../../components/ui/Themed';
 import setIntervalWithTimeout from '../../helpers/setInterval';
-import {
-  ExerciseStackParamList,
-  ExerciseStackScreenProps,
-} from '../../navigation/exerciseStack/types';
+import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
+import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import BreathingAnimation from './animation/BreathingAnimation';
 
-const breathsPerRound = 15;
-const breathTime = 1000;
+let lastPressedAt = 0;
+
+// mocked values
+const breathsPerRound = 3;
+const breathTime = 1400;
+
 export default function BreathingScreen({
   navigation,
 }: ExerciseStackScreenProps<'Breathing'>) {
   const dims = useWindowDimensions();
-  const [counter, setCounter] = useState(0);
   const [disableAnimation, setDisableAnimation] = useState(false);
+  const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
-
+  const [userForcedNextStep, setUserForcedNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
+  const focused = useIsFocused();
+  useAskBeforeLeave(focused, navigation as any);
+  useOverrideHardwareBack(navigation as any);
 
   if (counter >= breathsPerRound && !nextStep) {
     setNextStep(true);
   }
 
+  const completeScreen = useCallback(() => {
+    __devCheckActualBreathingTime(startIntervalTime.current, counter, breathTime);
+    startIntervalTime.current = -1;
+    navigation.navigate('HoldingOut');
+  }, [counter, navigation]);
+
+  useEffect(() => {
+    if (!focused) {
+      startIntervalTime.current = -1;
+      setCounter(0);
+      setUserForcedNextStep(false);
+      setNextStep(false);
+    }
+  }, [focused]);
+
   useEffect(() => {
     if (!nextStep) {
       return;
     }
-    const timeout = setTimeout(() => {
-      console.log((Date.now() - startIntervalTime.current) / 1000, counter);
-      navigation.replace('HoldingOut');
-    }, breathTime);
+
+    if (userForcedNextStep) {
+      completeScreen();
+      return;
+    }
+
+    const timeout = setTimeout(completeScreen, breathTime);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [navigation, nextStep, counter]);
+  }, [completeScreen, nextStep, userForcedNextStep]);
 
   useEffect(() => {
-    if (nextStep) {
+    if (nextStep || !focused) {
       return;
     }
 
@@ -57,69 +79,42 @@ export default function BreathingScreen({
     return () => {
       interval.clear();
     };
-  }, [nextStep]);
+  }, [focused, nextStep]);
 
-  useEffect(() => {
-    const callback: EventListenerCallback<
-      NativeStackNavigationEventMap &
-        EventMapCore<StackNavigationState<ExerciseStackParamList>>,
-      'beforeRemove'
-    > = (ev) => {
-      if (
-        ((ev.data.action.payload as { name: string } | undefined)?.name as string) ===
-        'HoldingOut'
-      ) {
-        return;
-      }
+  const screenPressHandler = () => {
+    if (Date.now() - lastPressedAt <= 500) {
+      setNextStep(true);
+      setUserForcedNextStep(true);
+      return;
+    }
 
-      ev.preventDefault();
-
-      Alert.alert('Warning!', 'Cancel Exercise?', [
-        {
-          text: 'Yes',
-          onPress: () => {
-            navigation.dispatch(ev.data.action);
-          },
-        },
-        {
-          text: 'No',
-          style: 'cancel',
-          onPress: () => {},
-        },
-      ]);
-    };
-
-    navigation.addListener('beforeRemove', callback);
-
-    return () => {
-      navigation.removeListener('beforeRemove', callback);
-    };
-  }, [navigation]);
+    lastPressedAt = Date.now();
+  };
 
   return (
-    <Pressable style={styles.container} onPress={() => setNextStep(true)}>
-      <Switch
-        value={disableAnimation}
-        onChange={() => setDisableAnimation((prev) => !prev)}
-      />
-      <Text style={styles.title}>Tap twice to go to the next phase.</Text>
-      <BreathingAnimation dims={dims} />
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <Text style={styles.title}>Breathing</Text>
-      <Text style={styles.title}>{counter}</Text>
+    <Pressable style={styles.pressable} onPress={screenPressHandler}>
+      <View style={styles.container}>
+        <Switch
+          value={disableAnimation}
+          onChange={() => setDisableAnimation((prev) => !prev)}
+        />
+        <Text style={styles.title}>Tap twice to go to the next phase.</Text>
+        <BreathingAnimation dims={dims} />
+        <Text style={styles.title}>Breathing</Text>
+        <Text style={styles.title}>{counter}</Text>
+      </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  pressable: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 20,
@@ -131,3 +126,73 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
+function __devCheckActualBreathingTime(
+  startIntervalTime: number,
+  counter: number,
+  breathTime: number,
+) {
+  if (__DEV__) {
+    const realTime = (Date.now() - startIntervalTime) / 1000;
+    const counterTime = ((counter + 1) * breathTime) / 1000;
+
+    console.log('(->', realTime, '|', counterTime, '|', counter);
+    if (realTime - counterTime >= 1) {
+      const msg = `
+		Actual screen time is greater than counter time for more than 1s.
+		breathsPerRound: ${breathsPerRound} (+ final timeout)
+		breathTime: ${breathTime};
+		counter: ${counter};
+		startTime: ${startIntervalTime}
+		realTime: ${realTime};
+		counterTime: ${counterTime};
+		difference: ${realTime - counterTime};
+		---------------------------------------`;
+      console.warn(msg);
+    }
+  }
+}
+
+//   useEffect(
+//     () => beforeRemoveUseEffectCallback(focused, navigation as any),
+//     [focused, navigation],
+//   );
+
+// const beforeRemoveUseEffectCallback: BeforeRemoveCallback = (focused, navigation) => {
+//   console.log('beforeRemoveUseEffectCallback');
+
+//   if (!focused) {
+//     return;
+//   }
+
+//   const callback = (ev: BeforeRemoveEvent) => {
+//     ev.preventDefault();
+
+//     Alert.alert('Warning!', 'Cancel Exercise?', [
+//       {
+//         text: 'Yes',
+//         style: 'destructive',
+//         onPress: () => {
+//           console.log('accepted');
+//           navigation.dispatch(ev.data.action);
+//         },
+//       },
+//       {
+//         text: 'No',
+//         style: 'cancel',
+//         onPress: () => {},
+//       },
+//     ]);
+//   };
+
+//   navigation.addListener('beforeRemove', callback);
+
+//   return () => {
+//     navigation.removeListener('beforeRemove', callback);
+//   };
+// };
+
+// type BeforeRemoveCallback = (
+//   focused: boolean,
+//   navigation: RootStackScreenProps<keyof RootStackParamList>['navigation'],
+// ) => (() => void) | undefined;

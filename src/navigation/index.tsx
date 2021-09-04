@@ -41,12 +41,12 @@ function RootNavigator() {
         component={BreathingExerciseStackNavigator}
         options={{ headerShown: false }}
       />
+
       <Stack.Screen
         name="BreathingInstruction"
         component={BreathingInstructionScreen}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

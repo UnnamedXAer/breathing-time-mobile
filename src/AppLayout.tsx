@@ -13,7 +13,7 @@ export default function AppLayout() {
   const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
-    return <ActivityIndicator color={Colors.primary} />;
+    return null; // <ActivityIndicator color={Colors.primary} />;
   } else {
     return (
       <SafeAreaProvider>

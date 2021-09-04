@@ -9,9 +9,7 @@ export class TimeoutHandler {
   }
 
   clear() {
-    const h = this.handlerRef.id;
     clearTimeout(this.handlerRef.id as NodeJS.Timer);
-    console.log('interval cleared', h);
   }
 }
 
@@ -32,7 +30,6 @@ export default function setIntervalWithTimeout(
         });
       }
     }, intervalMs);
-    console.log('interval scheduled', handleWrapper.handler);
   };
   timeout();
   return handleWrapper;
