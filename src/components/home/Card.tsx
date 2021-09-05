@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { GestureResponderEvent, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text } from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
+import { Text } from '../ui/Themed';
 
 interface Props {
   label: string;

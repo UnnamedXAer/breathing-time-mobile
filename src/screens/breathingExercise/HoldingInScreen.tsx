@@ -1,8 +1,11 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import Footer from '../../components/breathingExercise/Footer';
+import Counter from '../../components/Counter';
 
 import { Text } from '../../components/ui/Themed';
+import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
@@ -82,19 +85,14 @@ export default function HoldingInScreen({
           <Text style={styles.title}>
             - the stop breathing phase until strong urge to breath.
           </Text>
+          {isLastRound && <Text style={styles.title}>This is the final round.</Text>}
         </View>
-        {/* <Separator /> */}
-        <View>
-          <Text style={styles.title}>{counter}</Text>
-        </View>
-        {/* <Separator /> */}
-        <View>
-          <Text>This is last round.</Text>
-          <Text>
-            To it skip to {isLastRound ? 'the summary screen' : 'next round'} tap twice on
-            the screen.
-          </Text>
-        </View>
+        <Counter value={counter} />
+
+        <Footer
+          text={`To it skip to ${
+            isLastRound ? 'the summary screen' : 'next round'
+          } tap twice on the screen.`}></Footer>
       </View>
     </Pressable>
   );

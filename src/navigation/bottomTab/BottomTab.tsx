@@ -4,10 +4,8 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
-// import BreathingInstructionScreen from '../../screens/BreathingInstructionScreen';
 import HomeScreen from '../../screens/HomeScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
-// import { BreathingExerciseStackNavigator } from '../exerciseStack/ExerciseStack';
 import { RootTabParamList, RootTabScreenProps } from './types';
 
 /**
@@ -22,8 +20,11 @@ export function RootBottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
+      sceneContainerStyle={{
+        backgroundColor: Colors[colorScheme].background,
+      }}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: Colors.primary,
         // headerShown: false,
       }}>
       <BottomTab.Screen
@@ -56,21 +57,6 @@ export function RootBottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="dashboard" color={color} />,
         }}
       />
-      {/* <BottomTab.Screen
-        name="BreathingExerciseStack"
-        component={BreathingExerciseStackNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="asterisk" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="BreathingInstruction"
-        component={BreathingInstructionScreen}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
-        }}
-      /> */}
     </BottomTab.Navigator>
   );
 }

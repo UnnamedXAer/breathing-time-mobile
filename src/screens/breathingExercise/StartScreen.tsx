@@ -9,11 +9,12 @@ import useStateAndRef from '../../hooks/useStateAndRef';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import { TimeoutReturn } from '../../types/types';
 import { StyleSheet, View } from 'react-native';
+import Layout from '../../constants/Layout';
 
 interface Props extends ExerciseStackScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
-  const countdownTime = 1;
+  const countdownTime = 11;
   const [count, setCount] = useState(false);
   const interval = useRef<TimeoutReturn>(void 0);
   const [counter, setCounter, counterRef] = useStateAndRef(countdownTime);
@@ -59,29 +60,30 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Breathing Exercise - Start</Text>
-      </View>
-
-      <View>
+      <View style={styles.content}>
         {counter === countdownTime ? (
-          <View>
+          <View style={styles.startBtnWrapper}>
             <AppButton
               onPress={startExercise}
               title="START"
               size="large"
               mode="contained"
+              scale={1.6}
             />
           </View>
         ) : (
-          <Counter text="Get Ready!" value={counter ? counter : 'Go'} />
+          <Counter
+            text="Get Ready!"
+            value={counter > 0 ? counter : 'Go'}
+            fontSize={Layout.window.height * 0.15}
+          />
         )}
       </View>
-      <View>
+      <View style={styles.footer}>
         <AppButton
           onPress={() => navigation.replace('BreathingInstruction')}
           size="small"
-          mode="text"
+          mode="outlined"
           title="See Instructions"
         />
       </View>
@@ -97,15 +99,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  titleWrapper: {},
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  content: {
+    flex: 1,
+    justifyContent: 'center',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  startBtnWrapper: {
+    paddingBottom: Layout.window.height * 0.2,
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  footer: {
+    marginBottom: Layout.spacing(),
   },
 });
 

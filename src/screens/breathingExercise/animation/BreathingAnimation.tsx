@@ -11,8 +11,15 @@ interface Props {
 }
 
 const BreathingAnimation: React.FC<Props> = ({ dims }) => {
-  const dynamicContainer: ViewStyle = { width: dims.width, height: dims.height };
-  return <View style={[styles.container, dynamicContainer]}></View>;
+  const dynamicContainer: ViewStyle = {
+    width: dims.width * 0.5,
+    height: dims.width * 0.5,
+  };
+  return (
+    <View>
+      <View style={[styles.container, dynamicContainer]}></View>
+    </View>
+  );
 };
 
 export default BreathingAnimation;
@@ -25,5 +32,6 @@ const styles = StyleSheet.create({
     height: Layout.window.height * 0.4,
     borderColor: '#ccc',
     borderWidth: 1,
+    backgroundColor: 'rgb(245,245,245)',
   },
 });

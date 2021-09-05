@@ -12,7 +12,7 @@ const _colors = {
 export default {
   primary: 'rgb(1, 77, 77)',
   light: {
-    text: '#121212',
+    text: 'rgb(18, 18, 18)',
     background: 'rgb(253, 253, 253)',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
@@ -20,7 +20,7 @@ export default {
   },
   dark: {
     text: 'rgb(253, 253, 253)',
-    background: '#121212',
+    background: 'rgb(18, 18, 18)',
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,

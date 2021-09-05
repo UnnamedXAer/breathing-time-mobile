@@ -20,6 +20,7 @@ interface Props {
   mode?: ButtonMode;
   error?: boolean;
   color?: string;
+  scale?: number;
 }
 
 export default function Button({
@@ -32,6 +33,7 @@ export default function Button({
   size = 'medium',
   error,
   color,
+  scale,
 }: Props) {
   let colorScheme = useColorScheme();
   if (theme) {
@@ -41,7 +43,7 @@ export default function Button({
   const fontSize = Layout.spacing(size === 'medium' ? 3 : size === 'small' ? 2 : 4);
 
   let borderColor = 'transparent';
-  if (disabled) {
+  if (disabled && mode !== 'text') {
     borderColor = Colors.colors.disabled;
   } else if (error) {
     borderColor = Colors.colors.error;
@@ -58,11 +60,13 @@ export default function Button({
     textColor = Colors[colorScheme].background;
   }
 
+  const backgroundColor = mode === 'contained' ? borderColor : undefined;
+
   const styles = StyleSheet.create({
     touchable: {
       borderRadius: 2,
-      borderColor: borderColor,
-      backgroundColor: mode === 'contained' ? borderColor : undefined,
+      borderColor,
+      backgroundColor,
       borderWidth: 1,
       padding: Layout.spacing(size === 'small' ? 0.5 : 1),
       margin: Layout.spacing(),
@@ -73,6 +77,7 @@ export default function Button({
       },
       shadowOpacity: 0.6,
       // elevation: 5,
+      transform: scale ? [{ scale }] : undefined,
     },
     container: {
       marginHorizontal: Layout.spacing(),
@@ -107,7 +112,7 @@ export default function Button({
       <View style={styles.container}>
         {loading && (
           <View style={styles.iconContainer}>
-            <ActivityIndicator color={Colors[colorScheme].text} size={fontSize} />
+            <ActivityIndicator color={textColor} size={fontSize} />
           </View>
         )}
         {title && (

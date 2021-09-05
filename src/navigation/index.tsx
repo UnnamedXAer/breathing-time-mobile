@@ -1,7 +1,6 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
 
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -10,13 +9,15 @@ import LinkingConfiguration from './LinkingConfiguration';
 import { RootBottomTabNavigator } from './bottomTab/BottomTab';
 import { BreathingExerciseStackNavigator } from './exerciseStack/ExerciseStack';
 import BreathingInstructionScreen from '../screens/BreathingInstructionScreen';
+import Colors from '../constants/Colors';
+import { ColorSchemeName } from '../hooks/useColorScheme';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
+      <RootNavigator colorScheme={colorScheme} />
     </NavigationContainer>
   );
 }
@@ -27,9 +28,14 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: Colors[colorScheme].background,
+        },
+      }}>
       <Stack.Screen
         name="Root"
         component={RootBottomTabNavigator}

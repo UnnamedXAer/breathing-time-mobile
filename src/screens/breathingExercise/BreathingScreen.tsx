@@ -1,8 +1,12 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Switch, useWindowDimensions, View } from 'react-native';
+import Footer from '../../components/breathingExercise/Footer';
+import Counter from '../../components/Counter';
 
 import { Text } from '../../components/ui/Themed';
+import Colors from '../../constants/Colors';
+import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
@@ -12,14 +16,13 @@ import BreathingAnimation from './animation/BreathingAnimation';
 let lastPressedAt = 0;
 
 // mocked values
-const breathsPerRound = 3;
+const breathsPerRound = 312;
 const breathTime = 1400;
 
 export default function BreathingScreen({
   navigation,
 }: ExerciseStackScreenProps<'Breathing'>) {
   const dims = useWindowDimensions();
-  const [disableAnimation, setDisableAnimation] = useState(false);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
@@ -94,14 +97,15 @@ export default function BreathingScreen({
   return (
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
-        <Switch
-          value={disableAnimation}
-          onChange={() => setDisableAnimation((prev) => !prev)}
-        />
-        <Text style={styles.title}>Tap twice to go to the next phase.</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>Breathing Phase</Text>
+        </View>
+
         <BreathingAnimation dims={dims} />
-        <Text style={styles.title}>Breathing</Text>
-        <Text style={styles.title}>{counter}</Text>
+
+        <Counter value={counter} />
+
+        <Footer text="Tap twice on the screen to go to the next phase."></Footer>
       </View>
     </Pressable>
   );
@@ -116,14 +120,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  header: {},
   title: {
-    fontSize: 20,
+    fontSize: Layout.spacing(4),
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    textAlign: 'center',
   },
 });
 
