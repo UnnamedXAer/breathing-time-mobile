@@ -3,9 +3,6 @@ import { useEffect } from 'react';
 import { useRef, useState } from 'react';
 import AppButton from '../../components/ui/Button';
 import Counter from '../../components/Counter';
-
-import { Text } from '../../components/ui/Themed';
-import useStateAndRef from '../../hooks/useStateAndRef';
 import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import { TimeoutReturn } from '../../types/types';
 import { StyleSheet, View } from 'react-native';
@@ -14,54 +11,60 @@ import Layout from '../../constants/Layout';
 interface Props extends ExerciseStackScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
-  const countdownTime = 11;
+  const countdownTime = 0;
   const [count, setCount] = useState(false);
-  const interval = useRef<TimeoutReturn>(void 0);
-  const [counter, setCounter, counterRef] = useStateAndRef(countdownTime);
+  const timeoutRef = useRef<TimeoutReturn>(void 0);
+  const lastTick = useRef(0);
+  const [counter, setCounter] = useState(countdownTime);
+  const [started, setStarted] = useState(false);
+  const startTime = useRef(Date.now());
+
+  useEffect(() => {
+    if (started && counter <= 0) {
+      setCount(false);
+      const timeout = setTimeout(() => {
+        navigation.replace('Breathing');
+      }, 999);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [counter, navigation, started]);
 
   useEffect(() => {
     if (!count) {
-      if (interval.current) {
-        clearInterval(interval.current);
-        interval.current = void 0;
-      }
       return;
     }
+    let tm = 998;
+    const decrement = () => {
+      tm = 2000 - (Date.now() - lastTick.current);
+      if (tm > 1020) tm = 1020;
+      else if (tm < 980) tm = 980;
+      timeoutRef.current = setTimeout(decrement, tm);
+      lastTick.current = Date.now();
+      setCounter((c) => c - 1);
+    };
 
-    if (interval.current) {
-      console.log('trying to set interval while already counting');
-      return;
-    }
-
-    interval.current = setInterval(() => {
-      if (counterRef.current <= 0) {
-        clearInterval(interval.current as NodeJS.Timer);
-        interval.current = void 0;
-
-        navigation.navigate('Breathing');
-
-        return;
-      }
-      setCounter((v) => v - 1);
-    }, 1000);
+    lastTick.current = startTime.current = Date.now();
+    timeoutRef.current = setTimeout(decrement, tm);
 
     return () => {
-      if (interval.current) {
-        clearInterval(interval.current);
-        interval.current = void 0;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = void 0;
       }
     };
-  }, [count, counterRef, navigation, setCounter]);
+  }, [count]);
 
   const startExercise = () => {
-    setCounter((v) => v - 1);
     setCount(true);
+    setStarted(true);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {counter === countdownTime ? (
+        {!started ? (
           <View style={styles.startBtnWrapper}>
             <AppButton
               onPress={startExercise}

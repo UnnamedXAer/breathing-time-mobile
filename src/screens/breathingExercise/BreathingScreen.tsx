@@ -1,11 +1,9 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Switch, useWindowDimensions, View } from 'react-native';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
 import Counter from '../../components/Counter';
-
 import { Text } from '../../components/ui/Themed';
-import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
@@ -16,7 +14,7 @@ import BreathingAnimation from './animation/BreathingAnimation';
 let lastPressedAt = 0;
 
 // mocked values
-const breathsPerRound = 312;
+const breathsPerRound = 0;
 const breathTime = 1400;
 
 export default function BreathingScreen({
@@ -36,7 +34,12 @@ export default function BreathingScreen({
   }
 
   const completeScreen = useCallback(() => {
-    __devCheckActualBreathingTime(startIntervalTime.current, counter, breathTime);
+    __devCheckActualBreathingTime(
+      startIntervalTime.current,
+      counter,
+      breathTime,
+      breathsPerRound,
+    );
     startIntervalTime.current = -1;
     navigation.navigate('HoldingOut');
   }, [counter, navigation]);
@@ -132,12 +135,13 @@ function __devCheckActualBreathingTime(
   startIntervalTime: number,
   counter: number,
   breathTime: number,
+  breathsPerRound: number,
 ) {
-  if (__DEV__) {
+  if (__DEV__ && breathsPerRound) {
     const realTime = (Date.now() - startIntervalTime) / 1000;
     const counterTime = ((counter + 1) * breathTime) / 1000;
 
-    console.log('(->', realTime, '|', counterTime, '|', counter);
+    // console.log('(->', realTime, '|', counterTime, '|', counter);
     if (realTime - counterTime >= 1) {
       const msg = `
 		Actual screen time is greater than counter time for more than 1s.

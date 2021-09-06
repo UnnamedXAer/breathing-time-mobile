@@ -4,9 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
 import Counter from '../../components/Counter';
 import AppButton from '../../components/ui/Button';
-
 import { Text } from '../../components/ui/Themed';
-import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
@@ -49,7 +47,7 @@ export default function HoldingOutScreen({
     }
     const interval = setIntervalWithTimeout(() => {
       setCounter((prev) => prev + 1);
-    }, 1000);
+    }, 998);
 
     return () => {
       interval.clear();
@@ -109,4 +107,23 @@ const styles = StyleSheet.create({
   },
 });
 
-function __devCheckActualGoldOutTime(...args: number[]) {}
+function __devCheckActualGoldOutTime(startIntervalTime: number, counter: number) {
+  if (__DEV__) {
+    const realTime = (Date.now() - startIntervalTime) / 1000;
+    const counterTime = (counter + 1) * 1000;
+
+    console.log('(->', realTime, '|', counterTime, '|', counter);
+    if (realTime - counterTime >= 1) {
+      const msg = `
+	  		>> Holding In
+			Actual screen time is greater than counter time for more than 1s.
+			counter: ${counter};
+			startTime: ${startIntervalTime}
+			realTime: ${realTime};
+			counterTime: ${counterTime};
+			difference: ${realTime - counterTime};
+			---------------------------------------`;
+      console.warn(msg);
+    }
+  }
+}

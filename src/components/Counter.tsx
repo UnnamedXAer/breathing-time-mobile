@@ -10,7 +10,6 @@ interface Props {
 }
 const defaultFontSize = Layout.window.height * 0.25;
 const Counter: React.FC<Props> = ({ value, text, fontSize = defaultFontSize }) => {
-  console.log(fontSize);
   return (
     <View style={styles.container}>
       {text && <Text style={[styles.text]}>{text}</Text>}
