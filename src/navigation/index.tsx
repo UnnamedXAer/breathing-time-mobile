@@ -51,7 +51,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
       <Stack.Screen
         name="BreathingInstruction"
         component={BreathingInstructionScreen}
-        options={{ headerShown: false }}
+        options={{ title: 'Instructions' }}
       />
       <Stack.Screen
         name="NotFound"
