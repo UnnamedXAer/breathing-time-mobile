@@ -21,15 +21,10 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    'react-hooks',
-    '@typescript-eslint',
-    'prettier',
-  ],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
-    indent: ['error', 2],
+    indent: ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': 0, //['error', 'windows'],
     quotes: ['error', 'single', { avoidEscape: true }],
     semi: ['error', 'always'],
