@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { FontSource } from 'expo-font';
-import { LatoFont } from '../constants/fonts';
+import { Fonts } from '../constants/fonts';
 
-// @todo: remove unnecessary entires
-export const latoFontsMap = {
-  [LatoFont.Lato]: require('../assets/fonts/lato/Lato.ttf') as FontSource,
-  [LatoFont.LatoBoldItalic]:
-    require('../assets/fonts/lato/Lato_bold_italic.ttf') as FontSource,
-  [LatoFont.LatoBolderItalic]:
-    require('../assets/fonts/lato/Lato_bolder_italic.ttf') as FontSource,
-  [LatoFont.LatoLight]: require('../assets/fonts/lato/Lato_light.ttf') as FontSource,
-  [LatoFont.LatoThin]: require('../assets/fonts/lato/Lato_thin.ttf') as FontSource,
-  [LatoFont.LatoBold]: require('../assets/fonts/lato/Lato_bold.ttf') as FontSource,
-  [LatoFont.LatoBolder]: require('../assets/fonts/lato/Lato_bolder.ttf') as FontSource,
-  [LatoFont.LatoItalic]: require('../assets/fonts/lato/Lato_italic.ttf') as FontSource,
-  [LatoFont.LatoLightItalic]:
-    require('../assets/fonts/lato/Lato_light_italic.ttf') as FontSource,
-  [LatoFont.LatoThinItalic]:
-    require('../assets/fonts/lato/Lato_thin_italic.ttf') as FontSource,
+export const fontsMap = {
+  [Fonts.Lato]: require('../assets/fonts/lato/lato-v20-latin-regular.otf') as FontSource,
+  [Fonts.LatoItalic]:
+    require('../assets/fonts/lato/lato-v20-latin-italic.otf') as FontSource,
+  [Fonts.LatoLight]: require('../assets/fonts/lato/lato-v20-latin-300.otf') as FontSource,
+  [Fonts.LatoBold]: require('../assets/fonts/lato/lato-v20-latin-700.otf') as FontSource,
+  [Fonts.LatoBoldItalic]:
+    require('../assets/fonts/lato/lato-v20-latin-700italic.otf') as FontSource,
+  [Fonts.LatoBolder]:
+    require('../assets/fonts/lato/lato-v20-latin-900.otf') as FontSource,
+
+  [Fonts.EbGaramond]:
+    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-regular.otf') as FontSource,
+  [Fonts.EbGaramondSemiBold]:
+    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-600.otf') as FontSource,
+  [Fonts.EbGaramondBold]:
+    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-700.otf') as FontSource,
 };

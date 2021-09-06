@@ -7,7 +7,7 @@ import * as React from 'react';
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors from '../../constants/Colors';
-import { LatoFont } from '../../constants/fonts';
+import { Fonts } from '../../constants/fonts';
 import useColorScheme from '../../hooks/useColorScheme';
 
 export function useThemeColor(
@@ -37,7 +37,7 @@ export function Text(props: TextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
   return (
-    <DefaultText style={[{ color, fontFamily: LatoFont.Lato }, style]} {...otherProps} />
+    <DefaultText style={[{ color, fontFamily: Fonts.Lato }, style]} {...otherProps} />
   );
 }
 
