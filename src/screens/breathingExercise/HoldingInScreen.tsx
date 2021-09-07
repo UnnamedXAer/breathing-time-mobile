@@ -41,7 +41,6 @@ export default function HoldingInScreen({
     if (isLastRound) {
       nextScreenName = 'Summary';
     }
-    console.log(nextScreenName);
     navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
   }, [navigation, isLastRound]);
 
