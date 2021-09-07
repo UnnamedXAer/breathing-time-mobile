@@ -5,72 +5,114 @@ import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
 import Layout from '../../constants/Layout';
-import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import {
   ExerciseStackParamList,
   ExerciseStackScreenProps,
 } from '../../navigation/exerciseStack/types';
+import { TimeoutReturn } from '../../types/types';
 
 let lastPressedAt = 0;
 
 // mocked values
 const maxRounds = 3;
-const currentRound = 3;
-const holdInTime = 15;
+const currentRound = 1;
+const recoveryTime = 3;
 
 export default function HoldingInScreen({
   navigation,
 }: ExerciseStackScreenProps<'HoldingIn'>) {
-  const [counter, setCounter] = useState(0);
-  const [nextStep, setNextStep] = useState(false);
+  const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
   const isLastRound = currentRound >= maxRounds;
+  const [count, setCount] = useState(false);
+  const timeoutRef = useRef<TimeoutReturn>(void 0);
+  const exitTimeoutRef = useRef<TimeoutReturn>(void 0);
+  const lastTick = useRef(0);
+  const [userForcedNextScreen, setUserForcedNextScreen] = useState(false);
+
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
 
-  const completeScreen = useCallback(() => {
-    setNextStep(true);
-    __devCheckActualGoldOutTime(startIntervalTime.current, counter);
-    startIntervalTime.current = -1;
-    let nextScreen: keyof ExerciseStackParamList = 'Breathing';
+  const nextScreen = useCallback(() => {
+    let nextScreenName: keyof ExerciseStackParamList = 'Breathing';
     if (isLastRound) {
-      nextScreen = 'Summary';
+      nextScreenName = 'Summary';
     }
-    navigation.navigate(nextScreen);
-  }, [counter, isLastRound, navigation]);
+    console.log(nextScreenName);
+    navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
+    // navigation.navigate(nextScreenName);
+  }, [navigation, isLastRound]);
+
+  useEffect(() => {
+    if (userForcedNextScreen) {
+      //   __devCheckActualTime(startIntervalTime.current, recoveryTime - counter);
+      setCount(false);
+      nextScreen();
+    }
+  }, [nextScreen, userForcedNextScreen]);
+
+  useEffect(() => {
+    if (!focused || counter > 1) {
+      return;
+    }
+    setCount(false);
+
+    exitTimeoutRef.current = setTimeout(() => {
+      __devCheckActualTime(startIntervalTime.current, recoveryTime - counter);
+      nextScreen();
+    }, 995);
+    return () => {
+      if (exitTimeoutRef.current) {
+        clearTimeout(exitTimeoutRef.current);
+        exitTimeoutRef.current = void 0;
+      }
+    };
+  }, [counter, nextScreen, focused]);
 
   useEffect(() => {
     if (!focused) {
       startIntervalTime.current = -1;
-      setCounter(0);
-      setNextStep(false);
+      setCounter(recoveryTime);
+      setCount(false);
+      setUserForcedNextScreen(false);
+      return;
     }
+    setCounter(recoveryTime);
+    setCount(true);
   }, [focused]);
 
   useEffect(() => {
-    if (nextStep || !focused) {
+    if (!count) {
       return;
     }
+    let tm = 998;
+    const decrement = () => {
+      tm = 2000 - (Date.now() - lastTick.current);
+      if (tm > 1020) tm = 1020;
+      else if (tm < 980) tm = 980;
+      timeoutRef.current = setTimeout(decrement, tm);
+      lastTick.current = Date.now();
+      setCounter((c) => c - 1);
+    };
 
-    if (startIntervalTime.current === -1) {
-      startIntervalTime.current = Date.now();
-    }
-    const interval = setIntervalWithTimeout(() => {
-      setCounter((prev) => prev + 1);
-    }, 1000);
+    lastTick.current = startIntervalTime.current = Date.now();
+    timeoutRef.current = setTimeout(decrement, tm);
 
     return () => {
-      interval.clear();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = void 0;
+      }
     };
-  }, [focused, nextStep]);
+  }, [count]);
 
   const screenPressHandler = () => {
     if (Date.now() - lastPressedAt <= 500) {
-      setNextStep(true);
-      completeScreen();
+      setCount(false);
+      setUserForcedNextScreen(true);
       return;
     }
 
@@ -82,7 +124,7 @@ export default function HoldingInScreen({
       <View style={styles.container}>
         <Header
           title="Recovery"
-          roundInfo={`Take one deep breath and hold for ${holdInTime} seconds.`}
+          roundInfo={`Take one deep breath and hold for ${recoveryTime} seconds.`}
         />
         <Counter
           value={counter}
@@ -112,4 +154,22 @@ const styles = StyleSheet.create({
   },
 });
 
-function __devCheckActualGoldOutTime(...args: number[]) {}
+function __devCheckActualTime(startIntervalTime: number, recoveryTime: number) {
+  if (__DEV__) {
+    const realTime = (Date.now() - startIntervalTime) / 1000;
+    const counterTime = (recoveryTime + 1) / 1000;
+
+    console.log('Recovery (->', realTime, '|', counterTime, '|', recoveryTime);
+    if (realTime - counterTime >= 1) {
+      const msg = `
+			Actual screen time is greater than counter time for more than 1s.
+			recoveryTime: ${recoveryTime};
+			startTime: ${startIntervalTime}
+			realTime: ${realTime};
+			counterTime: ${counterTime};
+			difference: ${realTime - counterTime};
+			---------------------------------------`;
+      console.warn(msg);
+    }
+  }
+}
