@@ -7,6 +7,7 @@ import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
 import { TimeoutReturn } from '../../types/types';
 import { StyleSheet, View } from 'react-native';
 import Layout from '../../constants/Layout';
+import Header from '../../components/breathingExercise/Header';
 
 interface Props extends ExerciseStackScreenProps<'Start'> {}
 
@@ -63,17 +64,21 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Header title="Let's begin your breathing!" />
       <View style={styles.content}>
         {!started ? (
-          <View style={styles.startBtnWrapper}>
-            <AppButton
-              onPress={startExercise}
-              title="START"
-              size="large"
-              mode="contained"
-              scale={1.6}
-            />
-          </View>
+          <>
+            <View style={styles.startBtnWrapper}>
+              <AppButton
+                onPress={startExercise}
+                title="START"
+                size="large"
+                mode="contained"
+                containerStyle={{ padding: Layout.spacing(2) }}
+                textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
+              />
+            </View>
+          </>
         ) : (
           <Counter
             text="Get Ready!"
@@ -83,12 +88,14 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
         )}
       </View>
       <View style={styles.footer}>
-        <AppButton
-          onPress={() => navigation.replace('BreathingInstruction')}
-          size="small"
-          mode="outlined"
-          title="See Instructions"
-        />
+        {!started && (
+          <AppButton
+            onPress={() => navigation.replace('BreathingInstruction')}
+            size="small"
+            mode="outlined"
+            title="See Instructions"
+          />
+        )}
       </View>
     </View>
   );
@@ -101,13 +108,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: Layout.window.height * 0.04,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
   },
   startBtnWrapper: {
-    paddingBottom: Layout.window.height * 0.2,
+    paddingBottom: Layout.window.height * 0.18,
     flex: 1,
     justifyContent: 'flex-end',
   },

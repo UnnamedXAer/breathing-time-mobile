@@ -2,9 +2,8 @@ import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
+import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
-
-import { Text } from '../../components/ui/Themed';
 import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
@@ -19,6 +18,7 @@ let lastPressedAt = 0;
 // mocked values
 const maxRounds = 3;
 const currentRound = 3;
+const holdInTime = 15;
 
 export default function HoldingInScreen({
   navigation,
@@ -80,19 +80,18 @@ export default function HoldingInScreen({
   return (
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
-        <View>
-          <Text style={styles.title}>Holding In</Text>
-          <Text style={styles.title}>
-            - the stop breathing phase until strong urge to breath.
-          </Text>
-          {isLastRound && <Text style={styles.title}>This is the final round.</Text>}
-        </View>
-        <Counter value={counter} />
-
+        <Header
+          title="Recovery"
+          roundInfo={`Take one deep breath and hold for ${holdInTime} seconds.`}
+        />
+        <Counter
+          value={counter}
+          containerStyle={{ marginBottom: Layout.window.height * 0.25 }}
+        />
         <Footer
-          text={`To it skip to ${
-            isLastRound ? 'the summary screen' : 'next round'
-          } tap twice on the screen.`}></Footer>
+          text={`Tap twice on the screen to skip to the ${
+            isLastRound ? 'Summary screen' : 'next round'
+          }.`}></Footer>
       </View>
     </Pressable>
   );

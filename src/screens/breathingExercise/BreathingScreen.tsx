@@ -2,9 +2,8 @@ import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
+import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
-import { Text } from '../../components/ui/Themed';
-import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
@@ -100,15 +99,13 @@ export default function BreathingScreen({
   return (
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Breathing Phase</Text>
-        </View>
+        <Header title="Breathing" />
 
         <BreathingAnimation dims={dims} />
 
         <Counter value={counter} />
 
-        <Footer text="Tap twice on the screen to go to the next phase."></Footer>
+        <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
       </View>
     </Pressable>
   );
@@ -122,12 +119,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  header: {},
-  title: {
-    fontSize: Layout.spacing(4),
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
 });
 
@@ -157,47 +148,3 @@ function __devCheckActualBreathingTime(
     }
   }
 }
-
-//   useEffect(
-//     () => beforeRemoveUseEffectCallback(focused, navigation as any),
-//     [focused, navigation],
-//   );
-
-// const beforeRemoveUseEffectCallback: BeforeRemoveCallback = (focused, navigation) => {
-//   console.log('beforeRemoveUseEffectCallback');
-
-//   if (!focused) {
-//     return;
-//   }
-
-//   const callback = (ev: BeforeRemoveEvent) => {
-//     ev.preventDefault();
-
-//     Alert.alert('Warning!', 'Cancel Exercise?', [
-//       {
-//         text: 'Yes',
-//         style: 'destructive',
-//         onPress: () => {
-//           console.log('accepted');
-//           navigation.dispatch(ev.data.action);
-//         },
-//       },
-//       {
-//         text: 'No',
-//         style: 'cancel',
-//         onPress: () => {},
-//       },
-//     ]);
-//   };
-
-//   navigation.addListener('beforeRemove', callback);
-
-//   return () => {
-//     navigation.removeListener('beforeRemove', callback);
-//   };
-// };
-
-// type BeforeRemoveCallback = (
-//   focused: boolean,
-//   navigation: RootStackScreenProps<keyof RootStackParamList>['navigation'],
-// ) => (() => void) | undefined;

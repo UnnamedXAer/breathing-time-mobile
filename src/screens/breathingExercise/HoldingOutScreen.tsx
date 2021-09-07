@@ -2,9 +2,10 @@ import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
+import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
 import AppButton from '../../components/ui/Button';
-import { Text } from '../../components/ui/Themed';
+import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
@@ -67,21 +68,22 @@ export default function HoldingOutScreen({
   return (
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
-        <Text></Text>
-        <Text style={styles.title}>Holding Out</Text>
-        <Text style={styles.title}>
-          - the stop breathing phase until strong urge to breath.
-        </Text>
+        <Header
+          title="Breath Hold"
+          roundInfo="Exhale and stop breathing until you feel urge to inhale."
+        />
 
         <Counter value={counter} />
         <AppButton
           onPress={completeScreen}
-          title="NEXT PHASE"
+          title="Next Phase"
           size="large"
           mode="contained"
+          containerStyle={{ padding: Layout.spacing(2) }}
+          textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
         />
 
-        <Footer text="To go to the recovery phase press the button or tap twice on the screen."></Footer>
+        <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
       </View>
     </Pressable>
   );

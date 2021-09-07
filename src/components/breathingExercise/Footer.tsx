@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import useColorScheme from '../../hooks/useColorScheme';
 import { Text } from '../ui/Themed';
@@ -11,7 +12,7 @@ interface Props {
 const Footer: React.FC<Props> = ({ children, text }) => {
   const scheme = useColorScheme();
 
-  const color = scheme === 'light' ? 'rgba(18, 18, 18, 0.7)' : 'rgba(253, 253, 253, 0.7)';
+  const color = Colors[scheme].textRGBA(0.7);
 
   return (
     <View style={styles.container}>
@@ -24,9 +25,6 @@ const Footer: React.FC<Props> = ({ children, text }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: Layout.spacing(),
-  },
-  tip: {
-    textAlign: 'center',
   },
 });
 

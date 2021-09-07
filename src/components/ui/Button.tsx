@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 
@@ -21,6 +28,8 @@ interface Props {
   error?: boolean;
   color?: string;
   scale?: number;
+  containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 export default function Button({
@@ -34,6 +43,8 @@ export default function Button({
   error,
   color,
   scale,
+  containerStyle,
+  textStyle,
 }: Props) {
   let colorScheme = useColorScheme();
   if (theme) {
@@ -109,14 +120,14 @@ export default function Button({
       onPress={onPress}
       disabled={loading || disabled}
       activeOpacity={mode === 'contained' ? 0.7 : 0.4}>
-      <View style={styles.container}>
+      <View style={[styles.container, containerStyle]}>
         {loading && (
           <View style={styles.iconContainer}>
             <ActivityIndicator color={textColor} size={fontSize} />
           </View>
         )}
         {title && (
-          <Text style={styles.text} selectable={false}>
+          <Text style={[styles.text, textStyle]} selectable={false}>
             {title}
           </Text>
         )}

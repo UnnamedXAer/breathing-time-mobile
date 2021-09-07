@@ -13,14 +13,18 @@ export default {
   primary: 'rgb(1, 77, 77)',
   light: {
     text: 'rgb(18, 18, 18)',
+    textRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
     background: 'rgb(253, 253, 253)',
+    backgroundRGBA: (opacity: number) => `rgba(253, 253, 253, ${opacity})`,
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
   },
   dark: {
     text: 'rgb(253, 253, 253)',
+    textRGBA: (opacity: number) => `rgba(253, 253, 253, ${opacity})`,
     background: 'rgb(18, 18, 18)',
+    backgroundRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
