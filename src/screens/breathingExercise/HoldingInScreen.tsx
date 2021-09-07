@@ -43,7 +43,6 @@ export default function HoldingInScreen({
     }
     console.log(nextScreenName);
     navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
-    // navigation.navigate(nextScreenName);
   }, [navigation, isLastRound]);
 
   useEffect(() => {

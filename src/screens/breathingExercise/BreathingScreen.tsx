@@ -1,4 +1,4 @@
-import { useIsFocused } from '@react-navigation/core';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
@@ -40,7 +40,7 @@ export default function BreathingScreen({
       breathsPerRound,
     );
     startIntervalTime.current = -1;
-    navigation.navigate('HoldingOut');
+    navigation.navigate('BreathingExerciseStack', { screen: 'HoldingOut' });
   }, [counter, navigation]);
 
   useEffect(() => {
@@ -132,7 +132,7 @@ function __devCheckActualBreathingTime(
     const realTime = (Date.now() - startIntervalTime) / 1000;
     const counterTime = ((counter + 1) * breathTime) / 1000;
 
-    // console.log('(->', realTime, '|', counterTime, '|', counter);
+    console.log('Breathing (->', realTime, '|', counterTime, '|', counter);
     if (realTime - counterTime >= 1) {
       const msg = `
 		Actual screen time is greater than counter time for more than 1s.

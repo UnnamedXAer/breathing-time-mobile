@@ -25,10 +25,10 @@ export default function HoldingOutScreen({
 
   const completeScreen = useCallback(() => {
     setNextStep(true);
-    __devCheckActualGoldOutTime(startIntervalTime.current, counter);
+    // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
-    navigation.navigate('HoldingIn');
-  }, [counter, navigation]);
+    navigation.navigate('BreathingExerciseStack', { screen: 'HoldingIn' });
+  }, [navigation]);
 
   useEffect(() => {
     if (!focused) {
@@ -109,22 +109,21 @@ const styles = StyleSheet.create({
   },
 });
 
-function __devCheckActualGoldOutTime(startIntervalTime: number, counter: number) {
+function __devCheckActualTime(startIntervalTime: number, counter: number) {
   if (__DEV__) {
     const realTime = (Date.now() - startIntervalTime) / 1000;
-    const counterTime = (counter + 1) * 1000;
+    const counterTime = counter / 1000;
 
-    console.log('(->', realTime, '|', counterTime, '|', counter);
+    console.log('Breath Hold (->', realTime, '|', counterTime, '|', counter);
     if (realTime - counterTime >= 1) {
       const msg = `
-	  		>> Holding In
-			Actual screen time is greater than counter time for more than 1s.
-			counter: ${counter};
-			startTime: ${startIntervalTime}
-			realTime: ${realTime};
-			counterTime: ${counterTime};
-			difference: ${realTime - counterTime};
-			---------------------------------------`;
+			  Actual screen time is greater than counter time for more than 1s.
+			  recoveryTime: ${counter};
+			  startTime: ${startIntervalTime}
+			  counter: ${realTime};
+			  counterTime: ${counterTime};
+			  difference: ${realTime - counterTime};
+			  ---------------------------------------`;
       console.warn(msg);
     }
   }
