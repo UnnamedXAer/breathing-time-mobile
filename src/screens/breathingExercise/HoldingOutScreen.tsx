@@ -9,13 +9,13 @@ import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
-import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
+import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 
 let lastPressedAt = 0;
 
 export default function HoldingOutScreen({
   navigation,
-}: ExerciseStackScreenProps<'HoldingOut'>) {
+}: ExerciseTabScreenProps<'HoldingOut'>) {
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
@@ -27,7 +27,8 @@ export default function HoldingOutScreen({
     setNextStep(true);
     // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
-    navigation.navigate('BreathingExerciseStack', { screen: 'HoldingIn' });
+    // navigation.navigate('BreathingExerciseStack', { screen: 'HoldingIn' });
+    navigation.jumpTo('HoldingIn');
   }, [navigation]);
 
   useEffect(() => {

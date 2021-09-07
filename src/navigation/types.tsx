@@ -8,7 +8,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NativeStackNavigationEventMap } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { RootTabParamList } from './bottomTab/types';
-import { ExerciseStackParamList } from './exerciseStack/types';
+import { ExerciseTabParamList } from './exerciseBottomTab/types';
 
 // declare global {
 //   namespace ReactNavigation {
@@ -20,7 +20,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  BreathingExerciseStack: NavigatorScreenParams<ExerciseStackParamList> | undefined;
+  BreathingExerciseStack: NavigatorScreenParams<ExerciseTabParamList> | undefined;
   BreathingInstruction: undefined;
 };
 
@@ -29,7 +29,7 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
 
 export type BeforeRemoveCallback = EventListenerCallback<
   NativeStackNavigationEventMap &
-    EventMapCore<StackNavigationState<ExerciseStackParamList>>,
+    EventMapCore<StackNavigationState<ExerciseTabParamList>>,
   'beforeRemove'
 >;
 

@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 import { useRef, useState } from 'react';
 import AppButton from '../../components/ui/Button';
 import Counter from '../../components/Counter';
-import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
+import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { TimeoutReturn } from '../../types/types';
 import { StyleSheet, View } from 'react-native';
 import Layout from '../../constants/Layout';
 import Header from '../../components/breathingExercise/Header';
 
-interface Props extends ExerciseStackScreenProps<'Start'> {}
+interface Props extends ExerciseTabScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
   const countdownTime = 0;
@@ -24,7 +24,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
     if (started && counter <= 0) {
       setCount(false);
       const timeout = setTimeout(() => {
-        navigation.replace('Breathing');
+        navigation.jumpTo('Breathing');
       }, 999);
       return () => {
         clearTimeout(timeout);

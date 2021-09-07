@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native';
 import AppButton from '../../components/ui/Button';
 
 import { Text, View } from '../../components/ui/Themed';
-import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
+import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 
-interface Props extends ExerciseStackScreenProps<'Summary'> {}
+interface Props extends ExerciseTabScreenProps<'Summary'> {}
 
 export default function SummaryScreen({ navigation }: Props) {
   return (

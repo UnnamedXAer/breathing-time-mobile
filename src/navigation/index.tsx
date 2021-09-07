@@ -7,7 +7,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from './types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { RootBottomTabNavigator } from './bottomTab/BottomTab';
-import { BreathingExerciseStackNavigator } from './exerciseStack/ExerciseStack';
+import { BreathingExerciseTabNavigator } from './exerciseBottomTab/ExerciseBottomTab';
 import BreathingInstructionScreen from '../screens/BreathingInstructionScreen';
 import Colors from '../constants/Colors';
 import { ColorSchemeName } from '../hooks/useColorScheme';
@@ -44,7 +44,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
 
       <Stack.Screen
         name="BreathingExerciseStack"
-        component={BreathingExerciseStackNavigator}
+        component={BreathingExerciseTabNavigator}
         options={{ headerShown: false }}
       />
 

@@ -1,4 +1,3 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { StatusBar } from 'react-native';
 import { Text, View } from '../../components/ui/Themed';
@@ -8,14 +7,15 @@ import HoldingIn from '../../screens/breathingExercise/HoldingInScreen';
 import HoldingOut from '../../screens/breathingExercise/HoldingOutScreen';
 import Start from '../../screens/breathingExercise/StartScreen';
 import Summary from '../../screens/breathingExercise/SummaryScreen';
-import { ExerciseStackParamList } from './types';
+import { ExerciseTabParamList as ExerciseTabParamList } from './types';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createNativeStackNavigator<ExerciseStackParamList>();
+const Stack = createBottomTabNavigator<ExerciseTabParamList>();
 
-export function BreathingExerciseStackNavigator() {
+export function BreathingExerciseTabNavigator() {
   const scheme = useColorScheme();
   const marginTop = StatusBar.currentHeight
     ? StatusBar.currentHeight + Layout.spacing()
@@ -54,14 +54,16 @@ export function BreathingExerciseStackNavigator() {
       </LinearGradient>
 
       <Stack.Navigator
-        screenOptions={{
-          contentStyle: {
-            backgroundColor,
-            paddingHorizontal: Layout.spacing(),
-          },
-          headerShown: false,
-          headerBackVisible: false,
-        }}>
+        screenOptions={
+          {
+            //   contentStyle: {
+            //     backgroundColor,
+            //     paddingHorizontal: Layout.spacing(),
+            //   },
+            //   headerShown: false,
+            //   headerBackVisible: false,
+          }
+        }>
         <Stack.Screen name="Start" component={Start} />
         <Stack.Screen name="Breathing" component={Breathing} />
         <Stack.Screen name="HoldingOut" component={HoldingOut} />

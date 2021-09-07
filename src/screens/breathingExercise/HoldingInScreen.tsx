@@ -8,9 +8,9 @@ import Layout from '../../constants/Layout';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import {
-  ExerciseStackParamList,
-  ExerciseStackScreenProps,
-} from '../../navigation/exerciseStack/types';
+  ExerciseTabParamList,
+  ExerciseTabScreenProps,
+} from '../../navigation/exerciseBottomTab/types';
 import { TimeoutReturn } from '../../types/types';
 
 let lastPressedAt = 0;
@@ -22,7 +22,7 @@ const recoveryTime = 3;
 
 export default function HoldingInScreen({
   navigation,
-}: ExerciseStackScreenProps<'HoldingIn'>) {
+}: ExerciseTabScreenProps<'HoldingIn'>) {
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
   const isLastRound = currentRound >= maxRounds;
@@ -37,11 +37,12 @@ export default function HoldingInScreen({
   useOverrideHardwareBack(navigation as any);
 
   const nextScreen = useCallback(() => {
-    let nextScreenName: keyof ExerciseStackParamList = 'Breathing';
+    let nextScreenName: keyof ExerciseTabParamList = 'Breathing';
     if (isLastRound) {
       nextScreenName = 'Summary';
     }
-    navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
+    // navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
+    navigation.jumpTo(nextScreenName);
   }, [navigation, isLastRound]);
 
   useEffect(() => {

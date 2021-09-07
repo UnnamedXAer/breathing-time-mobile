@@ -7,7 +7,7 @@ import Counter from '../../components/Counter';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
-import { ExerciseStackScreenProps } from '../../navigation/exerciseStack/types';
+import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import BreathingAnimation from './animation/BreathingAnimation';
 
 let lastPressedAt = 0;
@@ -18,7 +18,7 @@ const breathTime = 1400;
 
 export default function BreathingScreen({
   navigation,
-}: ExerciseStackScreenProps<'Breathing'>) {
+}: ExerciseTabScreenProps<'Breathing'>) {
   const dims = useWindowDimensions();
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);

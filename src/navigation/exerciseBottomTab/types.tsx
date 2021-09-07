@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootTabParamList } from '../bottomTab/types';
 import { RootStackParamList } from '../types';
 
-export type ExerciseStackParamList = {
+export type ExerciseTabParamList = {
   Start: undefined;
   Breathing: undefined;
   HoldingOut: undefined;
@@ -12,10 +12,10 @@ export type ExerciseStackParamList = {
   Summary: undefined;
 };
 
-export type ExerciseStackScreenProps<Screen extends keyof ExerciseStackParamList> =
+export type ExerciseTabScreenProps<Screen extends keyof ExerciseTabParamList> =
   CompositeScreenProps<
     /**/ CompositeScreenProps<
-      NativeStackScreenProps<ExerciseStackParamList, Screen>,
+      BottomTabScreenProps<ExerciseTabParamList, Screen>,
       BottomTabScreenProps<RootTabParamList>
     > /**/,
     NativeStackScreenProps<RootStackParamList>
