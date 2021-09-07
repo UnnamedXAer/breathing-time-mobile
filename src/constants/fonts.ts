@@ -11,7 +11,7 @@ export enum Fonts {
   //   'LatoLightItalic' = 'Lato_light_italic',
   //   'LatoThinItalic' = 'Lato_thin_italic',
 
-  'EbGaramond' = 'EbGaramond',
-  'EbGaramondSemiBold' = 'EbGaramond_semi_bold',
-  'EbGaramondBold' = 'EbGaramond_bold',
+  //   'EbGaramond' = 'EbGaramond',
+  //   'EbGaramondSemiBold' = 'EbGaramond_semi_bold',
+  //   'EbGaramondBold' = 'EbGaramond_bold',
 }

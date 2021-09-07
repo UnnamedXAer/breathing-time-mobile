@@ -13,10 +13,10 @@ export const fontsMap = {
   [Fonts.LatoBolder]:
     require('../assets/fonts/lato/lato-v20-latin-900.otf') as FontSource,
 
-  [Fonts.EbGaramond]:
-    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-regular.otf') as FontSource,
-  [Fonts.EbGaramondSemiBold]:
-    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-600.otf') as FontSource,
-  [Fonts.EbGaramondBold]:
-    require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-700.otf') as FontSource,
+  //   [Fonts.EbGaramond]:
+  //     require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-regular.otf') as FontSource,
+  //   [Fonts.EbGaramondSemiBold]:
+  //     require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-600.otf') as FontSource,
+  //   [Fonts.EbGaramondBold]:
+  //     require('../assets/fonts/ebGaramond/eb-garamond-v15-latin-700.otf') as FontSource,
 };
