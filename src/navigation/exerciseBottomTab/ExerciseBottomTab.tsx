@@ -3,8 +3,8 @@ import { StatusBar } from 'react-native';
 import { Text, View } from '../../components/ui/Themed';
 import Layout from '../../constants/Layout';
 import Breathing from '../../screens/breathingExercise/BreathingScreen';
-import HoldingIn from '../../screens/breathingExercise/HoldingInScreen';
-import HoldingOut from '../../screens/breathingExercise/HoldingOutScreen';
+import Recovery from '../../screens/breathingExercise/RecoveryScreen';
+import BreathHold from '../../screens/breathingExercise/BreathHoldScreen';
 import Start from '../../screens/breathingExercise/StartScreen';
 import Summary from '../../screens/breathingExercise/SummaryScreen';
 import { ExerciseTabParamList as ExerciseTabParamList } from './types';
@@ -66,8 +66,8 @@ export function BreathingExerciseTabNavigator() {
         }>
         <Stack.Screen name="Start" component={Start} />
         <Stack.Screen name="Breathing" component={Breathing} />
-        <Stack.Screen name="HoldingOut" component={HoldingOut} />
-        <Stack.Screen name="HoldingIn" component={HoldingIn} />
+        <Stack.Screen name="BreathHold" component={BreathHold} />
+        <Stack.Screen name="Recovery" component={Recovery} />
         <Stack.Screen name="Summary" component={Summary} />
       </Stack.Navigator>
     </View>

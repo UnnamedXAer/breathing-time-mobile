@@ -40,7 +40,7 @@ export default function BreathingScreen({
       breathsPerRound,
     );
     startIntervalTime.current = -1;
-    navigation.navigate('BreathingExerciseStack', { screen: 'HoldingOut' });
+    navigation.navigate('BreathingExerciseStack', { screen: 'BreathHold' });
   }, [counter, navigation]);
 
   useEffect(() => {

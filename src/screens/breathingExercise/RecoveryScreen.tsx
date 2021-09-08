@@ -20,9 +20,9 @@ const maxRounds = 3;
 const currentRound = 1;
 const recoveryTime = 3;
 
-export default function HoldingInScreen({
+export default function RecoveryScreen({
   navigation,
-}: ExerciseTabScreenProps<'HoldingIn'>) {
+}: ExerciseTabScreenProps<'Recovery'>) {
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
   const isLastRound = currentRound >= maxRounds;

@@ -13,9 +13,9 @@ import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types
 
 let lastPressedAt = 0;
 
-export default function HoldingOutScreen({
+export default function BreathHoldScreen({
   navigation,
-}: ExerciseTabScreenProps<'HoldingOut'>) {
+}: ExerciseTabScreenProps<'BreathHold'>) {
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
@@ -27,8 +27,8 @@ export default function HoldingOutScreen({
     setNextStep(true);
     // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
-    // navigation.navigate('BreathingExerciseStack', { screen: 'HoldingIn' });
-    navigation.jumpTo('HoldingIn');
+    // navigation.navigate('BreathingExerciseStack', { screen: 'Recovery' });
+    navigation.jumpTo('Recovery');
   }, [navigation]);
 
   useEffect(() => {
