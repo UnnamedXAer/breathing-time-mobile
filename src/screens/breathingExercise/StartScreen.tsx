@@ -101,9 +101,6 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 const styles = StyleSheet.create({
-  pressable: {
-    flex: 1,
-  },
   container: {
     flex: 1,
     alignItems: 'center',

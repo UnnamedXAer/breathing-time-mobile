@@ -27,7 +27,6 @@ export default function BreathHoldScreen({
     setNextStep(true);
     // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
-    // navigation.navigate('BreathingExerciseStack', { screen: 'Recovery' });
     navigation.jumpTo('Recovery');
   }, [navigation]);
 
