@@ -2049,6 +2049,11 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
+"@miblanchard/react-native-slider@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-2.0.1.tgz#ce17c17e6fc9959faf07e6e722a7a10a31ae25eb"
+  integrity sha512-IwYHSj/EyXi3qKmCiWQpcU0jiDTg/G9RLPjqWamkdHE6poNrg0Fp2RT1+1Q4F0K5sfOrf+lkjweWXSU2ySg4Yg==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
