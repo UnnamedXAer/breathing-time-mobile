@@ -13,7 +13,7 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
         <Card
           label="Breathing Exercise"
           onPress={() =>
-            navigation.navigate('BreathingExerciseStack', {
+            navigation.navigate('BreathingExerciseBottomTab', {
               screen: 'Start',
             })
           }>

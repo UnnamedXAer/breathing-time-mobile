@@ -7,13 +7,13 @@ import Recovery from '../../screens/breathingExercise/RecoveryScreen';
 import BreathHold from '../../screens/breathingExercise/BreathHoldScreen';
 import Start from '../../screens/breathingExercise/StartScreen';
 import Summary from '../../screens/breathingExercise/SummaryScreen';
-import { ExerciseTabParamList as ExerciseTabParamList } from './types';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ExerciseTabParamList } from './types';
 
-const Stack = createBottomTabNavigator<ExerciseTabParamList>();
+const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
 export function BreathingExerciseTabNavigator() {
   const scheme = useColorScheme();
@@ -24,17 +24,13 @@ export function BreathingExerciseTabNavigator() {
   const backgroundColor = Colors[scheme].background;
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor }}>
       <LinearGradient
         style={{
           width: Layout.window.width,
           paddingTop: marginTop,
         }}
-        colors={[Colors.primary, Colors[scheme].background]}
-        start={{
-          x: 0,
-          y: 0,
-        }}>
+        colors={[Colors.primary, Colors[scheme].background]}>
         <Text
           style={{
             fontSize: Layout.spacing(4),
@@ -53,23 +49,25 @@ export function BreathingExerciseTabNavigator() {
         </Text>
       </LinearGradient>
 
-      <Stack.Navigator
-        screenOptions={
-          {
-            //   contentStyle: {
-            //     backgroundColor,
-            //     paddingHorizontal: Layout.spacing(),
-            //   },
-            //   headerShown: false,
-            //   headerBackVisible: false,
-          }
-        }>
-        <Stack.Screen name="Start" component={Start} />
-        <Stack.Screen name="Breathing" component={Breathing} />
-        <Stack.Screen name="BreathHold" component={BreathHold} />
-        <Stack.Screen name="Recovery" component={Recovery} />
-        <Stack.Screen name="Summary" component={Summary} />
-      </Stack.Navigator>
+      <BottomTab.Navigator
+        initialRouteName="Start"
+        sceneContainerStyle={{
+          padding: Layout.spacing(),
+          backgroundColor,
+        }}
+        screenOptions={{
+          tabBarStyle: {
+            display: 'none',
+          },
+          unmountOnBlur: true,
+          headerShown: false,
+        }}>
+        <BottomTab.Screen name="Start" component={Start} />
+        <BottomTab.Screen name="Breathing" component={Breathing} />
+        <BottomTab.Screen name="BreathHold" component={BreathHold} />
+        <BottomTab.Screen name="Recovery" component={Recovery} />
+        <BottomTab.Screen name="Summary" component={Summary} />
+      </BottomTab.Navigator>
     </View>
   );
 }

@@ -16,9 +16,9 @@ import { TimeoutReturn } from '../../types/types';
 let lastPressedAt = 0;
 
 // mocked values
-const maxRounds = 3;
-const currentRound = 1;
-const recoveryTime = 3;
+const maxRounds = 2;
+let currentRound = 1;
+const recoveryTime = 5;
 
 export default function RecoveryScreen({
   navigation,
@@ -37,13 +37,16 @@ export default function RecoveryScreen({
   useOverrideHardwareBack(navigation as any);
 
   const nextScreen = useCallback(() => {
+    if (!focused) {
+      return;
+    }
     let nextScreenName: keyof ExerciseTabParamList = 'Breathing';
     if (isLastRound) {
       nextScreenName = 'Summary';
     }
-    // navigation.navigate('BreathingExerciseStack', { screen: nextScreenName });
+    currentRound++;
     navigation.jumpTo(nextScreenName);
-  }, [navigation, isLastRound]);
+  }, [focused, isLastRound, navigation]);
 
   useEffect(() => {
     if (userForcedNextScreen) {
@@ -60,7 +63,7 @@ export default function RecoveryScreen({
     setCount(false);
 
     exitTimeoutRef.current = setTimeout(() => {
-      __devCheckActualTime(startIntervalTime.current, recoveryTime - counter);
+      //   __devCheckActualTime(startIntervalTime.current, recoveryTime - counter);
       nextScreen();
     }, 995);
     return () => {

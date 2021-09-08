@@ -43,7 +43,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
       />
 
       <Stack.Screen
-        name="BreathingExerciseStack"
+        name="BreathingExerciseBottomTab"
         component={BreathingExerciseTabNavigator}
         options={{ headerShown: false }}
       />

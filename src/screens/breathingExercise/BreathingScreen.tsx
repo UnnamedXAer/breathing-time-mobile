@@ -1,4 +1,4 @@
-import { useFocusEffect, useIsFocused } from '@react-navigation/core';
+import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
@@ -13,7 +13,7 @@ import BreathingAnimation from './animation/BreathingAnimation';
 let lastPressedAt = 0;
 
 // mocked values
-const breathsPerRound = 0;
+const breathsPerRound = 5;
 const breathTime = 1400;
 
 export default function BreathingScreen({
@@ -40,7 +40,7 @@ export default function BreathingScreen({
       breathsPerRound,
     );
     startIntervalTime.current = -1;
-    navigation.navigate('BreathingExerciseStack', { screen: 'BreathHold' });
+    navigation.jumpTo('BreathHold');
   }, [counter, navigation]);
 
   useEffect(() => {
