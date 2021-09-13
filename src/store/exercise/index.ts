@@ -1,6 +1,6 @@
 import { RoundState } from '../../types/breath';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ExerciseCustomizableProps, UpdateSettingsPayload } from './types';
+import { ExerciseCustomizableProps, UpdatePreferencesPayload } from './types';
 
 const initialState = {
   started: false,
@@ -31,7 +31,7 @@ const exerciseSlice = createSlice({
   initialState,
 
   reducers: {
-    updateSettings: (state, { payload }: PayloadAction<UpdateSettingsPayload>) => {
+    updatePreferences: (state, { payload }: PayloadAction<UpdatePreferencesPayload>) => {
       const { value, propName } = payload;
 
       (<K extends ExerciseCustomizableProps>(prop: K) => {
@@ -49,6 +49,6 @@ const exerciseSlice = createSlice({
   },
 });
 
-export const { restoreDefault, updateSettings } = exerciseSlice.actions;
+export const { restoreDefault, updatePreferences } = exerciseSlice.actions;
 
 export default exerciseSlice.reducer;

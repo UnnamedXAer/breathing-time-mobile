@@ -11,7 +11,7 @@ export type ExerciseCustomizableState = Pick<
 
 export type ExerciseCustomizableProps = keyof ExerciseCustomizableState;
 
-export type UpdateSettingsPayload = {
+export type UpdatePreferencesPayload = {
   propName: ExerciseCustomizableProps;
   value: ExerciseState[ExerciseCustomizableProps];
 };

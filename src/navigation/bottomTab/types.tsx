@@ -5,7 +5,7 @@ import { RootStackParamList } from '../types';
 
 export type RootTabParamList = {
   Home: undefined;
-  Settings: undefined;
+  Preferences: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

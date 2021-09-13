@@ -5,7 +5,7 @@ import { Pressable } from 'react-native';
 import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
 import HomeScreen from '../../screens/HomeScreen';
-import SettingsScreen from '../../screens/SettingsScreen';
+import PreferencesScreen from '../../screens/PreferencesScreen';
 import { RootTabParamList, RootTabScreenProps } from './types';
 
 /**
@@ -50,8 +50,8 @@ export function RootBottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Preferences"
+        component={PreferencesScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="dashboard" color={color} />,
