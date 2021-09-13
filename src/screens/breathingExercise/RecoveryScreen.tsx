@@ -150,10 +150,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
 });
 
 function __devCheckActualTime(startIntervalTime: number, recoveryTime: number) {
