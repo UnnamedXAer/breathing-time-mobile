@@ -1,4 +1,6 @@
-import { ExerciseState } from '.';
+import { productionExerciseDefaultState } from './defaultState';
+
+export type ExerciseState = typeof productionExerciseDefaultState;
 
 export type ExerciseCustomizableState = Pick<
   ExerciseState,

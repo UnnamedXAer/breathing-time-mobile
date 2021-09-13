@@ -1,8 +1,13 @@
 import { RoundState } from '../../types/breath';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ExerciseCustomizableProps, UpdatePreferencesPayload } from './types';
+import {
+  ExerciseCustomizableProps,
+  ExerciseState,
+  UpdatePreferencesPayload,
+} from './types';
+import { productionExerciseDefaultState } from './defaultState';
 
-const initialState = {
+const devInitialState: ExerciseState = {
   started: false,
   finished: false,
   disableAnimation: true,
@@ -11,12 +16,10 @@ const initialState = {
   recoveryTime: 5,
   breathTime: 1.4 * 1000,
   currentRoundState: RoundState.Stopped,
-  holdOutTime: 0,
-  holdOutSeconds: 0,
   holdTimes: [] as number[],
 };
 
-export type ExerciseState = typeof initialState;
+const initialState = __DEV__ ? devInitialState : productionExerciseDefaultState;
 
 export const customizableExerciseStateProps = [
   'numberOfRounds',
