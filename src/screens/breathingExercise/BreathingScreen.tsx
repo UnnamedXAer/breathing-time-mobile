@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
@@ -8,29 +9,32 @@ import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
+import { RootState } from '../../store/types';
 import BreathingAnimation from './animation/BreathingAnimation';
 
 let lastPressedAt = 0;
 
-// mocked values
-const breathsPerRound = 5;
-const breathTime = 1400;
-
 export default function BreathingScreen({
   navigation,
 }: ExerciseTabScreenProps<'Breathing'>) {
-  const dims = useWindowDimensions();
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
+  const disableAnimation = useSelector(
+    (state: RootState) => state.exercise.disableAnimation,
+  );
+  const breathsPerRound = useSelector(
+    (state: RootState) => state.exercise.breathsPerRound,
+  );
+  const breathTime = useSelector((state: RootState) => state.exercise.breathTime);
   const startIntervalTime = useRef(-1);
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
 
-  if (counter >= breathsPerRound && !nextStep) {
-    setNextStep(true);
-  }
+  //   if (counter >= breathsPerRound && !nextStep) {
+  //     setNextStep(true);
+  //   }
 
   const completeScreen = useCallback(() => {
     __devCheckActualBreathingTime(
@@ -41,7 +45,7 @@ export default function BreathingScreen({
     );
     startIntervalTime.current = -1;
     navigation.jumpTo('BreathHold');
-  }, [counter, navigation]);
+  }, [breathTime, breathsPerRound, counter, navigation]);
 
   useEffect(() => {
     if (!focused) {
@@ -67,7 +71,7 @@ export default function BreathingScreen({
     return () => {
       clearTimeout(timeout);
     };
-  }, [completeScreen, nextStep, userForcedNextStep]);
+  }, [breathTime, completeScreen, nextStep, userForcedNextStep]);
 
   useEffect(() => {
     if (nextStep || !focused) {
@@ -84,7 +88,7 @@ export default function BreathingScreen({
     return () => {
       interval.clear();
     };
-  }, [focused, nextStep]);
+  }, [breathTime, focused, nextStep]);
 
   const screenPressHandler = () => {
     if (Date.now() - lastPressedAt <= 500) {
@@ -97,22 +101,28 @@ export default function BreathingScreen({
   };
 
   return (
-    <Pressable style={styles.pressable} onPress={screenPressHandler}>
-      <View style={styles.container}>
-        <Header title="Breathing" />
+    <ScrollView style={styles.flexOne}>
+      <Pressable style={styles.flexOne} onPress={screenPressHandler}>
+        <View style={styles.container}>
+          <Header title="Breathing" />
 
-        <BreathingAnimation dims={dims} />
+          <BreathingAnimation
+            counter={counter}
+            duration={breathTime}
+            disableAnimation={disableAnimation}
+          />
 
-        <Counter value={counter} />
+          <Counter value={counter} />
 
-        <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
-      </View>
-    </Pressable>
+          <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+        </View>
+      </Pressable>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  pressable: {
+  flexOne: {
     flex: 1,
   },
   container: {

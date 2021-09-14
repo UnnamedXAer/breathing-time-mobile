@@ -8,6 +8,7 @@ export default {
     width,
     height,
   },
+  windowRatio: width / height,
   isSmallDevice: width < 375,
   baseRadius: 4,
   spacing: (x = 1) => x * 8,

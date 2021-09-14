@@ -9,7 +9,7 @@ interface Props {
   fontSize?: number;
   containerStyle?: ViewStyle;
 }
-const defaultFontSize = Layout.window.height * 0.25;
+const defaultFontSize = Layout.window.height * (Layout.windowRatio < 0.5 ? 0.25 : 0.2);
 const Counter: React.FC<Props> = ({
   value,
   text,
@@ -17,7 +17,7 @@ const Counter: React.FC<Props> = ({
   containerStyle,
 }) => {
   if (value > 999) {
-    fontSize = Layout.window.height * 0.18;
+    fontSize = Layout.window.height * 0.17;
   }
 
   return (
