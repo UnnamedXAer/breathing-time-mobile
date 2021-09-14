@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import Counter from '../../components/Counter';
@@ -10,12 +11,14 @@ import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
+import { addHoldTime } from '../../store/exercise';
 
 let lastPressedAt = 0;
 
 export default function BreathHoldScreen({
   navigation,
 }: ExerciseTabScreenProps<'BreathHold'>) {
+  const dispatch = useDispatch();
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
@@ -25,10 +28,11 @@ export default function BreathHoldScreen({
 
   const completeScreen = useCallback(() => {
     setNextStep(true);
+    dispatch(addHoldTime((Date.now() - startIntervalTime.current) / 1000));
     // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
     navigation.jumpTo('Recovery');
-  }, [navigation]);
+  }, [dispatch, navigation]);
 
   useEffect(() => {
     if (!focused) {
@@ -57,7 +61,6 @@ export default function BreathHoldScreen({
 
   const screenPressHandler = () => {
     if (Date.now() - lastPressedAt <= 500) {
-      setNextStep(true);
       completeScreen();
       return;
     }

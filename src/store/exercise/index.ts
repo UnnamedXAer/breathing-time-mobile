@@ -49,9 +49,13 @@ const exerciseSlice = createSlice({
         },
       );
     },
+
+    addHoldTime: (state, { payload: time }: PayloadAction<number>) => {
+      state.holdTimes.push(time);
+    },
   },
 });
 
-export const { restoreDefault, updatePreferences } = exerciseSlice.actions;
+export const { restoreDefault, updatePreferences, addHoldTime } = exerciseSlice.actions;
 
 export default exerciseSlice.reducer;
