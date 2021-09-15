@@ -2,7 +2,6 @@ import { RoundState } from '../../types/breath';
 
 export const productionExerciseDefaultState = {
   started: false,
-  finished: false,
   disableAnimation: true,
   numberOfRounds: 3,
   breathsPerRound: 30,
