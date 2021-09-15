@@ -10,6 +10,7 @@ import { productionExerciseDefaultState } from './defaultState';
 const devInitialState: ExerciseState = {
   started: false,
   disableAnimation: true,
+  disableStartTips: false,
   numberOfRounds: 3,
   breathsPerRound: 31231231,
   recoveryTime: 5,
@@ -26,6 +27,7 @@ export const customizableExerciseStateProps = [
   'recoveryTime',
   'breathTime',
   'disableAnimation',
+  'disableStartTips',
 ] as ReadonlyArray<ExerciseCustomizableProps>;
 
 const exerciseSlice = createSlice({

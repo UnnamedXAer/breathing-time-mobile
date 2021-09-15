@@ -1,12 +1,14 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
+import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
+import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { RootState } from '../../store/types';
@@ -17,6 +19,7 @@ let lastPressedAt = 0;
 export default function BreathingScreen({
   navigation,
 }: ExerciseTabScreenProps<'Breathing'>) {
+  const [started] = useCounterStarted(2000);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
@@ -32,9 +35,9 @@ export default function BreathingScreen({
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
 
-  //   if (counter >= breathsPerRound && !nextStep) {
-  //     setNextStep(true);
-  //   }
+  if (counter >= breathsPerRound && !nextStep) {
+    setNextStep(true);
+  }
 
   const completeScreen = useCallback(() => {
     __devCheckActualBreathingTime(
@@ -74,7 +77,7 @@ export default function BreathingScreen({
   }, [breathTime, completeScreen, nextStep, userForcedNextStep]);
 
   useEffect(() => {
-    if (nextStep || !focused) {
+    if (nextStep || !focused || !started) {
       return;
     }
 
@@ -88,9 +91,12 @@ export default function BreathingScreen({
     return () => {
       interval.clear();
     };
-  }, [breathTime, focused, nextStep]);
+  }, [breathTime, focused, nextStep, started]);
 
   const screenPressHandler = () => {
+    if (!started) {
+      return;
+    }
     if (Date.now() - lastPressedAt <= 500) {
       setNextStep(true);
       setUserForcedNextStep(true);
@@ -101,28 +107,31 @@ export default function BreathingScreen({
   };
 
   return (
-    <ScrollView style={styles.flexOne}>
-      <Pressable style={styles.flexOne} onPress={screenPressHandler}>
-        <View style={styles.container}>
-          <Header title="Breathing" />
+    <Pressable style={styles.pressable} onPress={screenPressHandler}>
+      <View style={styles.container}>
+        <Header title="Breathing" />
+        {!started ? (
+          <StartTip text="Breath deeply with counter." />
+        ) : (
+          <>
+            <BreathingAnimation
+              counter={counter}
+              duration={breathTime}
+              disableAnimation={disableAnimation}
+            />
 
-          <BreathingAnimation
-            counter={counter}
-            duration={breathTime}
-            disableAnimation={disableAnimation}
-          />
+            <Counter value={counter} />
 
-          <Counter value={counter} />
-
-          <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
-        </View>
-      </Pressable>
-    </ScrollView>
+            <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+          </>
+        )}
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  flexOne: {
+  pressable: {
     flex: 1,
   },
   container: {
@@ -138,7 +147,7 @@ function __devCheckActualBreathingTime(
   breathTime: number,
   breathsPerRound: number,
 ) {
-  if (__DEV__ && breathsPerRound) {
+  if (!!false && __DEV__ && breathsPerRound) {
     const realTime = (Date.now() - startIntervalTime) / 1000;
     const counterTime = ((counter + 1) * breathTime) / 1000;
 

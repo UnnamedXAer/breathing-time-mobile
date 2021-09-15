@@ -4,11 +4,13 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
+import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
 import AppButton from '../../components/ui/Button';
 import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
+import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { addHoldTime } from '../../store/exercise';
@@ -19,6 +21,7 @@ export default function BreathHoldScreen({
   navigation,
 }: ExerciseTabScreenProps<'BreathHold'>) {
   const dispatch = useDispatch();
+  const [started] = useCounterStarted(2000);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
@@ -43,7 +46,7 @@ export default function BreathHoldScreen({
   }, [focused]);
 
   useEffect(() => {
-    if (nextStep || !focused) {
+    if (nextStep || !focused || !started) {
       return;
     }
 
@@ -57,7 +60,7 @@ export default function BreathHoldScreen({
     return () => {
       interval.clear();
     };
-  }, [focused, nextStep]);
+  }, [focused, nextStep, started]);
 
   const screenPressHandler = () => {
     if (Date.now() - lastPressedAt <= 500) {
@@ -73,20 +76,27 @@ export default function BreathHoldScreen({
       <View style={styles.container}>
         <Header
           title="Breath Hold"
-          roundInfo="Exhale and stop breathing until you feel urge to inhale."
+          roundInfo={
+            !started ? void 0 : 'Exhale and stop breathing until you feel urge to inhale.'
+          }
         />
+        {!started ? (
+          <StartTip text=" Take final deep breath, then exhale and stop breathing." />
+        ) : (
+          <>
+            <Counter value={counter} />
+            <AppButton
+              onPress={completeScreen}
+              title="Next Phase"
+              size="large"
+              mode="contained"
+              containerStyle={{ padding: Layout.spacing(2) }}
+              textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
+            />
 
-        <Counter value={counter} />
-        <AppButton
-          onPress={completeScreen}
-          title="Next Phase"
-          size="large"
-          mode="contained"
-          containerStyle={{ padding: Layout.spacing(2) }}
-          textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
-        />
-
-        <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+            <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+          </>
+        )}
       </View>
     </Pressable>
   );

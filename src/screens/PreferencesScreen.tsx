@@ -120,6 +120,14 @@ export default function PreferencesScreen() {
         }}
       />
 
+      <Switch
+        label="Disable start tips before exercise phases:"
+        value={exerciseConfig.disableStartTips}
+        onChange={(value) => {
+          dispatch(updatePreferences({ propName: 'disableStartTips', value }));
+        }}
+      />
+
       <View style={styles.resetBtnContainer}>
         <Button
           title="Restore Default"

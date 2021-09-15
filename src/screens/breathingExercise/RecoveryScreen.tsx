@@ -3,9 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
+import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
 import Layout from '../../constants/Layout';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
+import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import {
   ExerciseTabParamList,
@@ -23,6 +25,7 @@ const recoveryTime = 5;
 export default function RecoveryScreen({
   navigation,
 }: ExerciseTabScreenProps<'Recovery'>) {
+  const [started] = useCounterStarted(2000);
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
   const isLastRound = currentRound >= maxRounds;
@@ -82,9 +85,11 @@ export default function RecoveryScreen({
       setUserForcedNextScreen(false);
       return;
     }
-    setCounter(recoveryTime);
-    setCount(true);
-  }, [focused]);
+    if (started) {
+      setCounter(recoveryTime);
+      setCount(true);
+    }
+  }, [focused, started]);
 
   useEffect(() => {
     if (!count) {
@@ -126,16 +131,26 @@ export default function RecoveryScreen({
       <View style={styles.container}>
         <Header
           title="Recovery"
-          roundInfo={`Take one deep breath and hold for ${recoveryTime} seconds.`}
+          roundInfo={
+            !started
+              ? void 0
+              : `Take one deep breath and hold for ${recoveryTime} seconds.`
+          }
         />
-        <Counter
-          value={counter}
-          containerStyle={{ marginBottom: Layout.window.height * 0.25 }}
-        />
-        <Footer
-          text={`Tap twice on the screen to skip to the ${
-            isLastRound ? 'Summary screen' : 'next round'
-          }.`}></Footer>
+        {!started ? (
+          <StartTip text="Inhale deeply and stop breathing." />
+        ) : (
+          <>
+            <Counter
+              value={counter}
+              containerStyle={{ marginBottom: Layout.window.height * 0.25 }}
+            />
+            <Footer
+              text={`Tap twice on the screen to skip to the ${
+                isLastRound ? 'Summary screen' : 'next round'
+              }.`}></Footer>
+          </>
+        )}
       </View>
     </Pressable>
   );

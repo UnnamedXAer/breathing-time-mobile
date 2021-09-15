@@ -6,6 +6,7 @@ export type ExerciseCustomizableState = Pick<
   ExerciseState,
   | 'numberOfRounds'
   | 'breathsPerRound'
+  | 'disableStartTips'
   | 'recoveryTime'
   | 'breathTime'
   | 'disableAnimation'
