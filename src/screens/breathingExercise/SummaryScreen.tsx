@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Button, Share, StyleSheet, ToastAndroid, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Header from '../../components/breathingExercise/Header';
 import AppButton from '../../components/ui/Button';
@@ -17,12 +17,44 @@ export default function SummaryScreen({ navigation }: Props) {
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
   const scheme = useColorScheme();
 
-  const averageTime = (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length).toFixed(3);
+  const averageTime = (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length)
+    .toFixed(3)
+    .replace(/((\.0+)|(0+))$/g, '');
+
+  const share = async () => {
+    let text = '';
+    holdTimes.forEach((v, idx) => {
+      if (idx > 0) {
+        text += '\n';
+      }
+      text += `Round ${idx + 1}:\t${v} s`;
+    });
+    if (holdTimes.length > 1) {
+      text += `\n\nAverage time: ${averageTime} seconds.`;
+    }
+
+    try {
+      await Share.share(
+        {
+          title: 'Breathing Exercise Results',
+          message: text,
+        },
+        {
+          dialogTitle: 'Share my results',
+          subject: 'Breathing Exercise Results',
+          tintColor: Colors.primary,
+        },
+      );
+    } catch (err) {
+      ToastAndroid.show('Sorry, could not open share dialog.', ToastAndroid.SHORT);
+      console.log('share err: ', err);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Header title="Recovery" />
-
+      <Button title="Share" onPress={share} />
       <View style={styles.results}>
         {holdTimes.map((time, idx) => {
           return (
