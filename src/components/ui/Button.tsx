@@ -71,7 +71,8 @@ export default function Button({
     textColor = Colors[colorScheme].background;
   }
 
-  const backgroundColor = mode === 'contained' ? borderColor : undefined;
+  const backgroundColor =
+    mode === 'contained' ? borderColor : Colors[colorScheme].background;
 
   const styles = StyleSheet.create({
     touchable: {
@@ -87,7 +88,7 @@ export default function Button({
         height: Layout.baseRadius,
       },
       shadowOpacity: 0.6,
-      // elevation: 5,
+      elevation: 5,
       transform: scale ? [{ scale }] : undefined,
     },
     container: {
