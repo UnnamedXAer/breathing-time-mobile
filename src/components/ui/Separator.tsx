@@ -10,8 +10,8 @@ export default function Separator() {
 
 const styles = StyleSheet.create({
   separator: {
-    marginVertical: 30,
     height: 1,
     width: '80%',
+    marginHorizontal: '10%',
   },
 });

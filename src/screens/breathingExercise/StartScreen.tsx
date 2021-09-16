@@ -8,6 +8,7 @@ import { TimeoutReturn } from '../../types/types';
 import { StyleSheet, View } from 'react-native';
 import Layout from '../../constants/Layout';
 import Header from '../../components/breathingExercise/Header';
+import WarningNote from '../../components/WarningNote';
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
@@ -68,6 +69,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.content}>
         {!started ? (
           <>
+            <WarningNote style={styles.warningNote} />
             <View style={styles.startBtnWrapper}>
               <AppButton
                 onPress={startExercise}
@@ -111,10 +113,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  warningNote: {
+    marginHorizontal: Layout.spacing(),
+  },
   startBtnWrapper: {
-    paddingBottom: Layout.window.height * 0.18,
+    // paddingBottom: Layout.window.height * 0.18,
+    marginVertical: Layout.spacing(),
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footer: {
     marginBottom: Layout.spacing(),

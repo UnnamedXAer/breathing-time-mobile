@@ -5,9 +5,10 @@ import { Text } from './Themed';
 
 interface Props {
   variant?: 'h1' | 'h2' | 'h3';
+  style?: TextStyle;
 }
 
-const Headline: React.FC<Props> = ({ children, variant = 'h1' }) => {
+const Headline: React.FC<Props> = ({ children, variant = 'h1', style }) => {
   let fontSize = Layout.spacing(4);
 
   switch (variant) {
@@ -25,6 +26,7 @@ const Headline: React.FC<Props> = ({ children, variant = 'h1' }) => {
         fontSize,
         fontFamily: 'Roboto',
         fontWeight: '700',
+        ...style,
       }}>
       {children}
     </Text>
