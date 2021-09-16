@@ -21,7 +21,7 @@ export default function BreathHoldScreen({
   navigation,
 }: ExerciseTabScreenProps<'BreathHold'>) {
   const dispatch = useDispatch();
-  const [started] = useCounterStarted(2000);
+  const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
   const startIntervalTime = useRef(-1);
@@ -63,6 +63,11 @@ export default function BreathHoldScreen({
   }, [focused, nextStep, started]);
 
   const screenPressHandler = () => {
+    if (!started) {
+      setStarted(true);
+      return;
+    }
+
     if (Date.now() - lastPressedAt <= 500) {
       completeScreen();
       return;

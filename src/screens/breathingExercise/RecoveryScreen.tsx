@@ -25,7 +25,7 @@ const recoveryTime = 5;
 export default function RecoveryScreen({
   navigation,
 }: ExerciseTabScreenProps<'Recovery'>) {
-  const [started] = useCounterStarted(2000);
+  const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
   const isLastRound = currentRound >= maxRounds;
@@ -117,6 +117,10 @@ export default function RecoveryScreen({
   }, [count]);
 
   const screenPressHandler = () => {
+    if (!started) {
+      setStarted(true);
+      return;
+    }
     if (Date.now() - lastPressedAt <= 500) {
       setCount(false);
       setUserForcedNextScreen(true);

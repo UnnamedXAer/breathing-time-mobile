@@ -22,5 +22,5 @@ export default function useCounterStarted(timeout: number) {
     };
   }, [timeout, started]);
 
-  return [started, setStarted];
+  return [started, setStarted] as const;
 }
