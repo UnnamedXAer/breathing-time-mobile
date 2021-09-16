@@ -142,9 +142,6 @@ const styles = StyleSheet.create({
   container: {
     width: containerSize,
     height: containerSize,
-    borderColor: 'darkgreen',
-    borderWidth: 1,
-
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: Layout.spacing(3),
@@ -157,8 +154,6 @@ const styles = StyleSheet.create({
     height: 100,
   },
   one: {
-    borderBottomColor: 'red',
-    borderTopColor: 'green',
     backgroundColor: 'rgb(106, 170, 170)',
   },
   two: {
