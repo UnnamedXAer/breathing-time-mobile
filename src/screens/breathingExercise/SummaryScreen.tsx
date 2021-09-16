@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Button, Share, StyleSheet, ToastAndroid, View } from 'react-native';
+import { Share, StyleSheet, ToastAndroid, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Header from '../../components/breathingExercise/Header';
 import AppButton from '../../components/ui/Button';
+import ShareButton from '../../components/ui/ShareButton';
 import { Text } from '../../components/ui/Themed';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
@@ -47,15 +48,14 @@ export default function SummaryScreen({ navigation }: Props) {
       );
     } catch (err) {
       ToastAndroid.show('Sorry, could not open share dialog.', ToastAndroid.SHORT);
-      console.log('share err: ', err);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Recovery" />
-      <Button title="Share" onPress={share} />
+      <Header title="Summary" />
       <View style={styles.results}>
+        <ShareButton onPress={share} style={styles.shareBtn} />
         {holdTimes.map((time, idx) => {
           return (
             <View
@@ -118,5 +118,9 @@ const styles = StyleSheet.create({
   },
   averageText: {
     fontSize: Layout.spacing(2.5),
+  },
+  shareBtn: {
+    alignSelf: 'flex-end',
+    marginTop: Layout.spacing(2),
   },
 });
