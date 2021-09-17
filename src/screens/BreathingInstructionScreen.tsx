@@ -46,7 +46,7 @@ const instructions: Instructions = [
 export default function BreathingInstructionScreen() {
   return (
     <ScrollView style={styles.container}>
-      <Headline variant="h1" style={{ textAlign: 'center' }}>
+      <Headline variant="h2" style={{ textAlign: 'center' }}>
         Exercise instructions
       </Headline>
 
