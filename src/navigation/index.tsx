@@ -6,11 +6,12 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from './types';
 import LinkingConfiguration from './LinkingConfiguration';
-import { RootBottomTabNavigator } from './bottomTab/BottomTab';
 import { BreathingExerciseTabNavigator } from './exerciseBottomTab/ExerciseBottomTab';
 import BreathingInstructionScreen from '../screens/BreathingInstructionScreen';
 import Colors from '../constants/Colors';
 import { ColorSchemeName } from '../hooks/useColorScheme';
+import PreferencesScreen from '../screens/PreferencesScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -22,10 +23,6 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -35,18 +32,17 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         contentStyle: {
           backgroundColor: Colors[colorScheme].background,
         },
+        headerBackVisible: true,
       }}>
-      <Stack.Screen
-        name="Root"
-        component={RootBottomTabNavigator}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} />
 
       <Stack.Screen
         name="BreathingExerciseBottomTab"
         component={BreathingExerciseTabNavigator}
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen name="Preferences" component={PreferencesScreen} />
 
       <Stack.Screen
         name="BreathingInstruction"

@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NativeStackNavigationEventMap } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { RootTabParamList } from './bottomTab/types';
 import { ExerciseTabParamList } from './exerciseBottomTab/types';
 
 // declare global {
@@ -17,11 +16,12 @@ import { ExerciseTabParamList } from './exerciseBottomTab/types';
 // }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
   BreathingExerciseBottomTab: NavigatorScreenParams<ExerciseTabParamList> | undefined;
   BreathingInstruction: undefined;
+  Preferences: undefined;
+  Home: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

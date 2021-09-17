@@ -9,7 +9,7 @@ export function useOverrideHardwareBack(
   useFocusEffect(
     useCallback(() => {
       const backPressHandler = () => {
-        navigation.navigate('Root', { screen: 'Home' });
+        navigation.navigate('Home');
         return true;
       };
       BackHandler.addEventListener('hardwareBackPress', backPressHandler);
