@@ -8,9 +8,10 @@ import { Text } from './ui/Themed';
 
 interface Props {
   style?: ViewStyle;
+  textSize?: number;
 }
 
-const WarningNote: React.FC<Props> = ({ style }) => {
+const WarningNote: React.FC<Props> = ({ style, textSize = Layout.spacing(2.2) }) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.headlineContainer}>
@@ -27,7 +28,7 @@ const WarningNote: React.FC<Props> = ({ style }) => {
         />
         <Headline variant="h3">Attention</Headline>
       </View>
-      <Text style={styles.text}>
+      <Text style={{ fontSize: textSize }}>
         This breathing exercise can affect your motor control, cause temporary dizziness
         or even make you faint - do NOT do it while driving or in kind of dangerous
         places. Find safe place like sofa or bed.
@@ -47,8 +48,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: Layout.spacing(),
-  },
-  text: {
-    fontSize: Layout.spacing(2.2),
   },
 });

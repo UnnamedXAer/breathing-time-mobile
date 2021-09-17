@@ -69,7 +69,10 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.content}>
         {!started ? (
           <>
-            <WarningNote style={styles.warningNote} />
+            <WarningNote
+              style={styles.warningNote}
+              textSize={Layout.spacing(Layout.window.height < 700 ? 1.8 : 2.2)}
+            />
             <View style={styles.startBtnWrapper}>
               <AppButton
                 onPress={startExercise}
@@ -107,7 +110,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: Layout.window.height * 0.04,
   },
   content: {
     flex: 1,
@@ -117,7 +119,6 @@ const styles = StyleSheet.create({
     marginHorizontal: Layout.spacing(),
   },
   startBtnWrapper: {
-    // paddingBottom: Layout.window.height * 0.18,
     marginVertical: Layout.spacing(),
     flex: 1,
     justifyContent: 'center',
