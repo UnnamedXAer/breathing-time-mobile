@@ -16,8 +16,11 @@ import Layout from '../constants/Layout';
 import Headline from '../components/ui/Headline';
 import Slider from '../components/ui/Slider';
 import Switch from '../components/ui/Switch';
+import { RootStackScreenProps } from '../navigation/types';
 
-export default function PreferencesScreen() {
+export default function PreferencesScreen({
+  navigation,
+}: RootStackScreenProps<'Preferences'>) {
   const dispatch = useDispatch();
 
   const exerciseConfig = useSelector((state: RootState) => {
@@ -35,7 +38,9 @@ export default function PreferencesScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
       <View style={styles.headerContainer}>
-        <Headline variant={'h2'}>Breathing Exercise Preferences</Headline>
+        <Headline variant={'h2'} style={{ textAlign: 'center' }}>
+          Breathing Exercise Preferences
+        </Headline>
       </View>
 
       <Slider
@@ -128,7 +133,15 @@ export default function PreferencesScreen() {
         }}
       />
 
-      <View style={styles.resetBtnContainer}>
+      <View style={styles.actionsContainer}>
+        <Button
+          title="Done"
+          mode="outlined"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={{ marginBottom: Layout.spacing(2) }} />
         <Button
           title="Restore Default"
           mode="contained"
@@ -153,7 +166,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     marginBottom: Layout.spacing(3),
   },
-  resetBtnContainer: {
+  actionsContainer: {
     alignItems: 'center',
     marginVertical: Layout.spacing(3),
   },

@@ -94,12 +94,15 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
       </View>
       <View style={styles.footer}>
         {!started && (
-          <AppButton
-            onPress={() => navigation.replace('BreathingInstruction')}
-            size="small"
-            mode="outlined"
-            title="See Instructions"
-          />
+          <>
+            <AppButton onPress={() => navigation.goBack()} mode="outlined" title="Back" />
+            <AppButton
+              onPress={() => navigation.replace('BreathingInstruction')}
+              size="small"
+              mode="outlined"
+              title="See Instructions"
+            />
+          </>
         )}
       </View>
     </View>
