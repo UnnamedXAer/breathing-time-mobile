@@ -12,6 +12,10 @@ import Colors from '../constants/Colors';
 import { ColorSchemeName } from '../hooks/useColorScheme';
 import PreferencesScreen from '../screens/PreferencesScreen';
 import HomeScreen from '../screens/HomeScreen';
+import { Fonts } from '../constants/fonts';
+import { Text } from '../components/ui/Themed';
+import { View } from 'react-native';
+import Layout from '../constants/Layout';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -29,12 +33,47 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <Stack.Navigator
       screenOptions={{
+        headerTintColor: Colors[colorScheme].text,
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].background,
+        },
+        headerTitleStyle: {
+          fontFamily: Fonts.Lato,
+        },
         contentStyle: {
           backgroundColor: Colors[colorScheme].background,
         },
-        headerBackVisible: true,
       }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'Breathing Time',
+          headerTitle: (props) => (
+            <Text
+              {...props}
+              style={{
+                color: props.tintColor,
+                textAlign: 'center',
+                fontSize: Layout.spacing(3),
+                width: '96.5%',
+                paddingRight: 25,
+              }}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            />
+          ),
+          headerRight: () => (
+            <View
+              style={{
+                borderWidth: 2,
+                borderColor: 'yellow',
+                width: 20,
+                height: 20,
+              }}></View>
+          ),
+        }}
+      />
 
       <Stack.Screen
         name="BreathingExerciseBottomTab"
