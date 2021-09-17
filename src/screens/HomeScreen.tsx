@@ -4,11 +4,18 @@ import Card from '../components/home/Card';
 import { View } from '../components/ui/Themed';
 import CoughingSvg from '../components/ui/icons/CoughingSvg';
 import Layout from '../constants/Layout';
-import { RootTabScreenProps } from '../navigation/bottomTab/types';
+import InstructionSvg from '../components/ui/icons/InstructionSvg';
+import PreferencesSvg from '../components/ui/icons/PreferencesSvg';
+import Colors from '../constants/Colors';
+import useColorScheme from '../hooks/useColorScheme';
+import { RootStackScreenProps } from '../navigation/types';
 
-export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
+export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>) {
+  const scheme = useColorScheme();
+  const fillColor = Colors[scheme].primary;
+
   return (
-    <ScrollView style={styles.scroll}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
       <View style={styles.container}>
         <Card
           label="Breathing Exercise"
@@ -16,13 +23,17 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
             navigation.navigate('BreathingExerciseBottomTab', {
               screen: 'Start',
             })
-          }>
-          <CoughingSvg />
+          }
+          imgContainerStyle={{ padding: Layout.spacing(2) }}>
+          <CoughingSvg fillColor={fillColor} />
         </Card>
         <Card
           label="Breathing Instruction"
           onPress={() => navigation.navigate('BreathingInstruction')}>
-          <CoughingSvg />
+          <InstructionSvg fillColor={fillColor} />
+        </Card>
+        <Card label="Preferences" onPress={() => navigation.navigate('Preferences')}>
+          <PreferencesSvg fillColor={fillColor} />
         </Card>
       </View>
     </ScrollView>
@@ -30,13 +41,18 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1 },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    flex: 1,
+    backgroundColor: 'red',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
-    paddingHorizontal: Layout.spacing(), // @todo: test the margin/padding
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
+    maxWidth: 420,
+    paddingHorizontal: Layout.spacing(),
+    alignItems: 'center',
   },
 });

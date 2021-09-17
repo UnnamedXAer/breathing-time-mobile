@@ -3,7 +3,7 @@ import Svg, { SvgProps, Path } from 'react-native-svg';
 import Colors from '../../../constants/Colors';
 import useColorScheme from '../../../hooks/useColorScheme';
 
-function SvgComponent(props: SvgProps) {
+function WarningSvg(props: SvgProps) {
   const scheme = useColorScheme();
   const pathFill = props.fill || Colors[scheme].text;
   return (
@@ -64,4 +64,4 @@ function SvgComponent(props: SvgProps) {
   );
 }
 
-export default SvgComponent;
+export default WarningSvg;
