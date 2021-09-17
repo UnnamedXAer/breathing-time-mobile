@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../components/ui/Button';
 import {
@@ -33,7 +33,7 @@ export default function PreferencesScreen() {
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
       <View style={styles.headerContainer}>
         <Headline variant={'h2'}>Breathing Exercise Preferences</Headline>
       </View>
@@ -137,14 +137,17 @@ export default function PreferencesScreen() {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: Layout.spacing(2),
+  },
+  scrollContainer: {
+    // flex: 1,
+    paddingHorizontal: Layout.spacing(3),
     justifyContent: 'center',
   },
   headerContainer: {
