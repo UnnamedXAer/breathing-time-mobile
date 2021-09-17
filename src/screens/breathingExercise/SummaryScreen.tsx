@@ -43,7 +43,7 @@ export default function SummaryScreen({ navigation }: Props) {
         {
           dialogTitle: 'Share my results',
           subject: 'Breathing Exercise Results',
-          tintColor: Colors.primary,
+          tintColor: Colors[scheme].primary,
         },
       );
     } catch (err) {
@@ -83,7 +83,7 @@ export default function SummaryScreen({ navigation }: Props) {
         title="Home"
         mode="contained"
         onPress={() => {
-          navigation.navigate('Root', { screen: 'Home' });
+          navigation.navigate('Home');
         }}
       />
     </View>

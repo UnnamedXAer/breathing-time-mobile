@@ -10,8 +10,8 @@ const _colors = {
 } as const;
 
 export default {
-  primary: 'rgb(1, 77, 77)',
   light: {
+    primary: 'rgb(1, 77, 77)',
     text: 'rgb(18, 18, 18)',
     textRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
     background: 'rgb(253, 253, 253)',
@@ -21,6 +21,7 @@ export default {
     tabIconSelected: tintColorLight,
   },
   dark: {
+    primary: 'rgb(12, 171, 171)',
     text: 'rgb(253, 253, 253)',
     textRGBA: (opacity: number) => `rgba(253, 253, 253, ${opacity})`,
     background: 'rgb(18, 18, 18)',
@@ -30,4 +31,4 @@ export default {
     tabIconSelected: tintColorDark,
   },
   colors: _colors,
-};
+} as const;

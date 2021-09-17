@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   thumb: {
     backgroundColor: '#019191',
-    borderColor: Colors.primary,
+    borderColor: Colors.light.primary,
     borderWidth: Layout.baseRadius,
     width: Layout.spacing(4),
     height: Layout.spacing(4),

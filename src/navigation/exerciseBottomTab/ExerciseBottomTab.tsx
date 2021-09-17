@@ -30,7 +30,7 @@ export function BreathingExerciseTabNavigator() {
           width: Layout.window.width,
           paddingTop: marginTop,
         }}
-        colors={[Colors.primary, Colors[scheme].background]}>
+        colors={[Colors[scheme].primary, Colors[scheme].background]}>
         <Text
           style={{
             fontSize: Layout.spacing(4),
