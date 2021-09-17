@@ -62,7 +62,7 @@ export default function Button({
     borderColor = Colors[colorScheme].text;
   }
 
-  let textColor = Colors[colorScheme].text;
+  let textColor: string = Colors[colorScheme].text;
   if (disabled) {
     textColor = Colors.colors.disabled;
   } else if (color) {
@@ -95,6 +95,7 @@ export default function Button({
       marginHorizontal: Layout.spacing(),
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
     },
     iconContainer: {
       width: fontSize,
@@ -107,6 +108,7 @@ export default function Button({
       marginLeft: loading ? Layout.spacing() : 0,
       fontSize,
       color: textColor,
+      textAlign: 'center',
     },
   });
 
