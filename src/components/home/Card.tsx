@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     margin: Layout.spacing(1),
     padding: Layout.baseRadius,
     flexDirection: 'row',
-    elevation: 4,
+    elevation: 6,
   },
   imageContainer: {
     padding: Layout.spacing(3),
