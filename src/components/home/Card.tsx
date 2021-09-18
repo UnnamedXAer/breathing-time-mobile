@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import {
   GestureResponderEvent,
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -17,6 +18,7 @@ interface Props {
   onPress: (event: GestureResponderEvent) => void;
   children: ReactElement;
   imgContainerStyle?: ViewStyle;
+  labelStyle?: TextStyle;
 }
 
 const Card: React.FC<Props> = ({
@@ -25,6 +27,7 @@ const Card: React.FC<Props> = ({
   children,
   onPress,
   imgContainerStyle,
+  labelStyle,
 }) => {
   const scheme = useColorScheme();
   const backgroundColor = Colors[scheme].background;
@@ -39,7 +42,7 @@ const Card: React.FC<Props> = ({
       <>
         <View style={[styles.imageContainer, imgContainerStyle]}>{children}</View>
         <View style={{ ...styles.labelWrapper, backgroundColor: labelBgColor }}>
-          <Text style={styles.label}>
+          <Text style={{ ...styles.label, ...labelStyle }}>
             {label}
             {helperLabel && <Text>{helperLabel}</Text>}
           </Text>

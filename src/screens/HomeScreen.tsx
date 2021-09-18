@@ -24,7 +24,8 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
               screen: 'Start',
             })
           }
-          imgContainerStyle={{ padding: Layout.spacing(2) }}>
+          imgContainerStyle={styles.beImg}
+          labelStyle={styles.beLabel}>
           <CoughingSvg fillColor={fillColor} />
         </Card>
         <Card
@@ -42,17 +43,19 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
 
 const styles = StyleSheet.create({
   scroll: {
-    flex: 1,
+    flexGrow: 1,
   },
   scrollContent: {
-    flex: 1,
-    backgroundColor: 'red',
+    paddingBottom: Layout.spacing(1),
     alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
+    padding: Layout.spacing(2),
     flex: 1,
-    maxWidth: 420,
-    paddingHorizontal: Layout.spacing(),
+    maxWidth: 400,
     alignItems: 'center',
   },
+  beImg: { padding: Layout.spacing(2) },
+  beLabel: { fontWeight: 'bold' },
 });
