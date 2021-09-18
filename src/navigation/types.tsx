@@ -16,7 +16,7 @@ import { ExerciseTabParamList } from './exerciseBottomTab/types';
 // }
 
 export type RootStackParamList = {
-  Modal: undefined;
+  About: undefined;
   NotFound: undefined;
   BreathingExerciseBottomTab: NavigatorScreenParams<ExerciseTabParamList> | undefined;
   BreathingInstruction: undefined;

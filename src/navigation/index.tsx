@@ -1,10 +1,9 @@
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-
-import ModalScreen from '../screens/ModalScreen';
+import AboutScreen from '../screens/AboutScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import { RootStackParamList } from './types';
+import { RootStackParamList, RootStackScreenProps } from './types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { BreathingExerciseTabNavigator } from './exerciseBottomTab/ExerciseBottomTab';
 import BreathingInstructionScreen from '../screens/BreathingInstructionScreen';
@@ -14,8 +13,9 @@ import PreferencesScreen from '../screens/PreferencesScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { Fonts } from '../constants/fonts';
 import { Text } from '../components/ui/Themed';
-import { View } from 'react-native';
+import { Pressable } from 'react-native';
 import Layout from '../constants/Layout';
+import SimpleLineIcons from '@expo/vector-icons/build/SimpleLineIcons';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -47,7 +47,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{
+        options={({ navigation }: RootStackScreenProps<'Home'>) => ({
           title: 'Breathing Time',
           headerTitle: (props) => (
             <Text
@@ -64,15 +64,20 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
             />
           ),
           headerRight: () => (
-            <View
-              style={{
-                borderWidth: 2,
-                borderColor: 'yellow',
-                width: 20,
-                height: 20,
-              }}></View>
+            <Pressable
+              onPress={() => navigation.push('About')}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+              <SimpleLineIcons
+                name="info"
+                size={25}
+                color={Colors[colorScheme].text}
+                style={{ marginRight: 15 }}
+              />
+            </Pressable>
           ),
-        }}
+        })}
       />
 
       <Stack.Screen
@@ -93,9 +98,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         component={NotFoundScreen}
         options={{ title: 'Oops!' }}
       />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
+      <Stack.Screen name="About" component={AboutScreen} />
     </Stack.Navigator>
   );
 }

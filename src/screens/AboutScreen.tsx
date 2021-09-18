@@ -5,10 +5,10 @@ import Separator from '../components/ui/Separator';
 
 import { Text, View } from '../components/ui/Themed';
 
-export default function ModalScreen() {
+export default function AboutScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
+      <Text style={styles.title}>About</Text>
       <Separator />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
