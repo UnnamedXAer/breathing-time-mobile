@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from '../components/ui/Button';
 import {
   customizableExerciseStateProps,
-  restoreDefault,
+  restoreDefaultPreferences,
   updatePreferences,
 } from '../store/exercise';
 import { RootState } from '../store/types';
@@ -146,7 +146,7 @@ export default function PreferencesScreen({
           title="Restore Default"
           mode="outlined"
           onPress={() => {
-            dispatch(restoreDefault());
+            dispatch(restoreDefaultPreferences());
           }}
         />
       </View>

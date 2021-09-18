@@ -18,3 +18,5 @@ export type UpdatePreferencesPayload = {
   propName: ExerciseCustomizableProps;
   value: ExerciseState[ExerciseCustomizableProps];
 };
+
+export type SavedPreferences = Partial<ExerciseCustomizableState> | null;
