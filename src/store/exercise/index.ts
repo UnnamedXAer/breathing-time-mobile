@@ -10,7 +10,7 @@ import { productionExerciseDefaultState } from './defaultState';
 const devInitialState: ExerciseState = {
   started: false,
   disableAnimation: true,
-  disableStartTips: false,
+  disableStartTips: true,
   numberOfRounds: 3,
   breathsPerRound: 31231231,
   recoveryTime: 5,

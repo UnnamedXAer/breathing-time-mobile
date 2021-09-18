@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
+import { Text } from '../../../components/ui/Themed';
+import Colors from '../../../constants/Colors';
 import Layout from '../../../constants/Layout';
+import useColorScheme from '../../../hooks/useColorScheme';
 
 interface Props {
   counter: number;
@@ -45,8 +48,10 @@ const opacityOutputRange = [0.8, 0.83, 1, 1, 0.83, 0.8];
 const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimation }) => {
   const anim = useRef(new Animated.Value(animStartVal)).current;
 
+  const scheme = useColorScheme();
+
   useEffect(() => {
-    if (!disableAnimation) {
+    if (disableAnimation) {
       return;
     }
     anim.setValue(animStartVal);
@@ -64,36 +69,32 @@ const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimati
   }, [anim, counter, duration, disableAnimation]);
 
   return (
-    <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.animated,
-          styles.one,
-          {
-            opacity: anim.interpolate({
-              inputRange,
-              outputRange: opacityOutputRange,
-            }),
-            transform: [
-              {
-                scale: anim.interpolate({
-                  inputRange,
-                  outputRange,
-                }),
-              },
-            ],
-          },
-        ]}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: disableAnimation
+            ? styles.container.height / 3
+            : styles.container.height,
+        },
+      ]}>
+      {disableAnimation ? (
+        <Text style={{ color: Colors[scheme].textRGBA(0.3) }}>Animation disabled</Text>
+      ) : (
         <Animated.View
           style={[
             styles.animated,
-            styles.two,
+            styles.one,
             {
+              opacity: anim.interpolate({
+                inputRange,
+                outputRange: opacityOutputRange,
+              }),
               transform: [
                 {
                   scale: anim.interpolate({
                     inputRange,
-                    outputRange: outputRangeTwo,
+                    outputRange,
                   }),
                 },
               ],
@@ -102,7 +103,7 @@ const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimati
           <Animated.View
             style={[
               styles.animated,
-              styles.three,
+              styles.two,
               {
                 transform: [
                   {
@@ -117,21 +118,37 @@ const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimati
             <Animated.View
               style={[
                 styles.animated,
-                styles.four,
+                styles.three,
                 {
                   transform: [
                     {
                       scale: anim.interpolate({
                         inputRange,
-                        outputRange: outputRangeFour,
+                        outputRange: outputRangeTwo,
                       }),
                     },
                   ],
                 },
-              ]}></Animated.View>
+              ]}>
+              <Animated.View
+                style={[
+                  styles.animated,
+                  styles.four,
+                  {
+                    transform: [
+                      {
+                        scale: anim.interpolate({
+                          inputRange,
+                          outputRange: outputRangeFour,
+                        }),
+                      },
+                    ],
+                  },
+                ]}></Animated.View>
+            </Animated.View>
           </Animated.View>
         </Animated.View>
-      </Animated.View>
+      )}
     </View>
   );
 };
