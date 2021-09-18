@@ -1,16 +1,15 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import Headline from '../components/ui/Headline';
 import { Text } from '../components/ui/Themed';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import useColorScheme from '../hooks/useColorScheme';
 import Constants from 'expo-constants';
+import TextLink from '../components/ui/TextLink';
+import { RootStackScreenProps } from '../navigation/types';
 
-const about =
-  'Breathing Time is a simple web application designed to help you with breathing exercises based on the Wim Hof method.\nIt allows you to easily adjust tempo of exercise based on your preferences. The breathing exercises are the first of the three pillars in the Wim Hof Method. You can find more information on the Wim Hof Method official website.';
-
-export default function AboutScreen() {
+export default function AboutScreen({ navigation }: RootStackScreenProps<'About'>) {
   const scheme = useColorScheme();
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContainer}>
@@ -21,7 +20,24 @@ export default function AboutScreen() {
           </Headline>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{about}</Text>
+          <Text style={styles.text}>
+            {Constants.manifest?.name} is a simple web application designed to help you
+            with breathing exercises based on the Wim Hof method.
+          </Text>
+          <Text style={styles.text}>
+            It allows you to easily adjust tempo of exercise based on your{' '}
+            <TextLink onPress={() => navigation.push('Preferences')}>
+              preferences
+            </TextLink>
+            . The breathing exercises are the first of the three pillars in the Wim Hof
+            Method. You can find more information on the{' '}
+            <TextLink
+              external
+              onPress={() => Linking.openURL('https://www.wimhofmethod.com/')}>
+              Wim Hof Method
+            </TextLink>{' '}
+            official website.
+          </Text>
         </View>
       </View>
 
