@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Share, StyleSheet, ToastAndroid, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/breathingExercise/Header';
 import AppButton from '../../components/ui/Button';
 import ShareButton from '../../components/ui/ShareButton';
@@ -10,6 +10,7 @@ import Layout from '../../constants/Layout';
 import useColorScheme from '../../hooks/useColorScheme';
 
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
+import { cleanExercise, finishExercise } from '../../store/exercise';
 import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
@@ -17,10 +18,18 @@ interface Props extends ExerciseTabScreenProps<'Summary'> {}
 export default function SummaryScreen({ navigation }: Props) {
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
   const scheme = useColorScheme();
+  const dispatch = useDispatch();
 
   const averageTime = (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length)
     .toFixed(3)
     .replace(/((\.0+)|(0+))$/g, '');
+
+  useEffect(() => {
+    dispatch(finishExercise());
+    return () => {
+      dispatch(cleanExercise());
+    };
+  }, [dispatch]);
 
   const share = async () => {
     let text = '';

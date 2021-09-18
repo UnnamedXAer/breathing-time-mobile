@@ -33,6 +33,23 @@ const exerciseSlice = createSlice({
   initialState,
 
   reducers: {
+    startExercise: (state) => {
+      state.started = true;
+    },
+
+    addHoldTime: (state, { payload: time }: PayloadAction<number>) => {
+      state.holdTimes.push(time);
+    },
+
+    finishExercise: (state) => {
+      state.started = false;
+    },
+
+    cleanExercise: (state) => {
+      state.started = false;
+      state.holdTimes = [];
+    },
+
     updatePreferences: (state, { payload }: PayloadAction<UpdatePreferencesPayload>) => {
       const { value, propName } = payload;
 
@@ -48,13 +65,16 @@ const exerciseSlice = createSlice({
         },
       );
     },
-
-    addHoldTime: (state, { payload: time }: PayloadAction<number>) => {
-      state.holdTimes.push(time);
-    },
   },
 });
 
-export const { restoreDefault, updatePreferences, addHoldTime } = exerciseSlice.actions;
+export const {
+  restoreDefault,
+  updatePreferences,
+  addHoldTime,
+  finishExercise,
+  startExercise,
+  cleanExercise,
+} = exerciseSlice.actions;
 
 export default exerciseSlice.reducer;

@@ -1,15 +1,19 @@
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
 import {
   BeforeRemoveEvent,
   RootStackScreenProps,
   RootStackParamList,
 } from '../navigation/types';
+import { cleanExercise } from '../store/exercise';
 
 export default function useAskBeforeLeave(
   focused: boolean,
   navigation: RootStackScreenProps<keyof RootStackParamList>['navigation'],
 ) {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!focused) {
       return;
@@ -26,6 +30,7 @@ export default function useAskBeforeLeave(
             text: 'Yes',
             style: 'destructive',
             onPress: () => {
+              dispatch(cleanExercise());
               navigation.dispatch(ev.data.action);
             },
           },
@@ -46,7 +51,7 @@ export default function useAskBeforeLeave(
     return () => {
       navigation.removeListener('beforeRemove', callback);
     };
-  }, [focused, navigation]);
+  }, [dispatch, focused, navigation]);
 
   return void 0;
 }
