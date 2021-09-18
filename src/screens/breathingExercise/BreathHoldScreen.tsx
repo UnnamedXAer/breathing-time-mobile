@@ -99,7 +99,9 @@ export default function BreathHoldScreen({
               textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
             />
 
-            <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+            <Footer
+              text="Press the button or tap twice on the screen to skip to the next phase."
+              navigation={navigation}></Footer>
           </>
         )}
       </View>

@@ -15,14 +15,21 @@ import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
 
+function calculateAverage(holdTimes: number[]) {
+  if (holdTimes.length === 0) {
+    return '-';
+  }
+  return (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length)
+    .toFixed(3)
+    .replace(/((\.0+)|(0+))$/g, '');
+}
+
 export default function SummaryScreen({ navigation }: Props) {
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
   const scheme = useColorScheme();
   const dispatch = useDispatch();
 
-  const averageTime = (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length)
-    .toFixed(3)
-    .replace(/((\.0+)|(0+))$/g, '');
+  const averageTime = calculateAverage(holdTimes);
 
   useEffect(() => {
     dispatch(finishExercise());
@@ -64,29 +71,45 @@ export default function SummaryScreen({ navigation }: Props) {
     <View style={styles.container}>
       <Header title="Summary" />
       <View style={styles.results}>
-        <ShareButton onPress={share} style={styles.shareBtn} />
-        {holdTimes.map((time, idx) => {
-          return (
-            <View
-              style={[
-                styles.row,
-                {
-                  backgroundColor: idx % 2 ? Colors[scheme].textRGBA(0.06) : void 0,
-                },
-              ]}
-              key={idx}>
-              <Text style={styles.cellHeader}>Round {idx + 1}</Text>
-              <Text style={styles.cellText}>{time} s</Text>
-            </View>
-          );
-        })}
+        {holdTimes.length === 0 ? (
+          <Text
+            style={{
+              fontSize: Layout.spacing(3),
+              marginVertical: Layout.spacing(5),
+              textAlign: 'center',
+            }}>
+            You have not completed any round.
+          </Text>
+        ) : (
+          <>
+            <ShareButton onPress={share} style={styles.shareBtn} />
+            {holdTimes.map((time, idx) => {
+              return (
+                <View
+                  style={[
+                    styles.row,
+                    {
+                      backgroundColor: idx % 2 ? Colors[scheme].textRGBA(0.06) : void 0,
+                    },
+                  ]}
+                  key={idx}>
+                  <Text style={styles.cellHeader}>Round {idx + 1}</Text>
+                  <Text style={styles.cellText}>{time} s</Text>
+                </View>
+              );
+            })}
+          </>
+        )}
       </View>
 
-      <View style={styles.averageContainer}>
-        <Text style={styles.averageText}>
-          Average Time: <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text> seconds
-        </Text>
-      </View>
+      {holdTimes.length > 0 && (
+        <View style={styles.averageContainer}>
+          <Text style={styles.averageText}>
+            Average Time: <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text>{' '}
+            seconds
+          </Text>
+        </View>
+      )}
 
       <AppButton
         title="Home"

@@ -123,7 +123,9 @@ export default function BreathingScreen({
 
             <Counter value={counter} />
 
-            <Footer text="Press the button or tap twice on the screen go to the next phase."></Footer>
+            <Footer
+              text="Tap twice on the screen to skip to the next phase."
+              navigation={navigation}></Footer>
           </>
         )}
       </View>

@@ -152,7 +152,8 @@ export default function RecoveryScreen({
             <Footer
               text={`Tap twice on the screen to skip to the ${
                 isLastRound ? 'Summary screen' : 'next round'
-              }.`}></Footer>
+              }.`}
+              navigation={navigation}></Footer>
           </>
         )}
       </View>
