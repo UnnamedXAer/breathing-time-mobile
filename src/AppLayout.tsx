@@ -17,7 +17,6 @@ export default function AppLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    console.log('AppLayout - about to dispatch getSavedPreferences');
     void dispatch(getSavedPreferences());
   }, [dispatch]);
 
