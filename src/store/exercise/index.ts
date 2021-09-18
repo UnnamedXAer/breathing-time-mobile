@@ -1,4 +1,3 @@
-import { RoundState } from '../../types/breath';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ExerciseCustomizableProps,
@@ -15,7 +14,6 @@ const devInitialState: ExerciseState = {
   breathsPerRound: 31231231,
   recoveryTime: 5,
   breathTime: 2 * 1000,
-  currentRoundState: RoundState.Stopped,
   holdTimes: [] as number[],
 };
 
