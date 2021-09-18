@@ -27,7 +27,7 @@ interface Props {
   mode?: ButtonMode;
   error?: boolean;
   color?: string;
-  scale?: number;
+  //   scale?: number;
   containerStyle?: ViewStyle;
   textStyle?: TextStyle;
 }
@@ -42,7 +42,7 @@ export default function Button({
   size = 'medium',
   error,
   color,
-  scale,
+  //   scale,
   containerStyle,
   textStyle,
 }: Props) {
@@ -89,7 +89,7 @@ export default function Button({
       },
       shadowOpacity: 0.6,
       elevation: 5,
-      transform: scale ? [{ scale }] : undefined,
+      //   transform: scale ? [{ scale }] : undefined,
     },
     container: {
       marginHorizontal: Layout.spacing(),
