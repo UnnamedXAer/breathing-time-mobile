@@ -20,7 +20,7 @@ export default function BreathingScreen({
   navigation,
 }: ExerciseTabScreenProps<'Breathing'>) {
   const [started, setStarted] = useCounterStarted(2000);
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(1);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
   const disableAnimation = useSelector(
