@@ -136,7 +136,7 @@ export default function PreferencesScreen({
       <View style={styles.actionsContainer}>
         <Button
           title="Done"
-          mode="outlined"
+          mode="contained"
           onPress={() => {
             navigation.goBack();
           }}
@@ -144,7 +144,7 @@ export default function PreferencesScreen({
         <View style={{ marginBottom: Layout.spacing(2) }} />
         <Button
           title="Restore Default"
-          mode="contained"
+          mode="outlined"
           onPress={() => {
             dispatch(restoreDefault());
           }}
