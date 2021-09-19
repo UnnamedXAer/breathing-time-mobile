@@ -22,7 +22,7 @@ const devInitialState: ExerciseState = {
   holdTimes: [] as number[],
 };
 
-const sliceName = 'exercise' as const;
+export const sliceName = 'exercise' as const;
 
 const initialState = __DEV__ ? devInitialState : productionExerciseDefaultState;
 

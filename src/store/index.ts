@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import exerciseReducer from './exercise';
+import exerciseReducer, { sliceName as exerciseSliceName } from './exercise';
+import settingsReducer, { sliceName as settingsSliceName } from './settings';
 
 export const store = configureStore({
   reducer: {
-    exercise: exerciseReducer,
+    [settingsSliceName]: settingsReducer,
+    [exerciseSliceName]: exerciseReducer,
   },
   devTools: true,
 });

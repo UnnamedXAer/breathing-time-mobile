@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
   labelContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'baseline',
+    paddingBottom: 2,
   },
   labelValue: {
     fontSize: Layout.spacing(2.2),

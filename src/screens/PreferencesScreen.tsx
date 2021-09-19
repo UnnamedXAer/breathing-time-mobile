@@ -1,5 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+// import { Picker } from '@react-native-picker/picker';
+
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../components/ui/Button';
 import {
@@ -17,11 +19,24 @@ import Headline from '../components/ui/Headline';
 import Slider from '../components/ui/Slider';
 import Switch from '../components/ui/Switch';
 import { RootStackScreenProps } from '../navigation/types';
+import { Theme, ThemeKey, Themes } from '../store/settings/types';
+import { setSettingsProp } from '../store/settings';
+import Select from '../components/ui/Select';
+
+const themesSelectData = [] as Array<{ key: Theme; label: ThemeKey }>;
+
+for (const key in Themes) {
+  themesSelectData.push({
+    key: Themes[key as ThemeKey],
+    label: key as ThemeKey,
+  });
+}
 
 export default function PreferencesScreen({
   navigation,
 }: RootStackScreenProps<'Preferences'>) {
   const dispatch = useDispatch();
+  const { theme } = useSelector((state: RootState) => state.settings);
 
   const exerciseConfig = useSelector((state: RootState) => {
     const config = {} as ExerciseCustomizableState;
@@ -37,6 +52,25 @@ export default function PreferencesScreen({
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.headerContainer}>
+        <Headline variant={'h2'} style={{ textAlign: 'center' }}>
+          App Preferences
+        </Headline>
+      </View>
+
+      <Select
+        data={themesSelectData}
+        initValue={themesSelectData.find((x) => (x.key = theme))!.label}
+        onChange={(option) => {
+          dispatch(
+            setSettingsProp({
+              propName: 'theme',
+              value: option.key,
+            }),
+          );
+        }}
+      />
+
       <View style={styles.headerContainer}>
         <Headline variant={'h2'} style={{ textAlign: 'center' }}>
           Breathing Exercise Preferences
@@ -59,6 +93,7 @@ export default function PreferencesScreen({
           );
         }}
       />
+
       <Slider
         label="Breaths per round:"
         value={exerciseConfig.breathsPerRound}
