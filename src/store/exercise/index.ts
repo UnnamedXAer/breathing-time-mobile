@@ -51,24 +51,26 @@ export const updatePreferences = createAsyncThunk<
     },
   );
 
-  void dispatch(savePreferences(preferences));
+  void savePreferences(preferences);
 });
-export const savePreferences = createAsyncThunk(
-  sliceName + '/savePreferences',
-  async (preferences: ExerciseCustomizableState) => {
-    try {
-      await AsyncStorage.setItem('preferences', JSON.stringify(preferences));
-    } catch (err) {
-      __DEV__ && console.log('Could note save preferences due to:', err);
-    }
-  },
-);
+
+export const savePreferences = async (preferences: ExerciseCustomizableState) => {
+  try {
+    await AsyncStorage.setItem(sliceName, JSON.stringify(preferences));
+  } catch (err) {
+    __DEV__ && console.log('Could note save preferences due to:', err);
+    ToastAndroid.show(
+      "Preferences couldn't be saved\nYou may need to update them after app relaunch.",
+      ToastAndroid.SHORT,
+    );
+  }
+};
 
 export const getSavedPreferences = createAsyncThunk<SavedPreferences>(
   sliceName + '/getSavedPreferences',
   async () => {
     try {
-      const preferencesString = await AsyncStorage.getItem('preferences');
+      const preferencesString = await AsyncStorage.getItem(sliceName);
       if (preferencesString === null) {
         return null;
       }
@@ -86,9 +88,9 @@ export const restoreDefaultPreferences = createAsyncThunk(
   async (_, { dispatch }) => {
     dispatch(exerciseSlice.actions.restoreDefault());
     try {
-      await AsyncStorage.removeItem('preferences');
+      await AsyncStorage.removeItem(sliceName);
     } catch (err) {
-      __DEV__ && console.log('Could not remove saved preferences due to:', err);
+      __DEV__ && console.log('Could not remove preferences due to:', err);
     }
   },
 );
@@ -139,21 +141,12 @@ const exerciseSlice = createSlice({
         return;
       }
 
-      // ts - workaround for ts issue with missing props in preferences respectively to state
-      const p = preferences as ExerciseState;
       customizableExerciseStateProps.forEach(
         <K extends ExerciseCustomizableProps>(prop: K) => {
-          if (prop in p) {
-            state[prop] = p[prop];
+          if (prop in preferences) {
+            state[prop] = (preferences as ExerciseState)[prop];
           }
         },
-      );
-    });
-
-    builder.addCase(savePreferences.rejected, () => {
-      ToastAndroid.show(
-        "Preferences couldn't be saved\nYou may need to update them after app relaunch.",
-        ToastAndroid.SHORT,
       );
     });
 
