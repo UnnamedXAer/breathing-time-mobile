@@ -17,7 +17,7 @@ const WarningNote: React.FC<Props> = ({ style, textSize = Layout.spacing(2.2) })
       <View style={styles.headlineContainer}>
         <WarningSvg
           fill={Colors.colors.warning}
-          opacity={0.4}
+          opacity={0.6}
           width={48}
           height={48}
           style={{

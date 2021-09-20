@@ -4,6 +4,7 @@ import { Slider as RNSlider } from '@miblanchard/react-native-slider';
 import Layout from '../../constants/Layout';
 import Colors from '../../constants/Colors';
 import { Text } from './Themed';
+import useColorScheme from '../../hooks/useColorScheme';
 
 interface Props {
   value: number;
@@ -28,6 +29,9 @@ const Slider: React.FC<Props> = ({
   trackMultiplier = 1,
   valueTranslation,
 }) => {
+  const scheme = useColorScheme();
+  const { primary, accent } = Colors[scheme];
+
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
@@ -41,8 +45,8 @@ const Slider: React.FC<Props> = ({
           ...styles.sliderContainer,
           marginTop: trackMarks?.length ? Layout.spacing(2) : Layout.spacing(),
         }}
-        thumbStyle={styles.thumb}
-        trackStyle={styles.track}
+        thumbStyle={{ ...styles.thumb, borderColor: primary, backgroundColor: accent }}
+        trackStyle={{ ...styles.track, backgroundColor: accent }}
         trackMarks={trackMarks}
         renderTrackMarkComponent={
           trackMarks ? (idx) => renderTrackMarkComponent(idx, trackMultiplier) : void 0
