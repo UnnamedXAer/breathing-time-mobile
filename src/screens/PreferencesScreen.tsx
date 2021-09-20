@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
-
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../components/ui/Button';
 import {
@@ -37,6 +35,9 @@ export default function PreferencesScreen({
 }: RootStackScreenProps<'Preferences'>) {
   const dispatch = useDispatch();
   const { theme } = useSelector((state: RootState) => state.settings);
+  const initialValue = useRef(
+    themesSelectData.find((x) => x.key === theme)!.label,
+  ).current;
 
   const exerciseConfig = useSelector((state: RootState) => {
     const config = {} as ExerciseCustomizableState;
@@ -60,7 +61,7 @@ export default function PreferencesScreen({
 
       <Select
         data={themesSelectData}
-        initValue={themesSelectData.find((x) => (x.key = theme))!.label}
+        initValue={initialValue}
         onChange={(option) => {
           dispatch(
             setSettingsProp({
