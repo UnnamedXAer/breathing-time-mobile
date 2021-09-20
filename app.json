@@ -1,37 +1,46 @@
 {
-  "expo": {
-    "name": "Breathing Time",
-    "slug": "breathingTime",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/images/icon.png",
-    "scheme": "breathing-time",
-    "userInterfaceStyle": "automatic",
-    "backgroundColor": "#121212",
-    "splash": {
-      "image": "./src/assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#121212"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "userInterfaceStyle": "automatic",
-      "supportsTablet": true
-    },
-    "android": {
-      "userInterfaceStyle": "automatic",
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
-        "backgroundColor": "#121212"
-      }
-    },
-    "web": {
-      "favicon": "./src/assets/images/favicon.png"
-    }
-  }
+	"expo": {
+		"name": "Breathing Time",
+		"slug": "breathing-time",
+		"scheme": "breathing-time",
+		"version": "1.0.0",
+		"description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
+		"orientation": "portrait",
+		"platforms": [
+			"android"
+		],
+		"userInterfaceStyle": "automatic",
+		"backgroundColor": "#121212",
+		"primaryColor": "#fdfdfd",
+		"icon": "./src/assets/images/icon.png",
+		"splash": {
+			"image": "./src/assets/images/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#121212"
+		},
+		"updates": {
+			"fallbackToCacheTimeout": 60000
+		},
+		"assetBundlePatterns": [
+			"**/*"
+		],
+		"android": {
+			"package": "app.netlify.breathing-time",
+			"versionCode": 0,
+			"userInterfaceStyle": "automatic",
+			"adaptiveIcon": {
+				"foregroundImage": "./src/assets/images/adaptive-icon.png",
+				"backgroundColor": "#121212"
+			}
+		},
+		"ios": {
+			"bundleIdentifier": "app.netlify.breathing-time",
+			"buildNumber": "1.0.0",
+			"userInterfaceStyle": "automatic",
+			"supportsTablet": true
+		},
+		"web": {
+			"favicon": "./src/assets/images/favicon.png"
+		}
+	}
 }
