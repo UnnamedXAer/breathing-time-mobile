@@ -26,7 +26,7 @@ export default function AppLayout() {
     return (
       <SafeAreaProvider>
         <Navigation colorScheme={colorScheme} />
-        <StatusBar />
+        <StatusBar style={Colors[colorScheme].statusBarStyle} />
       </SafeAreaProvider>
     );
   }

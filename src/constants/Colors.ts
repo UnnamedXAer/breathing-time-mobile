@@ -1,3 +1,4 @@
+import { StatusBarStyle } from 'expo-status-bar';
 import { ColorSchemeName } from '../hooks/useColorScheme';
 
 const _colors = {
@@ -14,13 +15,15 @@ const light = {
   textRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
   background: 'rgb(253, 253, 253)',
   backgroundRGBA: (opacity: number) => `rgba(253, 253, 253, ${opacity})`,
+  statusBarStyle: 'dark' as StatusBarStyle,
 } as const;
 
 type ThemeType = {
   [key in keyof typeof light]: typeof light[key] extends string
     ? string
     : typeof light[key];
-};
+} & { statusBarStyle: Exclude<StatusBarStyle, 'auto' | 'inverted'> };
+
 type ColorsType = { [key in ColorSchemeName]: ThemeType } & {
   colors: typeof _colors;
 };
@@ -33,6 +36,7 @@ const Colors = {
     textRGBA: (opacity: number) => `rgba(253, 253, 253, ${opacity})`,
     background: 'rgb(18, 18, 18)',
     backgroundRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
+    statusBarStyle: 'light',
   },
   bluish: {
     primary: 'rgb(255, 230, 153)',
@@ -40,6 +44,7 @@ const Colors = {
     background: 'rgb(112, 153, 194)',
     textRGBA: (opacity: number) => `rgba(0, 0, 102, ${opacity})`,
     backgroundRGBA: (opacity: number) => `rgba(112, 153, 194, ${opacity})`,
+    statusBarStyle: 'light',
   },
   colors: _colors,
 } as ColorsType;
