@@ -47,7 +47,7 @@ const Colors = {
     background: 'rgb(205, 235, 247)',
     textRGBA: (opacity: number) => `rgba(13, 71, 161, ${opacity})`,
     backgroundRGBA: (opacity: number) => `rgba(127, 217, 255, ${opacity})`,
-    statusBarStyle: 'light',
+    statusBarStyle: 'dark',
   },
   colors: _colors,
 } as ColorsType;
