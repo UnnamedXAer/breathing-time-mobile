@@ -18,7 +18,7 @@ import Slider from '../components/ui/Slider';
 import Switch from '../components/ui/Switch';
 import { RootStackScreenProps } from '../navigation/types';
 import { Theme, ThemeKey, Themes } from '../store/settings/types';
-import { setSettingsProp } from '../store/settings';
+import { restoreDefaultSettings, updateSettings } from '../store/settings';
 import Select from '../components/ui/Select';
 
 const themesSelectData = [] as Array<{ key: Theme; label: ThemeKey }>;
@@ -53,24 +53,37 @@ export default function PreferencesScreen({
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.headerContainer}>
-        <Headline variant={'h2'} style={{ textAlign: 'center' }}>
-          App Preferences
-        </Headline>
-      </View>
+      <View style={{ marginBottom: Layout.spacing(1) }}>
+        <View style={styles.headerContainer}>
+          <Headline variant={'h2'} style={{ textAlign: 'center' }}>
+            App Preferences
+          </Headline>
+        </View>
 
-      <Select
-        data={themesSelectData}
-        initValue={initialValue}
-        onChange={(option) => {
-          dispatch(
-            setSettingsProp({
-              propName: 'theme',
-              value: option.key,
-            }),
-          );
-        }}
-      />
+        <Select
+          data={themesSelectData}
+          initValue={initialValue}
+          onChange={(option) => {
+            dispatch(
+              updateSettings({
+                propName: 'theme',
+                value: option.key,
+              }),
+            );
+          }}
+        />
+
+        <View style={styles.actionsContainer}>
+          <Button
+            title="Restore Default"
+            size="small"
+            mode="outlined"
+            onPress={() => {
+              dispatch(restoreDefaultSettings());
+            }}
+          />
+        </View>
+      </View>
 
       <View style={styles.headerContainer}>
         <Headline variant={'h2'} style={{ textAlign: 'center' }}>
@@ -171,18 +184,19 @@ export default function PreferencesScreen({
 
       <View style={styles.actionsContainer}>
         <Button
-          title="Done"
-          mode="contained"
+          title="Restore Default"
+          size="small"
+          mode="outlined"
           onPress={() => {
-            navigation.goBack();
+            dispatch(restoreDefaultPreferences());
           }}
         />
         <View style={{ marginBottom: Layout.spacing(2) }} />
         <Button
-          title="Restore Default"
-          mode="outlined"
+          title="Back"
+          mode="contained"
           onPress={() => {
-            dispatch(restoreDefaultPreferences());
+            navigation.goBack();
           }}
         />
       </View>

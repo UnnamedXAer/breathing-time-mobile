@@ -18,3 +18,5 @@ export type ThemeKey = keyof typeof Themes;
 export type Theme = typeof Themes[ThemeKey];
 
 export type SettingsState = typeof productionSettingsDefaultState;
+
+export type SavedSettings = Partial<SettingsState> | null;

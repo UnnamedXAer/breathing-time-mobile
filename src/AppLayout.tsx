@@ -9,6 +9,7 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { getSavedPreferences } from './store/exercise';
+import { getSavedSettings } from './store/settings';
 import { AppDispatch } from './store/types';
 
 export default function AppLayout() {
@@ -18,6 +19,7 @@ export default function AppLayout() {
 
   useEffect(() => {
     void dispatch(getSavedPreferences());
+    void dispatch(getSavedSettings());
   }, [dispatch]);
 
   if (!isLoadingComplete) {
