@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StyleSheet, TextStyle, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
@@ -12,6 +12,11 @@ type DataRow = { key: string; label: string };
 interface Props<T extends DataRow> {
   initValue?: string;
   data: T[];
+
+  /** toggle this prop to reset the displayed value in select to first element of the data
+   * if passed then pass initially undefined to prevent from overriding initial value
+   */
+  triggerReset?: boolean | undefined;
   onChange: (option: T) => void;
 }
 
@@ -19,10 +24,17 @@ export default function Select<T extends DataRow>({
   data,
   onChange,
   initValue,
+  triggerReset,
 }: Props<T>) {
   const scheme = useColorScheme();
   const [value, setValue] = useState(initValue);
-  const selectRef = useRef<ModalSelector<T>>(null);
+
+  useEffect(() => {
+    if (triggerReset === void 0) {
+      return;
+    }
+    setValue(data[0].label);
+  }, [data, triggerReset]);
 
   const color = Colors[scheme].text;
   const primary = Colors[scheme].primary;
@@ -34,13 +46,14 @@ export default function Select<T extends DataRow>({
       </View>
       <View style={styles.selectContainer}>
         <ModalSelector
-          ref={selectRef}
           initValue={initValue}
           data={data}
           backdropPressToClose
           onChange={(option) => {
-            setValue(option.label);
-            onChange(option);
+            if (option.label !== value) {
+              setValue(option.label);
+              onChange(option);
+            }
           }}>
           <View style={styles.select}>
             <Text

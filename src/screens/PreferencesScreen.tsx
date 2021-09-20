@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../components/ui/Button';
@@ -39,6 +39,8 @@ export default function PreferencesScreen({
     themesSelectData.find((x) => x.key === theme)!.label,
   ).current;
 
+  const [triggerSettingsReset, setTriggerSettingsReset] = useState<boolean | undefined>();
+
   const exerciseConfig = useSelector((state: RootState) => {
     const config = {} as ExerciseCustomizableState;
 
@@ -61,6 +63,7 @@ export default function PreferencesScreen({
         </View>
 
         <Select
+          triggerReset={triggerSettingsReset}
           data={themesSelectData}
           initValue={initialValue}
           onChange={(option) => {
@@ -79,6 +82,7 @@ export default function PreferencesScreen({
             size="small"
             mode="outlined"
             onPress={() => {
+              setTriggerSettingsReset((pv) => !pv);
               dispatch(restoreDefaultSettings());
             }}
           />
