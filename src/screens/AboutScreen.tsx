@@ -1,5 +1,12 @@
 import React from 'react';
-import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  View,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 import Headline from '../components/ui/Headline';
 import { Text } from '../components/ui/Themed';
 import Colors from '../constants/Colors';
@@ -8,7 +15,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import Constants from 'expo-constants';
 import TextLink from '../components/ui/TextLink';
 import { RootStackScreenProps } from '../navigation/types';
-import { Ionicons } from '@expo/vector-icons';
+import Logo from '../assets/images/adaptive-icon.png';
 
 export default function AboutScreen({ navigation }: RootStackScreenProps<'About'>) {
   const scheme = useColorScheme();
@@ -22,7 +29,17 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             </Headline>
           </View>
           <View style={styles.logoContainer}>
-            <Ionicons name="square-outline" size={Layout.window.height * 0.1} />
+            <Image
+              width={200}
+              height={200}
+              style={{
+                width: 200,
+                height: 200,
+                maxHeight: '100%',
+                maxWidth: '100%',
+              }}
+              source={Logo as ImageSourcePropType}
+            />
           </View>
 
           <View style={styles.textContainer}>
@@ -52,7 +69,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             style={{
               color: Colors[scheme].textRGBA(0.7),
             }}>
-            App version: {Constants.manifest?.version}
+            App version: {Constants.manifest?.version} {__DEV__ ? '__DEV__' : null}
           </Text>
         </View>
       </View>
@@ -82,8 +99,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: Layout.spacing(3),
     maxHeight: Layout.window.height * 0.15,
-    borderColor: 'orange',
-    borderWidth: 2,
+    // borderColor: 'orange',
+    // borderWidth: 2,
   },
   textContainer: {
     maxWidth: 420,
