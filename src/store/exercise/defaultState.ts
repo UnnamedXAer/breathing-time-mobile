@@ -1,6 +1,6 @@
 export const productionExerciseDefaultState = {
   started: false,
-  disableAnimation: true,
+  disableAnimation: false,
   disableStartTips: false,
   numberOfRounds: 3,
   breathsPerRound: 30,
