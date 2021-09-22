@@ -13,7 +13,7 @@ import WarningNote from '../../components/WarningNote';
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
-  const countdownTime = 0;
+  const countdownTime = __DEV__ ? 0 : 3;
   const [count, setCount] = useState(false);
   const timeoutRef = useRef<TimeoutReturn>(void 0);
   const lastTick = useRef(0);
