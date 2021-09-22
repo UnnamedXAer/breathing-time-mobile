@@ -14,7 +14,6 @@ export default function useCounterStarted(timeout: number) {
     }
 
     const startTimeout = setTimeout(() => {
-      console.log('setting start to __true');
       setStarted(true);
     }, timeout);
     return () => {
