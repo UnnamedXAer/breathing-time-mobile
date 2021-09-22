@@ -31,12 +31,12 @@ const Card: React.FC<Props> = ({
 }) => {
   const scheme = useColorScheme();
   const backgroundColor = Colors[scheme].background;
-  const labelBgColor =
-    scheme === 'dark' ? 'rgba(100,100,100,0.3)' : 'rgba(100,100,100,0.1)';
+  const labelBgColor = Colors[scheme].textRGBA(0.1);
+  const borderColor = Colors[scheme].textRGBA(0.3);
 
   return (
     <TouchableOpacity
-      style={{ ...styles.card, backgroundColor }}
+      style={{ ...styles.card, backgroundColor, borderColor }}
       onPress={onPress}
       activeOpacity={0.7}>
       <>
@@ -54,7 +54,6 @@ const Card: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderColor: 'rgba(100,100,100,0.3)',
     borderWidth: 2,
     borderRadius: Layout.baseRadius,
     width: '100%',

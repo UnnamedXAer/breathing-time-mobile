@@ -32,12 +32,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             <Image
               width={200}
               height={200}
-              style={{
-                width: 200,
-                height: 200,
-                maxHeight: '100%',
-                maxWidth: '100%',
-              }}
+              style={styles.logo}
               source={Logo as ImageSourcePropType}
             />
           </View>
@@ -98,9 +93,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: Layout.spacing(3),
-    maxHeight: Layout.window.height * 0.15,
-    // borderColor: 'orange',
-    // borderWidth: 2,
+  },
+  logo: {
+    margin: -40,
+    width: 200,
+    height: 200,
   },
   textContainer: {
     maxWidth: 420,
