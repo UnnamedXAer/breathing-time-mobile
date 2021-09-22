@@ -1,6 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
@@ -13,22 +14,21 @@ import {
   ExerciseTabParamList,
   ExerciseTabScreenProps,
 } from '../../navigation/exerciseBottomTab/types';
+import { RootState } from '../../store/types';
 import { TimeoutReturn } from '../../types/types';
 
 let lastPressedAt = 0;
 
-// mocked values
-const maxRounds = 2;
-let currentRound = 1;
-const recoveryTime = 5;
-
 export default function RecoveryScreen({
   navigation,
 }: ExerciseTabScreenProps<'Recovery'>) {
+  const { recoveryTime, numberOfRounds, holdTimes } = useSelector(
+    (state: RootState) => state.exercise,
+  );
   const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
-  const isLastRound = currentRound >= maxRounds;
+  const isLastRound = holdTimes.length >= numberOfRounds;
   const [count, setCount] = useState(false);
   const timeoutRef = useRef<TimeoutReturn>(void 0);
   const exitTimeoutRef = useRef<TimeoutReturn>(void 0);
@@ -47,7 +47,6 @@ export default function RecoveryScreen({
     if (isLastRound) {
       nextScreenName = 'Summary';
     }
-    currentRound++;
     navigation.jumpTo(nextScreenName);
   }, [focused, isLastRound, navigation]);
 
@@ -89,7 +88,7 @@ export default function RecoveryScreen({
       setCounter(recoveryTime);
       setCount(true);
     }
-  }, [focused, started]);
+  }, [focused, recoveryTime, started]);
 
   useEffect(() => {
     if (!count) {
