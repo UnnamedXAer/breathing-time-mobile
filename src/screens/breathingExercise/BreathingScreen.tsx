@@ -2,6 +2,7 @@ import { useIsFocused } from '@react-navigation/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
+import BreathingAnimation from '../../components/breathingExercise/BreathingAnimation';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
@@ -12,7 +13,6 @@ import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { RootState } from '../../store/types';
-import BreathingAnimation from './animation/BreathingAnimation';
 
 let lastPressedAt = 0;
 

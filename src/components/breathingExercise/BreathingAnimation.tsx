@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
-import { Text } from '../../../components/ui/Themed';
-import Colors from '../../../constants/Colors';
-import Layout from '../../../constants/Layout';
-import useColorScheme from '../../../hooks/useColorScheme';
+import Colors from '../../constants/Colors';
+import Layout from '../../constants/Layout';
+import useColorScheme from '../../hooks/useColorScheme';
+import { Text } from '../ui/Themed';
 
 interface Props {
   counter: number;
