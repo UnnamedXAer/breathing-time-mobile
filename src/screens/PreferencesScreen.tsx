@@ -27,8 +27,8 @@ import {
 } from '../store/settings/types';
 import { restoreDefaultSettings, updateSettings } from '../store/settings';
 import Select from '../components/ui/Select';
-import I18n, { t } from 'i18n-js';
-import { messages } from '../i18n';
+import { t } from 'i18n-js';
+import { updateLocale } from '../i18n/helpers';
 
 const themesSelectData = [] as Array<{ key: Theme; label: ThemeKey }>;
 const localesSelectData = [] as Array<{ key: Locale; label: LocaleKey }>;
@@ -88,9 +88,7 @@ export default function PreferencesScreen({
           data={localesSelectData}
           initValue={localeInitialValue}
           onChange={(option) => {
-            const locale = option.key === 'default' ? Locales.EN : option.key;
-            I18n.locale = locale;
-            I18n.translations = { [locale]: messages[locale] };
+            updateLocale(option.key);
             dispatch(
               updateSettings({
                 propName: 'locale',
@@ -123,6 +121,7 @@ export default function PreferencesScreen({
             onPress={() => {
               setTriggerSettingsReset((pv) => !pv);
               dispatch(restoreDefaultSettings());
+              updateLocale(Locales.Default);
             }}
           />
         </View>

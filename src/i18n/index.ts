@@ -1,7 +1,6 @@
-import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
-import { store } from '../store';
+import I18n from 'i18n-js';
 import { Locales } from '../store/settings/types';
+import { getBestLocale } from './helpers';
 import en from './messages/en';
 import pl from './messages/pl';
 import { pluralization as pluralizationPL } from './messages/pl/pluralization';
@@ -12,25 +11,10 @@ export const messages: I18nMessages = {
   pl,
 };
 
-i18n.pluralization[Locales.PL] = pluralizationPL;
+I18n.pluralization[Locales.PL] = pluralizationPL;
 
-i18n.translations = messages;
+I18n.translations = messages;
 
-i18n.fallbacks = true;
-i18n.defaultLocale = Locales.EN;
-i18n.locale = getBestLocale();
-
-function getBestLocale() {
-  const storeLocale = store.getState().settings.locale;
-  if (storeLocale !== 'default') {
-    return storeLocale;
-  }
-  const matchedLang = Object.values(Locales).find(
-    (l) => l === Localization.locale.substr(0, 2),
-  );
-  if (matchedLang) {
-    return matchedLang;
-  }
-
-  return Locales.EN;
-}
+I18n.fallbacks = true;
+I18n.defaultLocale = Locales.EN;
+I18n.locale = getBestLocale();
