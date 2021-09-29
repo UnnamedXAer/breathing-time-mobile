@@ -10,6 +10,7 @@ import { Text } from './Themed';
 
 type DataRow = { key: string; label: string };
 interface Props<T extends DataRow> {
+  label: string;
   initValue?: string;
   data: T[];
 
@@ -21,6 +22,7 @@ interface Props<T extends DataRow> {
 }
 
 export default function Select<T extends DataRow>({
+  label,
   data,
   onChange,
   initValue,
@@ -42,7 +44,7 @@ export default function Select<T extends DataRow>({
   return (
     <View style={{ ...styles.container, borderBottomColor: primary }}>
       <View style={styles.labelContainer}>
-        <Text>App theme:</Text>
+        <Text>{label}</Text>
       </View>
       <View style={styles.selectContainer}>
         <ModalSelector
@@ -73,6 +75,7 @@ export default function Select<T extends DataRow>({
 const styles = StyleSheet.create({
   container: {
     paddingBottom: Layout.spacing(),
+    marginBottom: Layout.spacing(2.5),
     flex: 1,
     borderBottomWidth: 4,
     flexDirection: 'row',

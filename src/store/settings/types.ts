@@ -14,6 +14,15 @@ export const Themes = {
   Bluish: 'bluish',
 } as const;
 
+export const Locales = {
+  Default: 'default',
+  PL: 'pl',
+  EN: 'en',
+} as const;
+
+export type LocaleKey = keyof typeof Locales;
+export type Locale = typeof Locales[LocaleKey];
+
 export type ThemeKey = keyof typeof Themes;
 export type Theme = typeof Themes[ThemeKey];
 

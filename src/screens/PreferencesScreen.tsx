@@ -17,12 +17,21 @@ import Headline from '../components/ui/Headline';
 import Slider from '../components/ui/Slider';
 import Switch from '../components/ui/Switch';
 import { RootStackScreenProps } from '../navigation/types';
-import { Theme, ThemeKey, Themes } from '../store/settings/types';
+import {
+  Locale,
+  LocaleKey,
+  Locales,
+  Theme,
+  ThemeKey,
+  Themes,
+} from '../store/settings/types';
 import { restoreDefaultSettings, updateSettings } from '../store/settings';
 import Select from '../components/ui/Select';
-import { t } from 'i18n-js';
+import I18n, { t } from 'i18n-js';
+import { messages } from '../i18n';
 
 const themesSelectData = [] as Array<{ key: Theme; label: ThemeKey }>;
+const localesSelectData = [] as Array<{ key: Locale; label: LocaleKey }>;
 
 for (const key in Themes) {
   themesSelectData.push({
@@ -31,13 +40,23 @@ for (const key in Themes) {
   });
 }
 
+for (const key in Locales) {
+  localesSelectData.push({
+    key: Locales[key as LocaleKey],
+    label: key as LocaleKey,
+  });
+}
+
 export default function PreferencesScreen({
   navigation,
 }: RootStackScreenProps<'Preferences'>) {
   const dispatch = useDispatch();
-  const { theme } = useSelector((state: RootState) => state.settings);
-  const initialValue = useRef(
-    themesSelectData.find((x) => x.key === theme)!.label,
+  const { settings } = useSelector((state: RootState) => state);
+  const themeInitialValue = useRef(
+    themesSelectData.find((x) => x.key === settings.theme)!.label,
+  ).current;
+  const localeInitialValue = useRef(
+    localesSelectData.find((x) => x.key === settings.locale)!.label,
   ).current;
 
   const [triggerSettingsReset, setTriggerSettingsReset] = useState<boolean | undefined>();
@@ -59,14 +78,33 @@ export default function PreferencesScreen({
       <View style={{ marginBottom: Layout.spacing(1) }}>
         <View style={styles.headerContainer}>
           <Headline variant={'h2'} style={{ textAlign: 'center' }}>
-            App Preferences
+            {t('preferences.title_app_preferences')}
           </Headline>
         </View>
 
         <Select
+          label={t('preferences.app_locale')}
+          triggerReset={triggerSettingsReset}
+          data={localesSelectData}
+          initValue={localeInitialValue}
+          onChange={(option) => {
+            const locale = option.key === 'default' ? Locales.EN : option.key;
+            I18n.locale = locale;
+            I18n.translations = { [locale]: messages[locale] };
+            dispatch(
+              updateSettings({
+                propName: 'locale',
+                value: option.key,
+              }),
+            );
+          }}
+        />
+
+        <Select
+          label={t('preferences.app_theme')}
           triggerReset={triggerSettingsReset}
           data={themesSelectData}
-          initValue={initialValue}
+          initValue={themeInitialValue}
           onChange={(option) => {
             dispatch(
               updateSettings({
@@ -92,7 +130,7 @@ export default function PreferencesScreen({
 
       <View style={styles.headerContainer}>
         <Headline variant={'h2'} style={{ textAlign: 'center' }}>
-          Breathing Exercise Preferences
+          {t('preferences.title_breathing_exercise')}
         </Headline>
       </View>
 
@@ -135,9 +173,9 @@ export default function PreferencesScreen({
         label={t('preferences.breathing_pace')}
         value={exerciseConfig.breathTime}
         valueTranslation={{
-          1400: 'fast',
-          2000: 'moderate',
-          2600: 'slow',
+          1400: t('preferences.breathing_pace_fast'),
+          2000: t('preferences.breathing_pace_moderate'),
+          2600: t('preferences.breathing_pace_slow'),
         }}
         min={1400}
         max={2600}

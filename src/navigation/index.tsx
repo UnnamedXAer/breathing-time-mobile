@@ -86,19 +86,23 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         options={{ headerShown: false }}
       />
 
-      <Stack.Screen name="Preferences" component={PreferencesScreen} />
+      <Stack.Screen
+        name="Preferences"
+        component={PreferencesScreen}
+        options={{ title: '' }}
+      />
 
       <Stack.Screen
         name="BreathingInstruction"
         component={BreathingInstructionScreen}
-        options={{ title: 'Instructions' }}
+        options={{ title: '' }}
       />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
         options={{ title: 'Oops!' }}
       />
-      <Stack.Screen name="About" component={AboutScreen} />
+      <Stack.Screen name="About" component={AboutScreen} options={{ title: '' }} />
     </Stack.Navigator>
   );
 }

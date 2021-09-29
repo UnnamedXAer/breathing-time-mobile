@@ -3,16 +3,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState } from '../types';
 import { productionSettingsDefaultState } from './defaultState';
 import {
+  Locales,
   SavedSettings,
   SettingsState,
   SettingsStateProps,
-  Theme,
   Themes,
   UpdateSettingsPayload,
 } from './types';
 
 const devInitialState: SettingsState = {
-  theme: Themes.System as Theme,
+  theme: Themes.System,
+  locale: Locales.Default,
 };
 const initialState = __DEV__ ? devInitialState : productionSettingsDefaultState;
 

@@ -19,7 +19,10 @@ export default {
     exercise_preferences: 'Preferences',
   },
   preferences: {
-    title: 'Breathing Exercise Preferences',
+    title_app_preferences: 'App Preferences',
+    app_locale: 'App Language:',
+    app_theme: 'App theme:',
+    title_breathing_exercise: 'Breathing Exercise Preferences',
     num_of_rounds: 'Number of rounds:',
     breaths_per_round: 'Breaths per round:',
     breathing_pace: 'Breathing pace:',
@@ -97,18 +100,20 @@ export default {
     leave: {
       title: 'Warning!',
       content: 'Leave exercise? Progress will be lost.',
+      yes: 'Yes, leave',
     },
   },
   about: {
-    title: '@:header.about',
-    text: '%{0} is a simple web application designed to help you with breathing exercises based on the Wim Hof method.%{1}It allows you to easily adjust tempo of exercise based on your %{2}. The breathing exercises are the first of the three pillars in the Wim Hof Method. You can find more information on the %{3} official website.',
+    title: 'About Application',
+    text1:
+      'is a simple application designed to help you with breathing exercises based on the Wim Hof method.\nIt allows you to easily adjust tempo of exercise based on your ',
+    text2:
+      '.\nThe breathing exercises are the first of the three pillars in the Wim Hof Method. You can find more information on the ',
+    text3: 'official website.',
     preferences: 'preferences',
+    whm: 'Wim Hof Method',
     whm_link_title: 'Open official "Wim Hof Method" website',
     app_version: 'App version: %{0}',
-  },
-  modal: {
-    default_title: 'Message',
-    label_close: 'close dialog',
   },
   instructions,
 };

@@ -1,7 +1,7 @@
-import { LanguageMessages } from '../../types';
+import { LocaleMessages } from '../../types';
 import instructions from './instructions';
 
-const pl: LanguageMessages = {
+const pl: LocaleMessages = {
   common: {
     yes: 'Tak',
     no: 'Nie',
@@ -19,7 +19,10 @@ const pl: LanguageMessages = {
     about: 'O Aplikacji',
   },
   preferences: {
-    title: 'Preferencje Ćwiczenia Oddechowego',
+    title_app_preferences: 'Ustawienia Aplikacji',
+    app_locale: 'Język aplikacji:',
+    app_theme: 'Motyw aplikacji:',
+    title_breathing_exercise: 'Preferencje Ćwiczenia Oddechowego',
     num_of_rounds: 'Liczba rund:',
     breaths_per_round: 'Oddechy na runde:',
     breathing_pace: 'Tempo oddechów:',
@@ -101,18 +104,20 @@ const pl: LanguageMessages = {
     leave: {
       title: 'Uwaga!',
       content: 'Przerwać ćwiczenie? Progres zostanie utracony.',
+      yes: 'Tak, przerwij',
     },
   },
   about: {
-    title: '@:header.about',
-    text: '%{0} jest to aplikacja webowa zaprojektowana aby pomóc Ci w ćwiczeniach oddechowych na podstawie Metody Wima Hoffa.%{1}W applikacji możesz w łatwy sposób dostosować tempo ćwiczenia oddechowego na podstawie swoich %{2}. Te ćwiczenia oddechowe są pierwszym z trzech filarów w Metodzie Wima Hofa. Więcej informacji znajdzie na oficjalnej stronie: %{3}.',
+    title: 'O Aplikacji',
+    text1:
+      'to aplikacja zaprojektowana aby pomóc Ci w ćwiczeniach oddechowych na podstawie Metody Wima Hoffa.\nW applikacji możesz w łatwy sposób dostosować tempo ćwiczenia oddechowego na podstawie swoich ',
+    text2:
+      '.\nTe ćwiczenia oddechowe są pierwszym z trzech filarów w Metodzie Wima Hofa. Więcej informacji znajdzie na oficjalnej stronie: ',
+    text3: '.',
     preferences: 'preferencje',
+    whm: 'Wim Hof Method',
     whm_link_title: 'Otwórz oficjaną stronę Metody Wima Hofa',
     app_version: 'Wersja applikacji: %{0}',
-  },
-  modal: {
-    default_title: 'Wiadomość',
-    label_close: 'zakmnij dialog',
   },
   instructions,
 };

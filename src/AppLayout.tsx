@@ -11,8 +11,6 @@ import { getSavedSettings } from './store/settings';
 import { AppDispatch } from './store/types';
 import AppLoading from 'expo-app-loading';
 
-import './i18n';
-
 export default function AppLayout() {
   const isLoadingComplete = useCachedResources();
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +18,10 @@ export default function AppLayout() {
 
   useEffect(() => {
     void dispatch(getSavedPreferences());
-    void dispatch(getSavedSettings());
+    void (async () => {
+      await dispatch(getSavedSettings());
+      await import('./i18n');
+    })();
   }, [dispatch]);
 
   if (!isLoadingComplete) {

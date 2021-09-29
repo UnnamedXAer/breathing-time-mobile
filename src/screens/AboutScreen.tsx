@@ -16,8 +16,12 @@ import Constants from 'expo-constants';
 import TextLink from '../components/ui/TextLink';
 import { RootStackScreenProps } from '../navigation/types';
 import Logo from '../assets/images/adaptive-icon.png';
+import { t } from 'i18n-js';
+import { useTranslationChange } from '../hooks/useTranslationChange';
 
 export default function AboutScreen({ navigation }: RootStackScreenProps<'About'>) {
+  useTranslationChange();
+
   const scheme = useColorScheme();
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContainer}>
@@ -25,7 +29,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
         <View style={styles.mainContainer}>
           <View style={styles.headerContainer}>
             <Headline variant={'h2'} style={{ textAlign: 'center' }}>
-              About Application
+              {t('about.title')}
             </Headline>
           </View>
           <View style={styles.logoContainer}>
@@ -39,22 +43,18 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
 
           <View style={styles.textContainer}>
             <Text style={styles.text}>
-              {Constants.manifest?.name} is a simple web application designed to help you
-              with breathing exercises based on the Wim Hof method.
-            </Text>
-            <Text style={styles.text}>
-              It allows you to easily adjust tempo of exercise based on your{' '}
+              <Text style={{ fontWeight: 'bold' }}>{Constants.manifest?.name}</Text>{' '}
+              {t('about.text1')}
               <TextLink onPress={() => navigation.push('Preferences')}>
-                preferences
+                {t('about.preferences')}
               </TextLink>
-              . The breathing exercises are the first of the three pillars in the Wim Hof
-              Method. You can find more information on the{' '}
+              {t('about.text2')}
               <TextLink
                 external
                 onPress={() => Linking.openURL('https://www.wimhofmethod.com/')}>
-                Wim Hof Method
+                {t('about.whm')}
               </TextLink>{' '}
-              official website.
+              {t('about.text3')}
             </Text>
           </View>
         </View>
@@ -64,7 +64,8 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             style={{
               color: Colors[scheme].textRGBA(0.7),
             }}>
-            App version: {Constants.manifest?.version} {__DEV__ ? '__DEV__' : null}
+            {(t('about.app_version'), [Constants.manifest?.version])}
+            {__DEV__ ? '__DEV__' : null}
           </Text>
         </View>
       </View>
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: Layout.spacing(2.2),
     textAlign: 'justify',
+    lineHeight: Layout.spacing(3),
   },
   footerContainer: {
     marginTop: Layout.spacing(3),

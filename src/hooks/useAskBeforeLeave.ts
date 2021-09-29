@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -23,11 +24,11 @@ export default function useAskBeforeLeave(
       ev.preventDefault();
 
       Alert.alert(
-        'Warning!',
-        'Cancel Exercise?',
+        t('ex.leave.title'),
+        t('ex.leave.content'),
         [
           {
-            text: 'Yes',
+            text: t('ex.leave.yes'),
             style: 'destructive',
             onPress: () => {
               dispatch(cleanExercise());
@@ -35,7 +36,7 @@ export default function useAskBeforeLeave(
             },
           },
           {
-            text: 'No',
+            text: t('common.no'),
             style: 'cancel',
             onPress: () => {},
           },

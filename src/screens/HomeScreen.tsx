@@ -9,8 +9,11 @@ import PreferencesSvg from '../components/ui/icons/PreferencesSvg';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import { RootStackScreenProps } from '../navigation/types';
+import { t } from 'i18n-js';
+import { useTranslationChange } from '../hooks/useTranslationChange';
 
 export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>) {
+  useTranslationChange();
   const scheme = useColorScheme();
   const fillColor = Colors[scheme].primary;
 
@@ -18,7 +21,7 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
     <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
       <View style={styles.container}>
         <Card
-          label="Breathing Exercise"
+          label={t('home.start_exercise')}
           onPress={() =>
             navigation.navigate('BreathingExerciseBottomTab', {
               screen: 'Start',
@@ -29,11 +32,13 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
           <CoughingSvg fillColor={fillColor} />
         </Card>
         <Card
-          label="Breathing Instruction"
+          label={t('home.exercise_instructions')}
           onPress={() => navigation.navigate('BreathingInstruction')}>
           <InstructionSvg fillColor={fillColor} />
         </Card>
-        <Card label="Preferences" onPress={() => navigation.navigate('Preferences')}>
+        <Card
+          label={t('home.exercise_preferences')}
+          onPress={() => navigation.navigate('Preferences')}>
           <PreferencesSvg fillColor={fillColor} />
         </Card>
       </View>
