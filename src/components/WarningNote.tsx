@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import Colors from '../constants/Colors';
@@ -26,13 +27,9 @@ const WarningNote: React.FC<Props> = ({ style, textSize = Layout.spacing(2.2) })
             marginRight: Layout.spacing(),
           }}
         />
-        <Headline variant="h3">Attention</Headline>
+        <Headline variant="h3">{t('ex.warning.title')}</Headline>
       </View>
-      <Text style={{ fontSize: textSize }}>
-        This breathing exercise can affect your motor control, cause temporary dizziness
-        or even make you faint - do NOT do it while driving or in kind of dangerous
-        places. Find safe place like sofa or bed.
-      </Text>
+      <Text style={{ fontSize: textSize }}>{t('ex.warning.text')}</Text>
     </View>
   );
 };

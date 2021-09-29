@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
+import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -133,15 +134,11 @@ export default function RecoveryScreen({
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
         <Header
-          title="Recovery"
-          roundInfo={
-            !started
-              ? void 0
-              : `Take one deep breath and hold for ${recoveryTime} seconds.`
-          }
+          title={t('ex.recovery.title')}
+          roundInfo={!started ? void 0 : t('ex.recovery.round_info', [recoveryTime])}
         />
         {!started ? (
-          <StartTip text="Inhale deeply and stop breathing." />
+          <StartTip text={t('ex.recovery.start_tip')} />
         ) : (
           <>
             <Counter
@@ -149,10 +146,9 @@ export default function RecoveryScreen({
               containerStyle={{ marginBottom: Layout.window.height * 0.25 }}
             />
             <Footer
-              text={`Tap twice on the screen to skip to the ${
-                isLastRound ? 'Summary screen' : 'next round'
-              }.`}
-              navigation={navigation}></Footer>
+              text={t(`ex.recovery.${isLastRound ? 'skip_to_summary' : 'skip_to_next'}`)}
+              navigation={navigation}
+            />
           </>
         )}
       </View>

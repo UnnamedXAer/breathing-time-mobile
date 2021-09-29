@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/core';
+import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -110,9 +111,9 @@ export default function BreathingScreen({
   return (
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
-        <Header title="Breathing" />
+        <Header title={t('ex.breathing.title')} />
         {!started ? (
-          <StartTip text="Breath deeply with counter." />
+          <StartTip text={t('ex.breathing.start_tip')} />
         ) : (
           <>
             <BreathingAnimation
@@ -124,7 +125,7 @@ export default function BreathingScreen({
             <Counter value={counter} />
 
             <Footer
-              text="Tap twice on the screen to skip to the next phase."
+              text={t('ex.breathing.skip_to_next')}
               navigation={navigation}></Footer>
           </>
         )}

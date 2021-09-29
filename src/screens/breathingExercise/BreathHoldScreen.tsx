@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
+import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -80,28 +81,24 @@ export default function BreathHoldScreen({
     <Pressable style={styles.pressable} onPress={screenPressHandler}>
       <View style={styles.container}>
         <Header
-          title="Breath Hold"
-          roundInfo={
-            !started ? void 0 : 'Exhale and stop breathing until you feel urge to inhale.'
-          }
+          title={t('ex.hold.title')}
+          roundInfo={!started ? void 0 : t('ex.hold.round_info')}
         />
         {!started ? (
-          <StartTip text=" Take final deep breath, then exhale and stop breathing." />
+          <StartTip text={t('ex.hold.start_tip')} />
         ) : (
           <>
             <Counter value={counter} />
             <AppButton
               onPress={completeScreen}
-              title="Next Phase"
+              title={t('ex.hold.next_phase')}
               size="large"
               mode="contained"
               containerStyle={{ padding: Layout.spacing(2) }}
               textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
             />
 
-            <Footer
-              text="Press the button or tap twice on the screen to skip to the next phase."
-              navigation={navigation}></Footer>
+            <Footer text={t('ex.hold.skip_to_next')} navigation={navigation}></Footer>
           </>
         )}
       </View>

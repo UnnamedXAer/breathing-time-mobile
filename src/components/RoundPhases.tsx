@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -9,12 +10,6 @@ import { Text } from './ui/Themed';
 interface Props {
   style?: ViewStyle;
 }
-
-const phases = [
-  'Breathing - take {{breathsPerRound}} deep breaths.',
-  'Breath hold - exhale then stop breathing until you feel urge to inhale.',
-  'Recovery - inhale deeply and hold breath for {{recoveryTime}} seconds.',
-];
 
 const RoundPhases__unused: React.FC<Props> = ({ style }) => {
   const { breathsPerRound, recoveryTime } = useSelector(
@@ -29,16 +24,12 @@ const RoundPhases__unused: React.FC<Props> = ({ style }) => {
           style={{
             fontSize: Layout.spacing(2.3),
           }}>
-          Round phases
+          {t('ex.phases.title')}
         </Headline>
       </View>
-      <Text style={styles.text}>
-        {phases[0].replace('{{breathsPerRound}}', breathsPerRound.toString())}
-      </Text>
-      <Text style={styles.text}>{phases[1]}</Text>
-      <Text style={styles.text}>
-        {phases[2].replace('{{recoveryTime}}', recoveryTime.toString())}
-      </Text>
+      <Text style={styles.text}>{t('ex.phases.breathing', [breathsPerRound])}</Text>
+      <Text style={styles.text}>{t('ex.phases.hold')}</Text>
+      <Text style={styles.text}>{t('ex.phases.breathing', [recoveryTime])}</Text>
     </View>
   );
 };

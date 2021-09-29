@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import React from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import Colors from '../../constants/Colors';
@@ -27,15 +28,15 @@ const Footer: React.FC<Props> = ({ children, text, navigation }) => {
           size={'small'}
           onPress={() => {
             Alert.alert(
-              'Finish breathing session',
-              'Do you want to end the session now?',
+              t('ex.footer.finish_title'),
+              t('ex.footer.finish_message'),
               [
                 {
-                  text: 'Yes, finish',
+                  text: t('ex.footer.confirm'),
                   onPress: () => navigation.jumpTo('Summary'),
                 },
                 {
-                  text: 'No',
+                  text: t('common.no'),
                 },
               ],
               {
@@ -43,7 +44,7 @@ const Footer: React.FC<Props> = ({ children, text, navigation }) => {
               },
             );
           }}
-          title="Finish"
+          title={t('ex.footer.finish')}
         />
       </View>
       {children}

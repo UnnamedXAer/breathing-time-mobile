@@ -9,6 +9,7 @@ import { StyleSheet, View } from 'react-native';
 import Layout from '../../constants/Layout';
 import Header from '../../components/breathingExercise/Header';
 import WarningNote from '../../components/WarningNote';
+import { t } from 'i18n-js';
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
@@ -65,7 +66,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Let's begin your breathing!" />
+      <Header title={t('ex.start.title')} />
       <View style={styles.content}>
         {!started ? (
           <>
@@ -76,7 +77,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
             <View style={styles.startBtnWrapper}>
               <AppButton
                 onPress={startExercise}
-                title="START"
+                title={t('ex.start.start')}
                 size="large"
                 mode="contained"
                 containerStyle={{ padding: Layout.spacing(2) }}
@@ -86,8 +87,8 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
           </>
         ) : (
           <Counter
-            text="Get Ready!"
-            value={counter > 0 ? counter : 'Go'}
+            text={t('ex.start.get_ready')}
+            value={counter > 0 ? counter : t('ex.start.go')}
             fontSize={Layout.window.height * 0.15}
           />
         )}
@@ -95,12 +96,16 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.footer}>
         {!started && (
           <>
-            <AppButton onPress={() => navigation.goBack()} mode="outlined" title="Back" />
+            <AppButton
+              onPress={() => navigation.goBack()}
+              mode="outlined"
+              title={t('common.back')}
+            />
             <AppButton
               onPress={() => navigation.replace('BreathingInstruction')}
               size="small"
               mode="outlined"
-              title="See Instructions"
+              title={t('ex.start.see_instructions')}
             />
           </>
         )}

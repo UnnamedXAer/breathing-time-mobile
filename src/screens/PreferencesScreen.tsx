@@ -20,6 +20,7 @@ import { RootStackScreenProps } from '../navigation/types';
 import { Theme, ThemeKey, Themes } from '../store/settings/types';
 import { restoreDefaultSettings, updateSettings } from '../store/settings';
 import Select from '../components/ui/Select';
+import { t } from 'i18n-js';
 
 const themesSelectData = [] as Array<{ key: Theme; label: ThemeKey }>;
 
@@ -78,7 +79,7 @@ export default function PreferencesScreen({
 
         <View style={styles.actionsContainer}>
           <Button
-            title="Restore Default"
+            title={t('preferences.restore_default')}
             size="small"
             mode="outlined"
             onPress={() => {
@@ -96,7 +97,7 @@ export default function PreferencesScreen({
       </View>
 
       <Slider
-        label="Number of rounds:"
+        label={t('preferences.num_of_rounds')}
         value={exerciseConfig.numberOfRounds}
         trackMarks={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
         min={1}
@@ -113,7 +114,7 @@ export default function PreferencesScreen({
       />
 
       <Slider
-        label="Breaths per round:"
+        label={t('preferences.breaths_per_round')}
         value={exerciseConfig.breathsPerRound}
         min={10}
         max={60}
@@ -131,7 +132,7 @@ export default function PreferencesScreen({
       />
 
       <Slider
-        label="Breathing pace:"
+        label={t('preferences.breathing_pace')}
         value={exerciseConfig.breathTime}
         valueTranslation={{
           1400: 'fast',
@@ -153,7 +154,7 @@ export default function PreferencesScreen({
       />
 
       <Slider
-        label="Recovery time:"
+        label={t('preferences.recovery_time')}
         value={exerciseConfig.recoveryTime}
         min={5}
         max={30}
@@ -171,7 +172,7 @@ export default function PreferencesScreen({
       />
 
       <Switch
-        label="Disable animation:"
+        label={t('preferences.disable_animation')}
         value={exerciseConfig.disableAnimation}
         onChange={(value) => {
           dispatch(updatePreferences({ propName: 'disableAnimation', value }));
@@ -179,7 +180,7 @@ export default function PreferencesScreen({
       />
 
       <Switch
-        label="Disable start tips before exercise phases:"
+        label={t('preferences.disable_start_tips')}
         value={exerciseConfig.disableStartTips}
         onChange={(value) => {
           dispatch(updatePreferences({ propName: 'disableStartTips', value }));
@@ -188,7 +189,7 @@ export default function PreferencesScreen({
 
       <View style={styles.actionsContainer}>
         <Button
-          title="Restore Default"
+          title={t('preferences.restore_default')}
           size="small"
           mode="outlined"
           onPress={() => {
@@ -197,7 +198,7 @@ export default function PreferencesScreen({
         />
         <View style={{ marginBottom: Layout.spacing(2) }} />
         <Button
-          title="Back"
+          title={t('common.back')}
           mode="contained"
           onPress={() => {
             navigation.goBack();

@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import Colors from '../../constants/Colors';
@@ -79,7 +80,9 @@ const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimati
         },
       ]}>
       {disableAnimation ? (
-        <Text style={{ color: Colors[scheme].textRGBA(0.3) }}>Animation disabled</Text>
+        <Text style={{ color: Colors[scheme].textRGBA(0.3) }}>
+          {t('ex.breathing.animation_disabled')}
+        </Text>
       ) : (
         <Animated.View
           style={[

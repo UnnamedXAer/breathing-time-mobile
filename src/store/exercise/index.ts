@@ -19,7 +19,7 @@ const devInitialState: ExerciseState = {
   breathsPerRound: 31231231,
   recoveryTime: 5,
   breathTime: 2 * 1000,
-  holdTimes: [] as number[],
+  holdTimes: [11, 12, 13, 14.4] as number[],
 };
 
 export const sliceName = 'exercise' as const;
