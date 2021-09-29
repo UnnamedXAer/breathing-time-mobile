@@ -80,8 +80,8 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
                 title={t('ex.start.start')}
                 size="large"
                 mode="contained"
-                containerStyle={{ padding: Layout.spacing(2) }}
-                textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
+                containerStyle={styles.startBtnContainer}
+                textStyle={styles.startBtnText}
               />
             </View>
           </>
@@ -89,7 +89,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
           <Counter
             text={t('ex.start.get_ready')}
             value={counter > 0 ? counter : t('ex.start.go')}
-            fontSize={Layout.window.height * 0.15}
+            fontSize={Layout.window.height * (t('ex.start.go').length < 5 ? 0.15 : 0.07)}
           />
         )}
       </View>
@@ -131,6 +131,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  startBtnContainer: {
+    padding: Layout.spacing(2),
+  },
+  startBtnText: {
+    fontSize: Layout.spacing(5),
+    fontVariant: ['small-caps'],
   },
   footer: {
     marginBottom: Layout.spacing(),
