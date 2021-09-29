@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { Text, View } from '../../components/ui/Themed';
 import Layout from '../../constants/Layout';
 import Breathing from '../../screens/breathingExercise/BreathingScreen';
@@ -12,41 +12,20 @@ import Colors from '../../constants/Colors';
 import useColorScheme from '../../hooks/useColorScheme';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ExerciseTabParamList } from './types';
+import { t } from 'i18n-js';
 
 const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
 export function BreathingExerciseTabNavigator() {
   const scheme = useColorScheme();
-  const marginTop = StatusBar.currentHeight
-    ? StatusBar.currentHeight + Layout.spacing()
-    : Layout.spacing(5);
-
   const backgroundColor = Colors[scheme].background;
 
   return (
     <View style={{ flex: 1, backgroundColor }}>
       <LinearGradient
-        style={{
-          width: Layout.window.width,
-          paddingTop: marginTop,
-        }}
-        colors={[Colors[scheme].primary, Colors[scheme].background]}>
-        <Text
-          style={{
-            fontSize: Layout.spacing(4),
-            marginBottom: Layout.spacing(2),
-            textAlign: 'center',
-            fontFamily: 'zen-tokyo-zoo',
-            color: '#fff',
-            textShadowColor: 'black',
-            textShadowRadius: 1,
-            textShadowOffset: {
-              height: 1,
-              width: 0,
-            },
-          }}>
-          Breathing Exercise
-        </Text>
+        style={styles.gradient}
+        colors={[Colors[scheme].primary, backgroundColor]}>
+        <Text style={styles.customTitleText}>{t('ex.title')}</Text>
       </LinearGradient>
 
       <BottomTab.Navigator
@@ -56,9 +35,7 @@ export function BreathingExerciseTabNavigator() {
           backgroundColor,
         }}
         screenOptions={{
-          tabBarStyle: {
-            display: 'none',
-          },
+          tabBarStyle: styles.tabBar,
           unmountOnBlur: true,
           headerShown: false,
         }}>
@@ -71,3 +48,28 @@ export function BreathingExerciseTabNavigator() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  gradient: {
+    width: Layout.window.width,
+    paddingTop: StatusBar.currentHeight
+      ? StatusBar.currentHeight + Layout.spacing()
+      : Layout.spacing(5),
+  },
+  customTitleText: {
+    fontSize: Layout.spacing(4),
+    marginBottom: Layout.spacing(2),
+    textAlign: 'center',
+    fontFamily: 'zen-tokyo-zoo',
+    color: '#fff',
+    textShadowColor: 'black',
+    textShadowRadius: 1,
+    textShadowOffset: {
+      height: 1,
+      width: 0,
+    },
+  },
+  tabBar: {
+    display: 'none',
+  },
+});

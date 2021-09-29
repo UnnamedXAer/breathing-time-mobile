@@ -233,7 +233,7 @@ export default function PreferencesScreen({
             dispatch(restoreDefaultPreferences());
           }}
         />
-        <View style={{ marginBottom: Layout.spacing(2) }} />
+        <View style={styles.backBtn} />
         <Button
           title={t('common.back')}
           mode="contained"
@@ -261,5 +261,8 @@ const styles = StyleSheet.create({
   actionsContainer: {
     alignItems: 'center',
     marginVertical: Layout.spacing(3),
+  },
+  backBtn: {
+    marginBottom: Layout.spacing(2),
   },
 });

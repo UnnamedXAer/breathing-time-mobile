@@ -1,8 +1,3 @@
-/**
- * Learn more about Light and Dark modes:
- * https://docs.expo.io/guides/color-schemes/
- */
-
 import * as React from 'react';
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
@@ -10,46 +5,24 @@ import Colors from '../../constants/Colors';
 import { Fonts } from '../../constants/fonts';
 import useColorScheme from '../../hooks/useColorScheme';
 
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: Exclude<
-    keyof typeof Colors.light & keyof typeof Colors.dark,
-    'textRGBA' | 'backgroundRGBA'
-  >,
-) {
-  const theme = useColorScheme();
-  const colorFromProps = props[theme];
-
-  if (colorFromProps) {
-    return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
-  }
-}
-
-type ThemeProps = {
-  lightColor?: string;
-  darkColor?: string;
-};
-
-export type TextProps = ThemeProps & DefaultText['props'];
-export type ViewProps = ThemeProps & DefaultView['props'];
-
-export function Text(props: TextProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+export function Text({ style, ...otherProps }: DefaultText['props']) {
+  const scheme = useColorScheme();
 
   return (
-    <DefaultText style={[{ color, fontFamily: Fonts.Lato }, style]} {...otherProps} />
+    <DefaultText
+      style={[{ color: Colors[scheme].text, fontFamily: Fonts.Lato }, style]}
+      {...otherProps}
+    />
   );
 }
 
-export function View(props: ViewProps) {
-  const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    'background',
-  );
+export function View({ style, ...otherProps }: DefaultView['props']) {
+  const scheme = useColorScheme();
 
-  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+  return (
+    <DefaultView
+      style={[{ backgroundColor: Colors[scheme].background }, style]}
+      {...otherProps}
+    />
+  );
 }

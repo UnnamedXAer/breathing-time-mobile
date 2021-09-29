@@ -77,16 +77,9 @@ export default function SummaryScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Header title={t('ex.summary.title')} />
-      <View style={styles.results}>
+      <View>
         {holdTimes.length === 0 ? (
-          <Text
-            style={{
-              fontSize: Layout.spacing(3),
-              marginVertical: Layout.spacing(5),
-              textAlign: 'center',
-            }}>
-            {t('ex.summary.no_rounds_finished')}
-          </Text>
+          <Text style={styles.noRoundsText}>{t('ex.summary.no_rounds_finished')}</Text>
         ) : (
           <>
             <ShareButton onPress={share} style={styles.shareBtn} />
@@ -139,7 +132,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  results: {},
+  noRoundsText: {
+    fontSize: Layout.spacing(3),
+    marginVertical: Layout.spacing(5),
+    textAlign: 'center',
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

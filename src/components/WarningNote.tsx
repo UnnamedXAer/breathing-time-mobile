@@ -21,11 +21,7 @@ const WarningNote: React.FC<Props> = ({ style, textSize = Layout.spacing(2.2) })
           opacity={0.6}
           width={48}
           height={48}
-          style={{
-            width: 48,
-            height: 48,
-            marginRight: Layout.spacing(),
-          }}
+          style={styles.icon}
         />
         <Headline variant="h3">{t('ex.warning.title')}</Headline>
       </View>
@@ -45,5 +41,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: Layout.spacing(),
+  },
+  icon: {
+    width: 48,
+    height: 48,
+    marginRight: Layout.spacing(),
   },
 });

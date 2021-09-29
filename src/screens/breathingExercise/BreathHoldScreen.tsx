@@ -94,8 +94,8 @@ export default function BreathHoldScreen({
               title={t('ex.hold.next_phase')}
               size="large"
               mode="contained"
-              containerStyle={{ padding: Layout.spacing(2) }}
-              textStyle={{ fontSize: Layout.spacing(5), fontVariant: ['small-caps'] }}
+              containerStyle={styles.btnContainer}
+              textStyle={styles.btnText}
             />
 
             <Footer text={t('ex.hold.skip_to_next')} navigation={navigation}></Footer>
@@ -119,10 +119,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  btnContainer: {
+    padding: Layout.spacing(2),
+  },
+  btnText: {
+    fontSize: Layout.spacing(5),
+    fontVariant: ['small-caps'],
   },
 });
 

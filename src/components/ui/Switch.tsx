@@ -23,7 +23,7 @@ const Switch: React.FC<Props> = ({ label, value, onChange }) => {
         thumbColor={primary}
         trackColor={{
           true: accent,
-          false: Colors[scheme].textRGBA(0.4), //'rgba(66, 34, 31, 0.3)',
+          false: Colors[scheme].textRGBA(0.4),
         }}
         style={{ transform: [{ scale: 1.3 }] }}
       />

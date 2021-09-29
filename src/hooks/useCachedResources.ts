@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { FontAwesome } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import { FontSource } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -16,8 +15,6 @@ export default function useCachedResources() {
         void SplashScreen.preventAutoHideAsync();
 
         await Font.loadAsync({
-          ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf') as FontSource,
           'zen-tokyo-zoo':
             require('../assets/fonts/ZenTokyoZoo-Regular.ttf') as FontSource,
           ...fontsMap,

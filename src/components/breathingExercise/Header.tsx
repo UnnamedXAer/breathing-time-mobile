@@ -15,7 +15,7 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
   const color = Colors[scheme].textRGBA(0.7);
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.title}>{title}</Text>
       {roundInfo && <Text style={[styles.roundInfo, { color }]}>{roundInfo}</Text>}
       {children}
@@ -24,9 +24,6 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // marginBottom: Layout.spacing(),
-  },
   title: {
     fontSize: Layout.spacing(5),
     fontWeight: 'bold',
