@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as Font from 'expo-font';
-import { FontSource } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 import { fontsMap } from '../helpers/fonts';
@@ -14,11 +13,7 @@ export default function useCachedResources() {
       try {
         void SplashScreen.preventAutoHideAsync();
 
-        await Font.loadAsync({
-          'zen-tokyo-zoo':
-            require('../assets/fonts/ZenTokyoZoo-Regular.ttf') as FontSource,
-          ...fontsMap,
-        });
+        await Font.loadAsync(fontsMap);
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);

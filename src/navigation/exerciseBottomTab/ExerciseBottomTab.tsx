@@ -13,6 +13,7 @@ import useColorScheme from '../../hooks/useColorScheme';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ExerciseTabParamList } from './types';
 import { t } from 'i18n-js';
+import { Fonts } from '../../constants/fonts';
 
 const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
@@ -60,13 +61,13 @@ const styles = StyleSheet.create({
     fontSize: Layout.spacing(4),
     marginBottom: Layout.spacing(2),
     textAlign: 'center',
-    fontFamily: 'zen-tokyo-zoo',
     color: '#fff',
+    fontFamily: Fonts.LatoBoldItalic,
     textShadowColor: 'black',
-    textShadowRadius: 1,
+    textShadowRadius: 10,
     textShadowOffset: {
-      height: 1,
-      width: 0,
+      height: 3,
+      width: -1,
     },
   },
   tabBar: {
