@@ -25,7 +25,7 @@
 			"**/*"
 		],
 		"android": {
-			"package": "app.netlify.breathingtime",
+			"package": "com.unnamedxaer.breathingtime",
 			"versionCode": 0,
 			"userInterfaceStyle": "automatic",
 			"adaptiveIcon": {
@@ -34,7 +34,7 @@
 			}
 		},
 		"ios": {
-			"bundleIdentifier": "app.netlify.breathingtime",
+			"bundleIdentifier": "com.unnamedxaer.breathingtime",
 			"buildNumber": "1.0.0",
 			"userInterfaceStyle": "automatic",
 			"supportsTablet": true
