@@ -8,23 +8,13 @@ import ShareButton from '../../components/ui/ShareButton';
 import { Text } from '../../components/ui/Themed';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
+import { calculateAverage, prepareShareText } from '../../helpers/summary';
 import useColorScheme from '../../hooks/useColorScheme';
-
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { cleanExercise, finishExercise } from '../../store/exercise';
 import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
-
-function calculateAverage(holdTimes: number[]) {
-  if (holdTimes.length === 0) {
-    return '-';
-  }
-
-  return (holdTimes.reduce((pv, v) => pv + v) / holdTimes.length)
-    .toFixed(3)
-    .replace(/((\.0+)|(0+))$/g, '');
-}
 
 export default function SummaryScreen({ navigation }: Props) {
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
@@ -41,22 +31,7 @@ export default function SummaryScreen({ navigation }: Props) {
   }, [dispatch]);
 
   const share = async () => {
-    let text = '';
-    holdTimes.forEach((v, idx) => {
-      if (idx > 0) {
-        text += '\n';
-      }
-      text += `${t('ex.summary.round_with_num', [idx + 1])}:\t${v} s`;
-    });
-    if (holdTimes.length > 1) {
-      text += `\n\n${t('ex.summary.averageTime')} ${averageTime} ${t(
-        'ex.summary.seconds',
-        {
-          count: +averageTime,
-        },
-      )}.`;
-    }
-
+    const text = prepareShareText(holdTimes, averageTime);
     try {
       await Share.share(
         {
