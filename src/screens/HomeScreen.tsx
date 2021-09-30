@@ -41,6 +41,48 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
           onPress={() => navigation.navigate('Preferences')}>
           <PreferencesSvg fillColor={fillColor} />
         </Card>
+        {/* // */}
+        {__DEV__ && (
+          <>
+            <Card
+              label={'Start'}
+              onPress={() =>
+                navigation.navigate('BreathingExerciseBottomTab', { screen: 'Start' })
+              }>
+              <PreferencesSvg fillColor={'orange'} />
+            </Card>
+            <Card
+              label={'Breathing'}
+              onPress={() =>
+                navigation.navigate('BreathingExerciseBottomTab', { screen: 'Breathing' })
+              }>
+              <PreferencesSvg fillColor={'orange'} />
+            </Card>
+            <Card
+              label={'Hold'}
+              onPress={() =>
+                navigation.navigate('BreathingExerciseBottomTab', {
+                  screen: 'BreathHold',
+                })
+              }>
+              <PreferencesSvg fillColor={'orange'} />
+            </Card>
+            <Card
+              label={'Recovery'}
+              onPress={() =>
+                navigation.navigate('BreathingExerciseBottomTab', { screen: 'Recovery' })
+              }>
+              <PreferencesSvg fillColor={'orange'} />
+            </Card>
+            <Card
+              label={'Summary'}
+              onPress={() =>
+                navigation.navigate('BreathingExerciseBottomTab', { screen: 'Summary' })
+              }>
+              <PreferencesSvg fillColor={'orange'} />
+            </Card>
+          </>
+        )}
       </View>
     </ScrollView>
   );
