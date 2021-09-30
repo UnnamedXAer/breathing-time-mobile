@@ -14,9 +14,10 @@ interface Props
     'navigation'
   > {
   text?: string;
+  onLeaveConfirm?: () => void;
 }
 
-const Footer: React.FC<Props> = ({ children, text, navigation }) => {
+const Footer: React.FC<Props> = ({ children, text, navigation, onLeaveConfirm }) => {
   const scheme = useColorScheme();
 
   const color = Colors[scheme].textRGBA(0.7);
@@ -33,7 +34,12 @@ const Footer: React.FC<Props> = ({ children, text, navigation }) => {
               [
                 {
                   text: t('ex.footer.confirm'),
-                  onPress: () => navigation.jumpTo('Summary'),
+                  onPress: () => {
+                    if (onLeaveConfirm) {
+                      onLeaveConfirm();
+                    }
+                    navigation.jumpTo('Summary');
+                  },
                 },
                 {
                   text: t('common.no'),

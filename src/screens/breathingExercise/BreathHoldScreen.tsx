@@ -32,13 +32,18 @@ export default function BreathHoldScreen({
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
 
-  const completeScreen = useCallback(() => {
-    setNextStep(true);
+  const pushHoldTime = () => {
     dispatch(addHoldTime((Date.now() - startIntervalTime.current) / 1000));
     // __devCheckActualTime(startIntervalTime.current, counter);
     startIntervalTime.current = -1;
+  };
+
+  const completeScreen = useCallback(() => {
+    setNextStep(true);
+    pushHoldTime();
     navigation.jumpTo('Recovery');
-  }, [dispatch, navigation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
   useEffect(() => {
     if (!focused) {
@@ -116,7 +121,10 @@ export default function BreathHoldScreen({
               textStyle={styles.btnText}
             />
 
-            <Footer text={t('ex.hold.skip_to_next')} navigation={navigation}></Footer>
+            <Footer
+              text={t('ex.hold.skip_to_next')}
+              navigation={navigation}
+              onLeaveConfirm={pushHoldTime}></Footer>
           </>
         )}
       </View>
