@@ -12,15 +12,15 @@ import useColorScheme from '../../hooks/useColorScheme';
 
 interface Props {
   onPress: ((event: GestureResponderEvent) => void) | undefined;
-  style: ViewStyle;
+  style?: ViewStyle;
 }
 
 const ShareButton: React.FC<Props> = ({ onPress, style }) => {
   const scheme = useColorScheme();
   const dynamicContainerStyle: ViewStyle = {
-    ...style,
     backgroundColor: Colors[scheme].background,
     borderColor: Colors[scheme].textRGBA(0.3),
+    ...style,
   };
 
   return (

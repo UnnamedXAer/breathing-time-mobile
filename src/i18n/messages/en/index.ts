@@ -73,6 +73,7 @@ export default {
       breathing_finished: 'Breathing finished.',
       go_to: 'Go to',
       and_start_breathing: 'and start your breathing.',
+      results_header: 'Results:',
       round_with_num: 'Round %{0}',
       seconds: {
         one: 'second',

@@ -74,6 +74,7 @@ const pl: LocaleMessages = {
       breathing_finished: 'Oddychanie zakończone.',
       go_to: 'Idź do',
       and_start_breathing: 'i zacznij swoje oddychanie.',
+      results_header: 'Wyniki:',
       round_with_num: 'Runda %{0}',
       seconds: {
         one: 'sekunda',

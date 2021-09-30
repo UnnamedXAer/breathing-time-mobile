@@ -1,6 +1,6 @@
 import { t } from 'i18n-js';
 import React, { useEffect } from 'react';
-import { Share, StyleSheet, ToastAndroid, View } from 'react-native';
+import { ScrollView, Share, StyleSheet, ToastAndroid, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/breathingExercise/Header';
 import AppButton from '../../components/ui/Button';
@@ -77,12 +77,30 @@ export default function SummaryScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Header title={t('ex.summary.title')} />
-      <View>
-        {holdTimes.length === 0 ? (
-          <Text style={styles.noRoundsText}>{t('ex.summary.no_rounds_finished')}</Text>
-        ) : (
-          <>
-            <ShareButton onPress={share} style={styles.shareBtn} />
+      {holdTimes.length === 0 ? (
+        <Text style={styles.noRoundsText}>{t('ex.summary.no_rounds_finished')}</Text>
+      ) : (
+        <>
+          <ScrollView
+            stickyHeaderIndices={[0]}
+            style={{
+              marginTop: Layout.spacing(2),
+            }}
+            contentContainerStyle={{
+              paddingBottom: Layout.spacing(3),
+            }}>
+            <View>
+              <View
+                style={[
+                  styles.resultsHeader,
+                  { backgroundColor: Colors[scheme].background },
+                ]}>
+                <Text style={styles.resultsHeaderText}>
+                  {t('ex.summary.results_header')}
+                </Text>
+                <ShareButton onPress={share} />
+              </View>
+            </View>
             {holdTimes.map((time, idx) => {
               return (
                 <View
@@ -100,9 +118,9 @@ export default function SummaryScreen({ navigation }: Props) {
                 </View>
               );
             })}
-          </>
-        )}
-      </View>
+          </ScrollView>
+        </>
+      )}
 
       {holdTimes.length > 0 && (
         <View style={styles.averageContainer}>
@@ -137,6 +155,18 @@ const styles = StyleSheet.create({
     marginVertical: Layout.spacing(5),
     textAlign: 'center',
   },
+  resultsHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingBottom: Layout.spacing(),
+    paddingHorizontal: Layout.spacing(),
+    elevation: 6,
+  },
+  resultsHeaderText: {
+    fontSize: Layout.spacing(3),
+    fontWeight: 'bold',
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -159,9 +189,5 @@ const styles = StyleSheet.create({
   },
   averageText: {
     fontSize: Layout.spacing(2.5),
-  },
-  shareBtn: {
-    alignSelf: 'flex-end',
-    marginTop: Layout.spacing(2),
   },
 });
