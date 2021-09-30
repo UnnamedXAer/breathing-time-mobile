@@ -16,6 +16,7 @@ import { Text } from '../components/ui/Themed';
 import { Pressable } from 'react-native';
 import Layout from '../constants/Layout';
 import SimpleLineIcons from '@expo/vector-icons/build/SimpleLineIcons';
+import Constants from 'expo-constants';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -48,16 +49,24 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootStackScreenProps<'Home'>) => ({
-          title: 'Breathing Time',
+          title: Constants.manifest!.name,
           headerTitle: (props) => (
             <Text
               {...props}
               style={{
                 color: props.tintColor,
                 textAlign: 'center',
-                fontSize: Layout.spacing(3),
+                fontSize: Layout.spacing(4),
                 width: '96.5%',
                 paddingRight: 25,
+                paddingBottom: 2,
+                fontFamily: Fonts.LatoBoldItalic,
+                textShadowColor: Colors[colorScheme].textRGBA(0.7),
+                textShadowRadius: 6,
+                textShadowOffset: {
+                  height: 2,
+                  width: -1,
+                },
               }}
               numberOfLines={1}
               ellipsizeMode="tail"
