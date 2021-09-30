@@ -62,7 +62,7 @@ export default {
     recovery: {
       title: 'Recovery',
       start_tip: 'Inhale deeply and stop breathing.',
-      round_info: 'Take one deep breath and hold for ${0} seconds.',
+      round_info: 'Take one deep breath and hold for %{0} seconds.',
       skip_to_next: 'Tap twice on the screen to skip to the next phase.',
       skip_to_summary: 'Tap twice on the screen to skip to the Summary screen.',
     },

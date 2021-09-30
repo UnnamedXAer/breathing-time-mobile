@@ -62,7 +62,7 @@ const pl: LocaleMessages = {
     },
     recovery: {
       title: 'Regeneracja',
-      round_info: 'Wstrzymaj oddecha na %{0} sekund.',
+      round_info: 'Wstrzymaj oddech na %{0} sekund.',
       start_tip: 'Weź głęboki wdech i przestań oddychać.',
       skip_to_next: 'Stuknij dwukrotnie, żeby przejść do następnego etapu.',
       skip_to_summary: 'Stuknij dwukrotnie, żeby przejść do ekranu podsumowania.',

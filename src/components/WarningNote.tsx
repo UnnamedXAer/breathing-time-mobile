@@ -25,7 +25,9 @@ const WarningNote: React.FC<Props> = ({ style, textSize = Layout.spacing(2.2) })
         />
         <Headline variant="h3">{t('ex.warning.title')}</Headline>
       </View>
-      <Text style={{ fontSize: textSize }}>{t('ex.warning.text')}</Text>
+      <Text style={{ fontSize: textSize, textAlign: 'justify' }}>
+        {t('ex.warning.text')}
+      </Text>
     </View>
   );
 };

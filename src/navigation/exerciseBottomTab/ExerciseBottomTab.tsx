@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
   },
   customTitleText: {
     fontSize: Layout.spacing(4),
-    marginBottom: Layout.spacing(2),
+    marginBottom: Layout.spacing(),
+    paddingBottom: Layout.spacing(),
     textAlign: 'center',
     color: '#fff',
     fontFamily: Fonts.LatoBoldItalic,

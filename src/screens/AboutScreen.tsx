@@ -65,7 +65,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
               color: Colors[scheme].textRGBA(0.7),
             }}>
             {(t('about.app_version'), [Constants.manifest?.version])}
-            {__DEV__ ? '__DEV__' : null}
+            {__DEV__ ? ' __DEV__' : null}
           </Text>
         </View>
       </View>
