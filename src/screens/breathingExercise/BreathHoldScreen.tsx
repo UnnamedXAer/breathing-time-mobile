@@ -1,12 +1,13 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Vibration, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
+import Alert from '../../components/ui/Alert';
 import AppButton from '../../components/ui/Button';
 import Layout from '../../constants/Layout';
 import setIntervalWithTimeout from '../../helpers/setInterval';
@@ -22,6 +23,7 @@ export default function BreathHoldScreen({
   navigation,
 }: ExerciseTabScreenProps<'BreathHold'>) {
   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
   const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
@@ -45,6 +47,13 @@ export default function BreathHoldScreen({
       setNextStep(false);
     }
   }, [focused]);
+
+  useEffect(() => {
+    if (counter === 600) {
+      setShowAlert(true);
+      Vibration.vibrate(Platform.OS === 'ios' ? [0, 400, 200, 400] : [0, 200, 200, 200]);
+    }
+  }, [counter]);
 
   useEffect(() => {
     if (nextStep || !focused || !started) {
@@ -82,12 +91,21 @@ export default function BreathHoldScreen({
       <View style={styles.container}>
         <Header
           title={t('ex.hold.title')}
-          roundInfo={!started ? void 0 : t('ex.hold.round_info')}
+          roundInfo={!started || showAlert ? void 0 : t('ex.hold.round_info')}
         />
         {!started ? (
           <StartTip text={t('ex.hold.start_tip')} />
         ) : (
           <>
+            {showAlert && (
+              <Alert
+                title={t('ex.hold.warning_title')}
+                content={t('ex.hold.warning_text')}
+                onPress={() => {
+                  setShowAlert(false);
+                }}
+              />
+            )}
             <Counter value={counter} />
             <AppButton
               onPress={completeScreen}

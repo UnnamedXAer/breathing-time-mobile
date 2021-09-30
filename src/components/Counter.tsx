@@ -10,6 +10,7 @@ interface Props {
   containerStyle?: ViewStyle;
 }
 const defaultFontSize = Layout.window.height * (Layout.windowRatio < 0.5 ? 0.25 : 0.2);
+
 const Counter: React.FC<Props> = ({
   value,
   text,
@@ -36,12 +37,12 @@ const styles = StyleSheet.create({
     fontSize: Layout.spacing(6),
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: Layout.spacing(4),
+    marginBottom: Layout.spacing(8),
   },
   value: {
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingHorizontal: Layout.spacing(),
+    includeFontPadding: false,
   },
 });
 

@@ -56,6 +56,8 @@ export default {
       next_phase: 'Next Phase',
       skip_to_next:
         'Press the button or tap twice on the screen to skip to the next phase.',
+      warning_title: 'Hello!',
+      warning_text: 'Are you still there?',
     },
     recovery: {
       title: 'Recovery',

@@ -57,6 +57,8 @@ const pl: LocaleMessages = {
       next_phase: 'Następny Etap',
       skip_to_next:
         'Naciśnij przycisk lub stuknij dwukrotnie w ekran, żeby przejśc do następnego etapu.',
+      warning_title: 'Halo!',
+      warning_text: 'Jesteś tam jeszcze?',
     },
     recovery: {
       title: 'Regeneracja',
