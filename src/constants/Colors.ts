@@ -10,7 +10,7 @@ const _colors = {
 } as const;
 
 const light = {
-  primary: 'rgb(1, 77, 77)',
+  primary: 'rgb(0, 117, 117)',
   accent: '#019191',
   text: 'rgb(18, 18, 18)',
   textRGBA: (opacity: number) => `rgba(18, 18, 18, ${opacity})`,
