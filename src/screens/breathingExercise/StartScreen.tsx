@@ -72,7 +72,9 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
           <>
             <WarningNote
               style={styles.warningNote}
-              textSize={Layout.spacing(Layout.window.height < 700 ? 1.8 : 2.2)}
+              textSize={Layout.spacing(
+                Layout.window.height < 600 ? 1 : Layout.window.height < 700 ? 1.8 : 2.2,
+              )}
             />
             <View style={styles.startBtnWrapper}>
               <AppButton
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     padding: Layout.spacing(2),
   },
   startBtnText: {
-    fontSize: Layout.spacing(5),
+    fontSize: Layout.spacing(Layout.window.height < 600 ? 3.5 : 5),
     fontVariant: ['small-caps'],
   },
   footer: {

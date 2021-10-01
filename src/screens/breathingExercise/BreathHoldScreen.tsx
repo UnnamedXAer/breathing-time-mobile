@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     padding: Layout.spacing(2),
   },
   btnText: {
-    fontSize: Layout.spacing(5),
+    fontSize: Layout.spacing(Layout.window.height < 600 ? 4 : 5),
     fontVariant: ['small-caps'],
   },
 });

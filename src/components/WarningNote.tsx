@@ -37,6 +37,7 @@ export default WarningNote;
 const styles = StyleSheet.create({
   container: {
     marginTop: Layout.spacing(3),
+    maxWidth: 500,
   },
   headlineContainer: {
     flexDirection: 'row',

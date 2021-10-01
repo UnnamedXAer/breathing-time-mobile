@@ -143,7 +143,7 @@ export default function RecoveryScreen({
           <>
             <Counter
               value={counter}
-              containerStyle={{ marginBottom: Layout.window.height * 0.25 }}
+              containerStyle={{ marginBottom: Layout.window.height * 0.2 }}
             />
             <Footer
               text={t(`ex.recovery.${isLastRound ? 'skip_to_summary' : 'skip_to_next'}`)}

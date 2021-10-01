@@ -24,7 +24,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
 
   const scheme = useColorScheme();
   return (
-    <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContainer}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <View style={styles.headerContainer}>
@@ -41,7 +41,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             />
           </View>
 
-          <View style={styles.textContainer}>
+          <View>
             <Text style={styles.text}>
               <Text style={{ fontWeight: 'bold' }}>{Constants.manifest?.name}</Text>{' '}
               {t('about.text1')}
@@ -74,14 +74,14 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    flexGrow: 1,
-  },
   scrollContainer: {
     flexGrow: 1,
+    alignItems: 'center',
   },
   container: {
     flex: 1,
+    maxWidth: 500,
+    paddingTop: Layout.spacing(2),
     paddingHorizontal: Layout.spacing(3),
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -99,9 +99,6 @@ const styles = StyleSheet.create({
     margin: -40,
     width: 200,
     height: 200,
-  },
-  textContainer: {
-    maxWidth: 420,
   },
   text: {
     fontSize: Layout.spacing(2.2),

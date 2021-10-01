@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Headline: React.FC<Props> = ({ children, variant = 'h1', style }) => {
-  let fontSize = Layout.spacing(4);
+  let fontSize = Layout.spacing(Layout.window.height < 600 ? 3 : 4);
 
   switch (variant) {
     case 'h2':

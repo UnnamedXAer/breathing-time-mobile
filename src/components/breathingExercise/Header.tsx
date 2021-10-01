@@ -25,7 +25,7 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: Layout.spacing(5),
+    fontSize: Layout.spacing(Layout.window.height < 600 ? 4 : 5),
     fontWeight: 'bold',
     textAlign: 'center',
   },

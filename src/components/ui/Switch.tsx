@@ -41,5 +41,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  switchLabel: {},
+  switchLabel: {
+    marginRight: Layout.spacing(),
+    flex: 1,
+  },
 });

@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    paddingBottom: Layout.window.height > 700 ? Layout.spacing(2) : 0,
   },
   noRoundsText: {
     fontSize: Layout.spacing(3),
