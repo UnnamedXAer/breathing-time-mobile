@@ -31,7 +31,8 @@
 			"adaptiveIcon": {
 				"foregroundImage": "./src/assets/images/adaptive-icon.png",
 				"backgroundColor": "#121212"
-			}
+			},
+			"permissions": []
 		},
 		"ios": {
 			"bundleIdentifier": "com.unnamedxaer.breathingtime",
