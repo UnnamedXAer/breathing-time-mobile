@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   imageContainer: {
+    justifyContent: 'center',
     padding: Layout.spacing(3),
     width: '30%',
   },
