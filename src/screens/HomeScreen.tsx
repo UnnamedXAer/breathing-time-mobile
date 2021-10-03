@@ -11,6 +11,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import { RootStackScreenProps } from '../navigation/types';
 import { t } from 'i18n-js';
 import { useTranslationChange } from '../hooks/useTranslationChange';
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>) {
   useTranslationChange();
@@ -31,13 +32,16 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
           labelStyle={styles.beLabel}>
           <CoughingSvg fillColor={fillColor} />
         </Card>
+        <Card label={t('home.overview')} onPress={() => navigation.navigate('Overview')}>
+          <SimpleLineIcons name="chart" size={48} color={fillColor} />
+        </Card>
         <Card
           label={t('home.exercise_instructions')}
           onPress={() => navigation.navigate('BreathingInstruction')}>
           <InstructionSvg fillColor={fillColor} />
         </Card>
         <Card
-          label={t('home.exercise_preferences')}
+          label={t('home.preferences')}
           onPress={() => navigation.navigate('Preferences')}>
           <PreferencesSvg fillColor={fillColor} />
         </Card>

@@ -17,6 +17,7 @@ import { Pressable } from 'react-native';
 import Layout from '../constants/Layout';
 import SimpleLineIcons from '@expo/vector-icons/build/SimpleLineIcons';
 import Constants from 'expo-constants';
+import OverviewScreen from '../screens/OverviewScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -106,6 +107,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         component={BreathingInstructionScreen}
         options={{ title: '' }}
       />
+      <Stack.Screen name="Overview" component={OverviewScreen} options={{ title: '' }} />
       <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}

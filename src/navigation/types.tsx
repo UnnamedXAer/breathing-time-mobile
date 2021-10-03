@@ -22,6 +22,7 @@ export type RootStackParamList = {
   BreathingInstruction: undefined;
   Preferences: undefined;
   Home: undefined;
+  Overview: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

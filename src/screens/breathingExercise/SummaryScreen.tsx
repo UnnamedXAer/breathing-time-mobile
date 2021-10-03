@@ -1,10 +1,19 @@
+import { SQLError } from 'expo-sqlite';
 import { t } from 'i18n-js';
-import React, { useEffect } from 'react';
-import { ScrollView, Share, StyleSheet, ToastAndroid, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  Share,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { createTables, saveRounds } from '../../../storage/sqlite';
 import Header from '../../components/breathingExercise/Header';
+import SummaryResultsHeader from '../../components/breathingExercise/SummaryResultsHeader';
 import AppButton from '../../components/ui/Button';
-import ShareButton from '../../components/ui/ShareButton';
 import { Text } from '../../components/ui/Themed';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
@@ -16,17 +25,70 @@ import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
 
+function getRandomResults() {
+  const len = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+  const out = [
+    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+  ];
+
+  out.length = len;
+  return out;
+}
+
 export default function SummaryScreen({ navigation }: Props) {
+  const [saving, setSaving] = useState(false);
+  const [savingError, setSavingError] = useState<null | string>(null);
+  const [resultsSaved, setResultsSaved] = useState(false);
+
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
+  //   const [holdTimes, setHoldTimes] = useState(getRandomResults());
+  const [selectedRounds, setSelectedRounds] = useState<boolean[]>(
+    Array(holdTimes.length).fill(true),
+  );
+
   const scheme = useColorScheme();
   const dispatch = useDispatch();
 
   const averageTime = calculateAverage(holdTimes);
 
+  const saveResults = async () => {
+    const toSave: number[] = [];
+    for (let i = 0; i < holdTimes.length; i++) {
+      if (selectedRounds[i]) {
+        toSave.push(holdTimes[i]);
+      }
+    }
+
+    if (toSave.length === 0) {
+      ToastAndroid.show('Nothing to save', ToastAndroid.SHORT);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await createTables();
+      const r = await saveRounds(toSave);
+      setResultsSaved(true);
+      //   const newHoldTimes = getRandomResults();
+      //   setHoldTimes(newHoldTimes);
+      //   setSelectedRounds(Array(newHoldTimes.length).fill(true));
+      ToastAndroid.show(`Rounds saved (${r.rowsAffected})`, ToastAndroid.SHORT);
+      console.log('rounds saved');
+    } catch (err) {
+      console.log('creating err', err);
+      setSavingError((err as SQLError).message);
+    }
+    setSaving(false);
+  };
+
   useEffect(() => {
     dispatch(finishExercise());
     return () => {
-      dispatch(cleanExercise());
+      //   dispatch(cleanExercise());
     };
   }, [dispatch]);
 
@@ -52,33 +114,28 @@ export default function SummaryScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Header title={t('ex.summary.title')} />
+
       {holdTimes.length === 0 ? (
         <Text style={styles.noRoundsText}>{t('ex.summary.no_rounds_finished')}</Text>
       ) : (
         <>
-          <ScrollView
+          <FlatList
+            style={{ marginTop: Layout.spacing(2) }}
             stickyHeaderIndices={[0]}
-            style={{
-              marginTop: Layout.spacing(2),
-            }}
-            contentContainerStyle={{
-              paddingBottom: Layout.spacing(3),
-            }}>
-            <View>
-              <View
-                style={[
-                  styles.resultsHeader,
-                  { backgroundColor: Colors[scheme].background },
-                ]}>
-                <Text style={styles.resultsHeaderText}>
-                  {t('ex.summary.results_header')}
-                </Text>
-                <ShareButton onPress={share} />
-              </View>
-            </View>
-            {holdTimes.map((time, idx) => {
+            ListHeaderComponent={<SummaryResultsHeader onPress={share} />}
+            data={holdTimes}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ index: idx, item: time }) => {
               return (
-                <View
+                <TouchableOpacity
+                  disabled={resultsSaved || saving}
+                  onPress={() =>
+                    setSelectedRounds((pv) => {
+                      const updated = [...pv];
+                      updated[idx] = !updated[idx];
+                      return updated;
+                    })
+                  }
                   style={[
                     styles.row,
                     {
@@ -87,31 +144,51 @@ export default function SummaryScreen({ navigation }: Props) {
                   ]}
                   key={idx}>
                   <Text style={styles.cellHeader}>
+                    {selectedRounds[idx] ? '✔' : '➖'}{' '}
                     {t('ex.summary.round_with_num', [idx + 1])}
                   </Text>
                   <Text style={styles.cellText}>{time} s</Text>
-                </View>
+                </TouchableOpacity>
               );
-            })}
-          </ScrollView>
+            }}
+          />
+
+          <View style={styles.averageContainer}>
+            <Text style={styles.averageText}>
+              {t('ex.summary.averageTime')}{' '}
+              <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text>{' '}
+              {t('ex.summary.seconds', {
+                count: +averageTime,
+              })}
+            </Text>
+          </View>
+          <View style={{ flexGrow: 1 }}>
+            <Text>Only checked rows will be saved</Text>
+            <AppButton
+              title={t(
+                resultsSaved ? 'ex.summary.save_success' : 'ex.summary.save_results',
+              )}
+              mode="contained"
+              loading={saving}
+              disabled={resultsSaved}
+              onPress={saveResults}
+            />
+            {savingError && (
+              <Text
+                style={{
+                  color: Colors.colors.error,
+                  textAlign: 'center',
+                  marginTop: Layout.spacing(),
+                }}>
+                {savingError}
+              </Text>
+            )}
+          </View>
         </>
       )}
-
-      {holdTimes.length > 0 && (
-        <View style={styles.averageContainer}>
-          <Text style={styles.averageText}>
-            {t('ex.summary.averageTime')}{' '}
-            <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text>{' '}
-            {t('ex.summary.seconds', {
-              count: +averageTime,
-            })}
-          </Text>
-        </View>
-      )}
-
       <AppButton
         title={t('header.home')}
-        mode="contained"
+        mode="outlined"
         onPress={() => {
           navigation.navigate('Home');
         }}
@@ -130,18 +207,6 @@ const styles = StyleSheet.create({
     fontSize: Layout.spacing(3),
     marginVertical: Layout.spacing(5),
     textAlign: 'center',
-  },
-  resultsHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    paddingBottom: Layout.spacing(),
-    paddingHorizontal: Layout.spacing(),
-    elevation: 6,
-  },
-  resultsHeaderText: {
-    fontSize: Layout.spacing(3),
-    fontWeight: 'bold',
   },
   row: {
     flexDirection: 'row',

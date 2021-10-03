@@ -16,7 +16,8 @@ export default {
     welcome: 'Welcome to %{0}',
     start_exercise: 'Start Your Breathing',
     exercise_instructions: 'Breathing Instructions',
-    exercise_preferences: 'Preferences',
+    preferences: 'Preferences',
+    overview: 'Results Overview',
   },
   preferences: {
     title_app_preferences: 'App Preferences',
@@ -83,6 +84,8 @@ export default {
       share_results_dialog_title: 'Share my results',
       share_results_title: 'Breathing Exercise Results',
       fail_to_open_share_msg: 'Sorry, could not open share dialog.',
+      save_results: 'Save Results',
+      save_success: 'Saved ✔',
     },
     footer: {
       finish: 'Finish',

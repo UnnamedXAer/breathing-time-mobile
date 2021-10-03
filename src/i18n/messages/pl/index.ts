@@ -12,7 +12,8 @@ const pl: LocaleMessages = {
     welcome: 'Witaj w %{0}',
     start_exercise: 'Zacznij Oddychać',
     exercise_instructions: 'Informacje o Ćwiczeniu Oddechowym',
-    exercise_preferences: 'Preferencje',
+    preferences: 'Preferencje',
+    overview: 'Przegląd Wyników',
   },
   header: {
     home: 'Ekran Główny',
@@ -87,6 +88,8 @@ const pl: LocaleMessages = {
       share_results_dialog_title: 'Udostępnij mój wynik',
       share_results_title: 'Wyniki Cwiczenia Oddechowego',
       fail_to_open_share_msg: 'Przepraszam, nie udało się otworzyć opcji udostępniania.',
+      save_results: 'Zapisz Wyniki',
+      save_success: 'Zapisane ✔',
     },
     footer: {
       finish: 'Zakończ',
