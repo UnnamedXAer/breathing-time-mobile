@@ -62,7 +62,7 @@ export default function Button({
 
   let textColor: string = Colors[colorScheme].text;
   if (disabled) {
-    textColor = Colors.colors.disabled;
+    textColor = Colors.light.textRGBA(0.7); //Colors[colorScheme].textRGBA(0.8); //Colors.colors.disabled;
   } else if (color) {
     textColor = color;
   } else if (mode === 'contained') {

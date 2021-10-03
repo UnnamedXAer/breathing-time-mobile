@@ -3,7 +3,7 @@ import { ColorSchemeName } from '../hooks/useColorScheme';
 
 const _colors = {
   placeholder: '#2f95dc',
-  disabled: '#666',
+  disabled: '#888',
   error: '#d00000',
   warning: '#ffba08',
   info: '#3a86ff',
