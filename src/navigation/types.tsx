@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Preferences: undefined;
   Home: undefined;
   Overview: undefined;
+  ExerciseDetails: { id: number };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

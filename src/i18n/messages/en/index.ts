@@ -86,6 +86,8 @@ export default {
       fail_to_open_share_msg: 'Sorry, could not open share dialog.',
       save_results: 'Save Results',
       save_success: 'Saved ✔',
+      nothing_to_save: 'Nothing to save.',
+      rounds_saved_toast: 'Results saved.',
     },
     footer: {
       finish: 'Finish',

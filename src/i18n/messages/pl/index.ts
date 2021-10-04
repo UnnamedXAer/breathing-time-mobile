@@ -90,6 +90,8 @@ const pl: LocaleMessages = {
       fail_to_open_share_msg: 'Przepraszam, nie udało się otworzyć opcji udostępniania.',
       save_results: 'Zapisz Wyniki',
       save_success: 'Zapisane ✔',
+      nothing_to_save: 'Nie ma nic do zapisania.',
+      rounds_saved_toast: 'Wyniki zapisane.',
     },
     footer: {
       finish: 'Zakończ',

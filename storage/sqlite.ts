@@ -14,35 +14,36 @@ type DatabaseWithPrivate = WebSQLDatabase & {
   };
 };
 
-let db: DatabaseWithPrivate;
+let db: DatabaseWithPrivate | undefined;
 
-interface RoundRecord {
-  id: number;
-  round_time: number;
-}
+type ResultsSetListWithArray<Record> = SQLResultSetRowList & { _array: Record[] };
 
 interface ExerciseRecord {
   id: number;
   date_time: number;
+  rounds_count: number;
 }
 
-type ExerciseWithRoundsRecord = ExerciseRecord &
-  RoundRecord & {
-    round_id: number;
-  };
-
-type ResultsSetListWithArray<Record> = SQLResultSetRowList & { _array: Record[] };
+interface RoundRecord {
+  round_id: number;
+  date_time: number;
+  round_time: number;
+}
 
 export interface Exercise {
   id: number;
-  exerciseDate: Date;
-  rounds: Round[];
+  date: Date;
+  roundsCnt: number;
 }
 
 export interface Round {
   id: number;
   time: number;
 }
+
+export type ExerciseWithRounds = Omit<Exercise, 'roundsCnt'> & {
+  rounds: Round[];
+};
 
 export async function createTables() {
   console.log('\n\n\nStart creating tables.');
@@ -53,22 +54,12 @@ export async function createTables() {
     'create table if not exists round (id integer primary key not null, exId integer not null, round_time integer not null, foreign key(exId) references exercise(id));';
   try {
     const trx = await getTransaction();
-    // db._db.close();
-    console.log('is db closed', db._db._closed);
-    const r = await Promise.all([
-      //   executeSql(trx, 'drop table round;'),
-      //   executeSql(trx, 'drop table exercise;'),
-      // //
-
+    await Promise.all([
       // executeSql(trx, 'delete from round;'),
       // executeSql(trx, 'delete from exercise;'),
-
-      // //
       executeSql(trx, createExTableSql),
       executeSql(trx, createRoundsTableSql),
     ]);
-    console.log('tables created');
-
     return;
   } catch (err) {
     __DEV__ && console.log('create tables:', err);
@@ -76,24 +67,31 @@ export async function createTables() {
   }
 }
 
-export async function saveRounds(data: number[]) {
-  if (data.length === 0) {
+export async function saveRounds(rounds: number[], date: Date) {
+  if (rounds.length === 0) {
     throw new Error('nothing to save');
   }
 
-  return createExercise(data);
+  return createExercise(rounds, date);
 }
 
-function createExercise(rounds: number[]): Promise<SQLResultSet> {
+function createExercise(rounds: number[], date: Date): Promise<SQLResultSet> {
   return new Promise((resolve, reject) => {
     const createExSql = 'insert into exercise (date_time) values (?);';
     const pushRounds = createPushRoundsFn(rounds, resolve, reject);
 
     void getTransaction().then((trx) => {
-      trx.executeSql(createExSql, [Date.now()], pushRounds, (_, err) => {
-        reject(err);
-        return true;
-      });
+      trx.executeSql(
+        createExSql,
+        [date.getTime()],
+        (trx, res) => {
+          pushRounds(trx, res);
+        },
+        (_, err) => {
+          reject(err);
+          return true;
+        },
+      );
     });
   });
 }
@@ -111,15 +109,13 @@ function createPushRoundsFn(
       params.push(insertId, rounds[i]);
     }
 
-    console.log('params', params);
+    __DEV__ && console.log('rounds params', params);
 
     trx.executeSql(
       sql,
       params,
       (_, results) => {
         resolve(results);
-        // const gooErr = new Error('Rejecting goog operation :(.') as unknown as SQLError;
-        // reject(gooErr);
       },
       (_, err) => {
         reject(err);
@@ -130,44 +126,87 @@ function createPushRoundsFn(
   };
 }
 
-export async function readResults() {
-  const trx = await getTransaction();
-  const r = await executeSql(
-    trx,
-    'select r.exId id, x.date_time, r.id round_id, r.round_time from round r join exercise x on x.id = r.exId order by r.id desc',
-  );
+export async function readResultsOverview() {
+  try {
+    const trx = await getTransaction();
+    const r = await executeSql(
+      trx,
+      'select x.id id, x.date_time, count(r.id) rounds_count from exercise x join round r on x.id = r.exId group by x.id order by r.exId desc;',
+    );
 
-  if (r.rows.length === 0) {
-    return [] as Exercise[];
-  }
-
-  const { _array: rows } = r.rows as ResultsSetListWithArray<ExerciseWithRoundsRecord>;
-  const exercises: Exercise[] = [
-    {
-      id: rows[0].id,
-      exerciseDate: new Date(rows[0].date_time),
-      rounds: [],
-    },
-  ];
-
-  for (let i = 0; i < rows.length; i++) {
-    const record = rows[i];
-
-    if (exercises[exercises.length - 1].id !== record.id) {
-      exercises.push({
-        id: record.id,
-        exerciseDate: new Date(record.date_time),
-        rounds: [],
-      });
+    if (r.rows.length === 0) {
+      return [] as Exercise[];
     }
 
-    exercises[exercises.length - 1].rounds.push({
-      id: record.round_id,
-      time: record.round_time,
-    });
+    const { _array: rows } = r.rows as ResultsSetListWithArray<ExerciseRecord>;
+
+    const exercises: Exercise[] = rows.map((r) => ({
+      id: r.id,
+      date: new Date(r.date_time),
+      roundsCnt: r.rounds_count,
+    }));
+
+    return exercises;
+  } catch (err) {
+    __DEV__ && console.log('read overview:', err);
+    throw err;
   }
-  console.log(exercises);
-  return exercises;
+}
+
+export async function readExerciseResults(id: number) {
+  try {
+    const trx = await getTransaction();
+    const r = await executeSql(
+      trx,
+      'select x.date_time, r.id round_id, r.round_time from round r join exercise x on x.id = r.exId where x.id = ? order by x.date_time desc',
+      [id],
+    );
+
+    if (r.rows.length === 0) {
+      return null;
+    }
+
+    const { _array: rows } = r.rows as ResultsSetListWithArray<RoundRecord>;
+
+    const exercise: ExerciseWithRounds = {
+      id,
+      date: new Date(rows[0].date_time),
+      rounds: rows.map((r) => ({
+        id: r.round_id,
+        time: r.round_time,
+      })),
+    };
+    console.log('Exercise: ', exercise);
+    return exercise;
+  } catch (err) {
+    __DEV__ && console.log('read exercise:', err);
+    throw err;
+  }
+}
+
+export function removeRound(id: Round['id']) {
+  return new Promise((resolve, reject) => {
+    getTransaction()
+      .then((trx) =>
+        trx.executeSql(
+          'delete from round r where id = ? returning (select count(1) from round r2 where rs.exId = r.id)',
+          [id],
+          (_, res) => {
+            console.log('removeRound:', res);
+            resolve(res.rowsAffected);
+          },
+          (_, err) => {
+            console.log('removeRound:', err);
+            reject(err);
+            return true;
+          },
+        ),
+      )
+      .catch((err) => {
+        __DEV__ && console.log('delete round:', err);
+        reject(err);
+      });
+  });
 }
 
 function openDb(): Promise<void> | void {
@@ -175,28 +214,20 @@ function openDb(): Promise<void> | void {
     return;
   }
 
-  console.log('about to call "openDatabase"');
   db = <DatabaseWithPrivate>(
     openDatabase(
       'breathing-time.db',
       '1',
       'The db for the Breathing Time app, to keep track of the breathing results',
-      void 0,
-      (openedDB) => {
-        db = <DatabaseWithPrivate>openedDB;
-      },
     )
   );
-
-  console.log('returning from "openDB"');
 }
 
 async function getTransaction(): Promise<SQLTransaction> {
   await openDb();
-  console.log('in transaction get - got db');
   return new Promise((resolve, reject) => {
-    db.transaction(resolve, reject, () => {
-      console.log('transaction success');
+    db!.transaction(resolve, reject, () => {
+      __DEV__ && console.log(' + transaction success');
     });
   });
 }
@@ -207,16 +238,13 @@ function executeSql(
   args?: (string | number)[],
 ): Promise<SQLResultSet> {
   return new Promise((resolve, reject) => {
-    console.log('about to execute ->', sql);
     tr.executeSql(
       sql,
       args,
       (_, results) => {
-        // console.log('resolved', sql);
         resolve(results);
       },
       (_, err) => {
-        console.log('rejected', sql);
         reject(err);
         return true;
       },

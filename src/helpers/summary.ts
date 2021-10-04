@@ -12,14 +12,15 @@ export function calculateAverage(holdTimes: number[]) {
     .replace(/((\.0+)|(0+))$/g, '');
 }
 
-export function prepareShareText(
-  holdTimes: ExerciseState['holdTimes'],
-  averageTime: string,
-) {
+export function prepareShareText(date: Date, holdTimes: ExerciseState['holdTimes']) {
+  const averageTime = calculateAverage(holdTimes);
+
   const text = [
     Constants.manifest!.name,
     '\n_______________________\n',
     t('ex.title'),
+    '\n',
+    date.toLocaleString(),
     '\n\n',
     t('ex.summary.results_header'),
   ];

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, FlatList, ListRenderItem } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  ListRenderItem,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { Text } from '../components/ui/Themed';
 import Layout from '../constants/Layout';
 import Colors from '../constants/Colors';
@@ -8,10 +16,10 @@ import { RootStackScreenProps } from '../navigation/types';
 import { t } from 'i18n-js';
 import { useTranslationChange } from '../hooks/useTranslationChange';
 import Headline from '../components/ui/Headline';
-import { Exercise, readResults } from '../../storage/sqlite';
+import { Exercise, readResultsOverview } from '../../storage/sqlite';
 import { SQLError } from 'expo-sqlite';
 
-export default function OverviewScreen({ navigation }: RootStackScreenProps<'Home'>) {
+export default function OverviewScreen({ navigation }: RootStackScreenProps<'Overview'>) {
   useTranslationChange();
   const scheme = useColorScheme();
 
@@ -23,8 +31,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Hom
     setLoading(true);
     setError(null);
     try {
-      const r = await readResults();
-      console.log(JSON.stringify(r, null, 2));
+      const r = await readResultsOverview();
       setResults(r);
     } catch (err) {
       setError((err as SQLError).message);
@@ -38,12 +45,17 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Hom
 
   const renderItem: ListRenderItem<Exercise> = ({ item }) => {
     return (
-      <View>
-        <Text>
-          ID: {item.id} | Date: {item.exerciseDate.toLocaleString()} | Rounds:{' '}
-          {item.rounds.length}
+      <TouchableOpacity
+        onPress={() => {
+          console.log(item.id);
+          navigation.navigate('ExerciseDetails', {
+            id: item.id,
+          });
+        }}>
+        <Text style={{ fontSize: Layout.spacing(2), paddingVertical: Layout.spacing(1) }}>
+          ID: {item.id} | Date: {item.date.toLocaleString()} | Rounds: {item.roundsCnt}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -51,7 +63,12 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Hom
     <View style={[styles.scroll, styles.scrollContent]}>
       <View style={styles.container}>
         <Headline variant="h1">Results Overview</Headline>
-        <FlatList refreshing={loading} data={results} renderItem={renderItem} />
+        <FlatList
+          refreshing={loading}
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={({ id }) => id.toString()}
+        />
       </View>
     </View>
   );
