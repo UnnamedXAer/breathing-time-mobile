@@ -53,7 +53,7 @@ export async function createTables() {
   const createRoundsTableSql =
     'create table if not exists round (id integer primary key not null, exId integer not null, round_time integer not null, foreign key(exId) references exercise(id));';
   try {
-    const trx = await getTransaction();
+    const trx = await getTransaction('create tables');
     await Promise.all([
       // executeSql(trx, 'delete from round;'),
       // executeSql(trx, 'delete from exercise;'),
@@ -80,7 +80,7 @@ function createExercise(rounds: number[], date: Date): Promise<SQLResultSet> {
     const createExSql = 'insert into exercise (date_time) values (?);';
     const pushRounds = createPushRoundsFn(rounds, resolve, reject);
 
-    void getTransaction().then((trx) => {
+    void getTransaction('create exercise').then((trx) => {
       trx.executeSql(
         createExSql,
         [date.getTime()],
@@ -102,7 +102,7 @@ function createPushRoundsFn(
   reject: (err: SQLError) => void,
 ) {
   return (trx: SQLTransaction, { insertId }: SQLResultSet) => {
-    let sql = 'insert into round (exId, round_time) values (?, ?)';
+    let sql = 'insert into round (exId, round_time) values (?, ?);';
     const params = [insertId, rounds[0]];
     for (let i = 1; i < rounds.length; i++) {
       sql += ', (?, ?)';
@@ -128,7 +128,7 @@ function createPushRoundsFn(
 
 export async function readResultsOverview() {
   try {
-    const trx = await getTransaction();
+    const trx = await getTransaction('read exercise details');
     const r = await executeSql(
       trx,
       'select x.id id, x.date_time, count(r.id) rounds_count from exercise x join round r on x.id = r.exId group by x.id order by r.exId desc;',
@@ -155,7 +155,7 @@ export async function readResultsOverview() {
 
 export async function readExerciseResults(id: number) {
   try {
-    const trx = await getTransaction();
+    const trx = await getTransaction('read exercises overview');
     const r = await executeSql(
       trx,
       'select x.date_time, r.id round_id, r.round_time from round r join exercise x on x.id = r.exId where x.id = ? order by x.date_time desc',
@@ -176,7 +176,6 @@ export async function readExerciseResults(id: number) {
         time: r.round_time,
       })),
     };
-    console.log('Exercise: ', exercise);
     return exercise;
   } catch (err) {
     __DEV__ && console.log('read exercise:', err);
@@ -186,22 +185,54 @@ export async function readExerciseResults(id: number) {
 
 export function removeRound(id: Round['id']) {
   return new Promise((resolve, reject) => {
-    getTransaction()
-      .then((trx) =>
+    const errCb = (_: SQLTransaction, err: SQLError) => {
+      console.log('delete round:', err);
+      reject(err);
+      return true;
+    };
+
+    const selectCb = (trx: SQLTransaction, res: SQLResultSet) => {
+      const { roundsCount, exId } = <{ roundsCount: number; exId: number }>(
+        res.rows.item(0)
+      );
+
+      const deleteRoundCb = (trx: SQLTransaction, delRRes: SQLResultSet) => {
+        if (delRRes.rowsAffected === 0) {
+          return reject(new Error('delete round: affected rows is 0'));
+        }
+        if (roundsCount > 1) {
+          return resolve(void 0);
+        }
         trx.executeSql(
-          'delete from round r where id = ? returning (select count(1) from round r2 where rs.exId = r.id)',
+          'DELETE FROM exercise WHERE id = ?;',
+          [exId],
+          (trx, res) => {
+            if (res.rowsAffected === 0) {
+              trx.executeSql(
+                "select 'delete exercise: affected rows is 0' from someNonExistingTableToRollbackTransaction",
+              );
+              const err = new Error('delete round: delete exercise: affected rows id 0.');
+              __DEV__ && console.log(err);
+              return reject(err);
+            }
+            resolve(void 0);
+          },
+          errCb,
+        );
+      };
+
+      trx.executeSql('DELETE FROM round WHERE id = ?;', [id], deleteRoundCb, errCb);
+    };
+
+    void getTransaction('delete round')
+      .then((trx) => {
+        trx.executeSql(
+          'SELECT COUNT(1) roundsCount, exId from round WHERE exId = (SELECT exId FROM round r2 WHERE r2.id = ?)',
           [id],
-          (_, res) => {
-            console.log('removeRound:', res);
-            resolve(res.rowsAffected);
-          },
-          (_, err) => {
-            console.log('removeRound:', err);
-            reject(err);
-            return true;
-          },
-        ),
-      )
+          selectCb,
+          errCb,
+        );
+      })
       .catch((err) => {
         __DEV__ && console.log('delete round:', err);
         reject(err);
@@ -223,11 +254,11 @@ function openDb(): Promise<void> | void {
   );
 }
 
-async function getTransaction(): Promise<SQLTransaction> {
+async function getTransaction(label: string): Promise<SQLTransaction> {
   await openDb();
   return new Promise((resolve, reject) => {
     db!.transaction(resolve, reject, () => {
-      __DEV__ && console.log(' + transaction success');
+      __DEV__ && console.log(`____+ transaction finished -> "${label}"\n`);
     });
   });
 }

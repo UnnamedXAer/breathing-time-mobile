@@ -7,6 +7,7 @@ const pl: LocaleMessages = {
     no: 'Nie',
     ok: 'Ok',
     back: 'Wstecz',
+    cancel: 'Anuluj',
   },
   home: {
     welcome: 'Witaj w %{0}',
@@ -114,6 +115,18 @@ const pl: LocaleMessages = {
       content: 'Przerwać ćwiczenie? Progres zostanie utracony.',
       yes: 'Tak, przerwij',
     },
+  },
+  details: {
+    title: 'Wyniki sesji',
+    read_exercise_error: 'Nie udało się wczytać danych.\nOdśwież i spróbuj ponownie.',
+    delete_confirm: 'Tak, usuń',
+    delete_question:
+      'Jesteś pewny, że chcesz usunąć ten wynik ( %{0}s ), nie można tego cofnąć?',
+    delete_question_includes_exercise:
+      '\n\n! Nie zostanie więcej wyników, dlatego wpis o sesji również zostanie usunięty.',
+    delete_success: 'Runda usunięta.',
+    delete_failure: 'Nie udało się usunąć rundy.\nOdśwież i spróbuj ponownie.',
+    exercise_not_found: 'Przepraszam. Nie udało się znaleźć tego ćwiczenia.',
   },
   about: {
     title: 'O Aplikacji',

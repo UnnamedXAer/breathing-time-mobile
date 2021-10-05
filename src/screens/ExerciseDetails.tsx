@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Alert, ActivityIndicator, ToastAndroid } from 'react-native';
 import { Text } from '../components/ui/Themed';
 import Layout from '../constants/Layout';
 import Colors from '../constants/Colors';
@@ -47,16 +47,22 @@ export default function ExerciseDetails({
   }, []);
 
   const roundPressHandler = (idx: number) => {
+    let message = t('details.delete_question', [exercise!.rounds[idx].time]);
+
+    if (exercise!.rounds.length <= 1) {
+      message += t('details.delete_question_includes_exercise');
+    }
+
     Alert.alert(
       'Delete',
-      'Do you really want to delete this round? It is irreversible.',
+      message,
       [
         {
-          text: 'Yes, delete',
+          text: t('details.delete_confirm'),
           onPress: () => deleteRound(exercise!.rounds[idx].id),
         },
         {
-          text: 'Cancel',
+          text: t('common.cancel'),
         },
       ],
       {
@@ -66,17 +72,14 @@ export default function ExerciseDetails({
   };
 
   const deleteRound = async (id: Round['id']) => {
-    console.log('id', id);
     try {
-      const r = await removeRound(id);
-      console.log(
-        'deleted rounds (',
-        r,
-        '). id: ',
-        id,
-        ', time:',
-        exercise?.rounds.find((r) => r.id === id)?.time,
-      );
+      await removeRound(id);
+      ToastAndroid.show(t('details.delete_success'), ToastAndroid.SHORT);
+      if (exercise!.rounds.length <= 1) {
+        navigation.goBack();
+        return;
+      }
+
       setExercise((prevState) => {
         if (prevState === null) {
           return null;
@@ -87,14 +90,14 @@ export default function ExerciseDetails({
         };
       });
     } catch (err) {
-      setError((err as SQLError).message);
+      ToastAndroid.show(t('details.delete_failure'), ToastAndroid.SHORT);
     }
   };
 
   return (
     <View style={[styles.scroll, styles.scrollContent]}>
       <View style={styles.container}>
-        <Headline variant="h1">Session Results</Headline>
+        <Headline variant="h1">{t('details.title')}</Headline>
         {exercise ? (
           <View>
             <ExerciseResultsTable
@@ -109,19 +112,20 @@ export default function ExerciseDetails({
                 )
               }
               onRowPress={roundPressHandler}
-              selectedRounds={[]}
               disabled={false}
             />
           </View>
         ) : loading ? (
           <ActivityIndicator size="large" />
         ) : error ? (
-          <Text style={{ color: Colors.colors.error }}>{error}</Text>
+          <Text style={{ color: Colors.colors.error }}>
+            {t('details.read_exercise_error')}
+          </Text>
         ) : (
-          <Text>Couldn&apos;t find that exercise.</Text>
+          <Text>{t('details.exercise_not_found')}</Text>
         )}
       </View>
-      <Button onPress={getResultsOverview} mode="text" title="refresh" />
+      {__DEV__ && <Button onPress={getResultsOverview} mode="text" title="refresh" />}
     </View>
   );
 }
