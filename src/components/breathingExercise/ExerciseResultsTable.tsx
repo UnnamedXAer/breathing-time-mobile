@@ -15,7 +15,7 @@ interface Props {
   onRowPress: (idx: number) => void;
   share: () => void;
   disabled?: boolean;
-  selectedRounds: boolean[];
+  selectedRounds?: boolean[];
 }
 
 const ExerciseResultsTable = ({
@@ -49,7 +49,7 @@ const ExerciseResultsTable = ({
               ]}
               key={idx}>
               <Text style={styles.cellHeader}>
-                {selectedRounds[idx] ? '✔' : '➖'}{' '}
+                {selectedRounds ? (selectedRounds[idx] ? '✔' : '➖') + ' ' : null}
                 {t('ex.summary.round_with_num', [idx + 1])}
               </Text>
               <Text style={styles.cellText}>{time} s</Text>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: Layout.spacing(2),
     paddingVertical: Layout.spacing(),
   },
