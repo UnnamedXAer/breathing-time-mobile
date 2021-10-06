@@ -2,12 +2,18 @@ import { LocaleMessages } from '../../types';
 import instructions from './instructions';
 
 const pl: LocaleMessages = {
+  date: {
+    formats: {
+      long_date: '%d/%m/%Y',
+    },
+  },
   common: {
     yes: 'Tak',
     no: 'Nie',
     ok: 'Ok',
     back: 'Wstecz',
     cancel: 'Anuluj',
+    clear: 'Wyczyść',
   },
   home: {
     welcome: 'Witaj w %{0}',
@@ -115,6 +121,11 @@ const pl: LocaleMessages = {
       content: 'Przerwać ćwiczenie? Progres zostanie utracony.',
       yes: 'Tak, przerwij',
     },
+  },
+  overview: {
+    title: 'Przegląd wyników',
+    start_date_placeholder: 'Data początkowa',
+    end_date_placeholder: 'Data końcowa',
   },
   details: {
     title: 'Wyniki sesji',

@@ -6,6 +6,7 @@ import {
   SQLTransaction,
   WebSQLDatabase,
 } from 'expo-sqlite';
+import { DatesFromTo } from '../src/types/types';
 
 type DatabaseWithPrivate = WebSQLDatabase & {
   _db: {
@@ -126,12 +127,34 @@ function createPushRoundsFn(
   };
 }
 
-export async function readResultsOverview() {
+export async function readResultsOverview(dates: DatesFromTo) {
+  const params = [];
+  let where = '';
+  if (dates.from) {
+    let from = dates.from;
+    from = new Date(from.getFullYear(), from.getMonth(), from.getDate(), 0, 0, 0, 0);
+    params.push(from.getTime().toString());
+    where += 'x.date_time > ?';
+  }
+
+  if (dates.to) {
+    let to = dates.to;
+    to = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59, 999);
+    params.push(to.getTime().toString());
+    where += (where.length > 0 ? ' and ' : '') + 'x.date_time < ?';
+  }
+
+  if (where.length > 0) {
+    where = ' where ' + where;
+  }
+  console.log(where, params);
+
   try {
     const trx = await getTransaction('read exercise details');
     const r = await executeSql(
       trx,
-      'select x.id id, x.date_time, count(r.id) rounds_count from exercise x join round r on x.id = r.exId group by x.id order by r.exId desc;',
+      `select x.id id, x.date_time, count(r.id) rounds_count from exercise x join round r on x.id = r.exId ${where} group by x.id order by r.exId desc;`,
+      params,
     );
 
     if (r.rows.length === 0) {

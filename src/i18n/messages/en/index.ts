@@ -2,12 +2,18 @@ import { MessagePlural } from '../../types';
 import instructions from './instructions';
 
 export default {
+  date: {
+    formats: {
+      long_date: '%m/%d/%Y',
+    },
+  },
   common: {
     yes: 'Yes',
     no: 'No',
     ok: 'Ok',
     back: 'Back',
     cancel: 'Cancel',
+    clear: 'Clear',
   },
   header: {
     home: 'Home',
@@ -111,6 +117,11 @@ export default {
       content: 'Leave exercise? Progress will be lost.',
       yes: 'Yes, leave',
     },
+  },
+  overview: {
+    title: 'Results overview',
+    start_date_placeholder: 'Start date',
+    end_date_placeholder: 'End date',
   },
   details: {
     title: 'Session results',

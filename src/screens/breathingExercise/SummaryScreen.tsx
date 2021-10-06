@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ColorValue,
   FlatList,
+  Pressable,
   Share,
   StyleSheet,
   ToastAndroid,
