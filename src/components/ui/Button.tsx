@@ -87,6 +87,7 @@ export default function Button({
       },
       shadowOpacity: 0.6,
       elevation: 5,
+      justifyContent: 'center',
     },
     container: {
       marginHorizontal: Layout.spacing(),

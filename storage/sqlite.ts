@@ -23,6 +23,7 @@ interface ExerciseRecord {
   id: number;
   date_time: number;
   rounds_count: number;
+  average_time: number;
 }
 
 interface RoundRecord {
@@ -35,6 +36,7 @@ export interface Exercise {
   id: number;
   date: Date;
   roundsCnt: number;
+  averageTime: number;
 }
 
 export interface Round {
@@ -42,7 +44,7 @@ export interface Round {
   time: number;
 }
 
-export type ExerciseWithRounds = Omit<Exercise, 'roundsCnt'> & {
+export type ExerciseWithRounds = Omit<Exercise, 'roundsCnt' | 'averageTime'> & {
   rounds: Round[];
 };
 
@@ -147,13 +149,12 @@ export async function readResultsOverview(dates: DatesFromTo) {
   if (where.length > 0) {
     where = ' where ' + where;
   }
-  console.log(where, params);
 
   try {
     const trx = await getTransaction('read exercise details');
     const r = await executeSql(
       trx,
-      `select x.id id, x.date_time, count(r.id) rounds_count from exercise x join round r on x.id = r.exId ${where} group by x.id order by r.exId desc;`,
+      `select x.id id, x.date_time, count(r.id) rounds_count, round(avg(r.round_time),1) average_time from exercise x join round r on x.id = r.exId ${where} group by x.id order by r.exId desc;`,
       params,
     );
 
@@ -167,6 +168,7 @@ export async function readResultsOverview(dates: DatesFromTo) {
       id: r.id,
       date: new Date(r.date_time),
       roundsCnt: r.rounds_count,
+      averageTime: r.average_time,
     }));
 
     return exercises;

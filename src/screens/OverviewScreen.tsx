@@ -2,15 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView,
   FlatList,
   ListRenderItem,
-  TouchableOpacity,
-  Alert,
   Pressable,
   Platform,
-  StyleProp,
-  TextStyle,
 } from 'react-native';
 import { Text } from '../components/ui/Themed';
 import Layout from '../constants/Layout';
@@ -26,8 +21,10 @@ import DateTimePicker, {
   AndroidEvent,
   Event,
 } from '@react-native-community/datetimepicker';
-import { TextInput } from 'react-native-gesture-handler';
 import { DatesFromTo } from '../types/types';
+import AppButton from '../components/ui/Button';
+import { format } from 'date-fns';
+import { pl, enUS } from 'date-fns/locale';
 
 const startDatePlaceholder = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
 export default function OverviewScreen({ navigation }: RootStackScreenProps<'Overview'>) {
@@ -44,14 +41,11 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
   const [selectedDateInput, setSelectedDateInput] = useState<'from' | 'to'>('from');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const dateInputStyle: TextStyle = {
-    backgroundColor: Colors[scheme].background,
-    color: Colors[scheme].text,
-    borderColor: Colors[scheme].accent,
-    borderWidth: 3,
-    width: 150,
-    textAlign: 'center',
+  const dateOptions = {
+    locale: I18n.locale === 'pl' ? pl : enUS,
   };
+
+  const color = Colors[scheme].text;
 
   const getResultsOverview = async () => {
     setLoading(true);
@@ -67,21 +61,31 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
 
   useEffect(() => {
     void getResultsOverview();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dates]);
 
-  const renderItem: ListRenderItem<Exercise> = ({ item }) => {
+  const renderItem: ListRenderItem<Exercise> = ({ item, index }) => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
-          console.log(item.id);
           navigation.navigate('ExerciseDetails', {
             id: item.id,
           });
-        }}>
-        <Text style={{ fontSize: Layout.spacing(2), paddingVertical: Layout.spacing(1) }}>
-          ID: {item.id} | Date: {item.date.toLocaleString()} | Rounds: {item.roundsCnt}
+        }}
+        style={({ pressed }) => ({
+          opacity: pressed ? 0.5 : 1,
+          backgroundColor: index % 2 ? Colors[scheme].textRGBA(0.06) : void 0,
+          paddingHorizontal: Layout.spacing(2),
+          paddingVertical: Layout.spacing(Layout.window.height > 700 ? 2 : 1.5),
+          alignItems: 'center',
+        })}>
+        <Text style={{ fontSize: Layout.spacing(2), marginBottom: Layout.spacing(1) }}>
+          {format(item.date, 'eeee, do MMMM, p', dateOptions)}
         </Text>
-      </TouchableOpacity>
+        <Text style={{ fontSize: Layout.spacing(2) }}>
+          Rounds: {item.roundsCnt} | Average: {item.averageTime}s
+        </Text>
+      </Pressable>
     );
   };
 
@@ -113,37 +117,39 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
           style={{
             flexDirection: 'row',
             justifyContent: 'space-evenly',
+            maxWidth: 400,
             width: '100%',
+            alignSelf: 'center',
             padding: Layout.spacing(1),
           }}>
-          <Pressable
+          <AppButton
             onPress={() => {
               setSelectedDateInput('from');
               setShowDatePicker(true);
             }}
-            style={({ pressed }) => ({ opacity: pressed ? 0.1 : 1 })}>
-            <TextInput
-              editable={false}
-              placeholder={t('overview.start_date_placeholder')}
-              value={
-                dates.from ? I18n.toTime('date.formats.long_date', dates.from) : void 0
-              }
-              style={dateInputStyle}
-            />
-          </Pressable>
-          <Pressable
+            size="small"
+            color={dates.from ? color : Colors[scheme].textRGBA(0.6)}
+            title={
+              dates.from
+                ? format(dates.from, 'P', dateOptions)
+                : t('overview.start_date_placeholder')
+            }
+            containerStyle={styles.dateBtnContainer}
+          />
+          <AppButton
             onPress={() => {
               setSelectedDateInput('to');
               setShowDatePicker(true);
             }}
-            style={({ pressed }) => ({ opacity: pressed ? 0.1 : 1 })}>
-            <TextInput
-              editable={false}
-              placeholder={t('overview.end_date_placeholder')}
-              value={dates.to ? I18n.toTime('date.formats.long_date', dates.to) : void 0}
-              style={dateInputStyle}
-            />
-          </Pressable>
+            size="small"
+            color={dates.to ? color : Colors[scheme].textRGBA(0.6)}
+            title={
+              dates.to
+                ? format(dates.to, 'P', dateOptions)
+                : t('overview.end_date_placeholder')
+            }
+            containerStyle={styles.dateBtnContainer}
+          />
         </View>
         <FlatList
           refreshing={loading}
@@ -162,15 +168,19 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Layout.spacing(1),
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   container: {
-    padding: Layout.spacing(2),
+    padding: Layout.spacing(),
     flex: 1,
-    maxWidth: 400,
-    alignItems: 'center',
   },
-  beImg: { padding: Layout.spacing(2) },
-  beLabel: { fontWeight: 'bold' },
+  beImg: {
+    padding: Layout.spacing(2),
+  },
+  beLabel: {
+    fontWeight: 'bold',
+  },
+  dateBtnContainer: {
+    width: 120,
+    height: 38,
+  },
 });
