@@ -95,7 +95,9 @@ export default {
       save_success: 'Saved ✔',
       nothing_to_save: 'Nothing to save.',
       rounds_saved_toast: 'Results saved.',
-      save_error: 'Sorry, unable to save the results.',
+      save_error: 'Sorry, failed to save the results.',
+      only_checked_will_save: 'Only checked rows will be saved.',
+      completed_at: 'Completed At: %{0}',
     },
     footer: {
       finish: 'Finish',

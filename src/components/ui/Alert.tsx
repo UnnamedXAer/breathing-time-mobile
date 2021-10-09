@@ -1,5 +1,12 @@
 import React from 'react';
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import {
+  Pressable,
+  PressableStateCallbackType,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import Headline from './Headline';
@@ -9,29 +16,51 @@ import { Text } from './Themed';
 interface Props {
   style?: ViewStyle;
   textSize?: number;
+  textStyle?: TextStyle;
   title?: string;
   content: string;
   onPress?: () => void;
+  type?: Extract<keyof typeof Colors['colors'], 'warning' | 'error' | 'info'>;
+  hideIcon?: boolean;
 }
 
 const Alert: React.FC<Props> = ({
   title,
   content,
   style,
+  textStyle,
   textSize = Layout.spacing(2.2),
   onPress,
+  type = 'info',
+  hideIcon,
 }) => {
+  const color = Colors.colors[type];
+
+  if (type !== 'warning') {
+    hideIcon = true;
+  }
+
+  const pressableStyleFn = ({ pressed }: PressableStateCallbackType) => [
+    styles.container,
+    { borderColor: color, opacity: pressed ? 0.5 : 1 },
+    hideIcon && {
+      paddingHorizontal: Layout.spacing(1),
+      paddingVertical: Layout.spacing(1),
+    },
+    style,
+  ];
+
   return (
-    <Pressable
-      style={({ pressed }) => [styles.container, style, { opacity: pressed ? 0.5 : 1 }]}
-      onPress={onPress}>
-      <WarningSvg
-        fill={Colors.colors.warning}
-        opacity={0.6}
-        width={48}
-        height={48}
-        style={styles.icon}
-      />
+    <Pressable style={pressableStyleFn} onPress={onPress}>
+      {!hideIcon && (
+        <WarningSvg
+          fill={Colors.colors.warning}
+          opacity={0.6}
+          width={48}
+          height={48}
+          style={styles.icon}
+        />
+      )}
 
       <View style={styles.content}>
         {title && <Headline variant="h3">{title}</Headline>}
@@ -40,6 +69,7 @@ const Alert: React.FC<Props> = ({
             fontSize: textSize,
             textAlign: 'justify',
             textAlignVertical: 'center',
+            ...textStyle,
           }}>
           {content}
         </Text>
@@ -53,7 +83,6 @@ export default Alert;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderColor: Colors.colors.warning,
     borderWidth: 3,
     width: '100%',
     borderRadius: Layout.baseRadius,

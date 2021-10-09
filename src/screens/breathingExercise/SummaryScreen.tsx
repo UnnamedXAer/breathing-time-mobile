@@ -1,27 +1,17 @@
 import { SQLError } from 'expo-sqlite';
 import { t } from 'i18n-js';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  ColorValue,
-  FlatList,
-  Pressable,
-  Share,
-  StyleSheet,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, ToastAndroid, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTables, saveRounds } from '../../../storage/sqlite';
 import ExerciseResultsTable from '../../components/breathingExercise/ExerciseResultsTable';
 import Header from '../../components/breathingExercise/Header';
-import SummaryResultsHeader from '../../components/breathingExercise/SummaryResultsHeader';
+import Alert from '../../components/ui/Alert';
 import AppButton from '../../components/ui/Button';
 import { Text } from '../../components/ui/Themed';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
 import { shareExerciseResults } from '../../helpers/share';
-import { calculateAverage, prepareShareText } from '../../helpers/summary';
 import useColorScheme from '../../hooks/useColorScheme';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { cleanExercise, finishExercise } from '../../store/exercise';
@@ -130,8 +120,8 @@ export default function SummaryScreen({ navigation }: Props) {
               })
             }
           />
-          <View style={{ flexGrow: 1 }}>
-            <Text>Only checked rows will be saved</Text>
+          <View style={styles.saveContainer}>
+            <Text>{t('ex.summary.only_checked_will_save')}</Text>
             <AppButton
               title={t(
                 resultsSaved ? 'ex.summary.save_success' : 'ex.summary.save_results',
@@ -142,14 +132,13 @@ export default function SummaryScreen({ navigation }: Props) {
               onPress={saveResults}
             />
             {savingError && (
-              <Text
-                style={{
-                  color: Colors.colors.error,
-                  textAlign: 'center',
-                  marginTop: Layout.spacing(),
-                }}>
-                {savingError}
-              </Text>
+              <Alert
+                content={savingError}
+                hideIcon
+                onPress={() => setSavingError(null)}
+                type="error"
+                textStyle={{ textAlign: 'auto' }}
+              />
             )}
           </View>
         </>
@@ -176,4 +165,5 @@ const styles = StyleSheet.create({
     marginVertical: Layout.spacing(5),
     textAlign: 'center',
   },
+  saveContainer: { flexGrow: 1, alignItems: 'center' },
 });

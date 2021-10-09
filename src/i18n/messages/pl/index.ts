@@ -100,6 +100,8 @@ const pl: LocaleMessages = {
       nothing_to_save: 'Nie ma nic do zapisania.',
       rounds_saved_toast: 'Wyniki zapisane.',
       save_error: 'Przepraszam, nie udało się zapisać wyników.',
+      only_checked_will_save: 'Tylko zaznaczone wiersze zostaną zapisane.',
+      completed_at: 'Ukończono: %{0}',
     },
     footer: {
       finish: 'Zakończ',
