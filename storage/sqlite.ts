@@ -105,12 +105,13 @@ function createPushRoundsFn(
   reject: (err: SQLError) => void,
 ) {
   return (trx: SQLTransaction, { insertId }: SQLResultSet) => {
-    let sql = 'insert into round (exId, round_time) values (?, ?);';
+    let sql = 'insert into round (exId, round_time) values (?, ?)';
     const params = [insertId, rounds[0]];
     for (let i = 1; i < rounds.length; i++) {
       sql += ', (?, ?)';
       params.push(insertId, rounds[i]);
     }
+    sql += ';';
 
     __DEV__ && console.log('rounds params', params);
 
