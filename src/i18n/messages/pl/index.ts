@@ -99,6 +99,7 @@ const pl: LocaleMessages = {
       save_success: 'Zapisane ✔',
       nothing_to_save: 'Nie ma nic do zapisania.',
       rounds_saved_toast: 'Wyniki zapisane.',
+      save_error: 'Przepraszam, nie udało się zapisać wyników.',
     },
     footer: {
       finish: 'Zakończ',

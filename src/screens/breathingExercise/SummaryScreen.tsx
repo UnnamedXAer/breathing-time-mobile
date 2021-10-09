@@ -73,20 +73,21 @@ export default function SummaryScreen({ navigation }: Props) {
     }
 
     setSaving(true);
+    setSavingError(null);
     let i = 0;
     try {
-      while (i < 1) {
+      do {
         await createTables();
         await saveRounds(toSave, completeDate.current);
-        //   setResultsSaved(true);
-        const newHoldTimes = getRandomResults();
-        setHoldTimes(newHoldTimes);
-        setSelectedRounds(Array(newHoldTimes.length).fill(true));
+        setResultsSaved(true);
+        // const newHoldTimes = getRandomResults();
+        // setHoldTimes(newHoldTimes);
+        // setSelectedRounds(Array(newHoldTimes.length).fill(true));
         i++;
-      }
+      } while (__DEV__ && i < 1);
       ToastAndroid.show(t('ex.summary.rounds_saved_toast'), ToastAndroid.SHORT);
     } catch (err) {
-      setSavingError((err as SQLError).message);
+      setSavingError(__DEV__ ? (err as SQLError).message : t('ex.summary.save_error'));
     }
     setSaving(false);
   };
