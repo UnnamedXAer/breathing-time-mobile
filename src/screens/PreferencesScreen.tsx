@@ -91,6 +91,7 @@ export default function PreferencesScreen({
             onChange={(option) => {
               updateLocale(option.key);
               dispatch(
+                // TODO #2 setting locale to Default doesn't change the app language
                 updateSettings({
                   propName: 'locale',
                   value: option.key,
