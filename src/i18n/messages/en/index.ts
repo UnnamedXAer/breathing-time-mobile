@@ -125,6 +125,12 @@ export default {
     title: 'Results overview',
     start_date_placeholder: 'Start date',
     end_date_placeholder: 'End date',
+    no_results: 'No results found.',
+    no_results_for_range: 'No results found for the this dates range.',
+    session_rounds_count: 'Rounds: %{0}',
+    session_avr_time: 'Average time: %{0}s',
+    read_results_error: 'Sorry, failed load the results.',
+    incorrect_dates: 'Incorrect dates range.',
   },
   details: {
     title: 'Session results',

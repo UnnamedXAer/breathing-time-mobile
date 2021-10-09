@@ -1,10 +1,13 @@
+import { format } from 'date-fns';
 import { t } from 'i18n-js';
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
+import { getDateOptions } from '../../helpers/date';
 import { calculateAverage } from '../../helpers/summary';
 import useColorScheme from '../../hooks/useColorScheme';
+import { Text } from '../ui/Themed';
 import SummaryResultsHeader from './SummaryResultsHeader';
 
 interface Props {
@@ -30,6 +33,11 @@ const ExerciseResultsTable = ({
 
   return (
     <>
+      <Text style={styles.completeDateText}>
+        {t('ex.summary.completed_at', [
+          format(exercise.date, 'eeee, do MMMM, p', getDateOptions()),
+        ])}
+      </Text>
       <FlatList
         style={{ marginTop: Layout.spacing(2) }}
         stickyHeaderIndices={[0]}
@@ -98,4 +106,5 @@ const styles = StyleSheet.create({
   averageText: {
     fontSize: Layout.spacing(2.5),
   },
+  completeDateText: { textAlign: 'center' },
 });
