@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
+import useColorScheme from '../../hooks/useColorScheme';
 import Headline from './Headline';
 import WarningSvg from './icons/WarningSvg';
 import { Text } from './Themed';
@@ -29,20 +30,29 @@ const Alert: React.FC<Props> = ({
   content,
   style,
   textStyle,
-  textSize = Layout.spacing(2.2),
+  textSize,
   onPress,
   type = 'info',
   hideIcon,
 }) => {
+  const scheme = useColorScheme();
   const color = Colors.colors[type];
 
   if (type !== 'warning') {
     hideIcon = true;
   }
+  const textSizeDef = textSize
+    ? textSize
+    : Layout.spacing(Layout.window.height > 600 ? 2.2 : 1.8);
 
   const pressableStyleFn = ({ pressed }: PressableStateCallbackType) => [
     styles.container,
-    { borderColor: color, opacity: pressed ? 0.5 : 1 },
+    {
+      borderColor: color,
+      opacity: pressed ? 0.5 : 1,
+      elevation: 2,
+      backgroundColor: Colors[scheme].background,
+    },
     hideIcon && {
       paddingHorizontal: Layout.spacing(1),
       paddingVertical: Layout.spacing(1),
@@ -66,7 +76,7 @@ const Alert: React.FC<Props> = ({
         {title && <Headline variant="h3">{title}</Headline>}
         <Text
           style={{
-            fontSize: textSize,
+            fontSize: textSizeDef,
             textAlign: 'justify',
             textAlignVertical: 'center',
             ...textStyle,
@@ -83,7 +93,7 @@ export default Alert;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderWidth: 3,
+    borderWidth: 2,
     width: '100%',
     borderRadius: Layout.baseRadius,
     paddingRight: Layout.spacing(),

@@ -14,9 +14,13 @@ interface Props {
 const SummaryResultsHeader = ({ onPress: share }: Props) => {
   const scheme = useColorScheme();
 
+  const fontSize = Layout.spacing(Layout.window.height > 600 ? 3 : 2.5);
+
   return (
     <View style={[styles.resultsHeader, { backgroundColor: Colors[scheme].background }]}>
-      <Text style={styles.resultsHeaderText}>{t('ex.summary.results_header')}</Text>
+      <Text style={{ ...styles.resultsHeaderText, fontSize }}>
+        {t('ex.summary.results_header')}
+      </Text>
       <ShareButton onPress={share} />
     </View>
   );
@@ -34,7 +38,6 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   resultsHeaderText: {
-    fontSize: Layout.spacing(3),
     fontWeight: 'bold',
   },
   dateText: {

@@ -31,6 +31,12 @@ interface Props {
   textStyle?: TextStyle;
 }
 
+const fontSizeMap = {
+  medium: Layout.window.height > 600 ? 3 : 2.5,
+  small: Layout.window.height > 600 ? 2 : 1.8,
+  large: Layout.window.height > 600 ? 4 : 3.5,
+};
+
 export default function Button({
   onPress,
   title,
@@ -49,7 +55,8 @@ export default function Button({
     colorScheme = theme;
   }
 
-  const fontSize = Layout.spacing(size === 'medium' ? 3 : size === 'small' ? 2 : 4);
+  //   const fontSize = Layout.spacing(size === 'medium' ? 3 : size === 'small' ? 2 : 4);
+  const fontSize = Layout.spacing(fontSizeMap[size]);
 
   let borderColor = 'transparent';
   if (disabled && mode !== 'text') {

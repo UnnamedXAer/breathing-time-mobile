@@ -17,9 +17,14 @@ interface Props {
 
 const ShareButton: React.FC<Props> = ({ onPress, style }) => {
   const scheme = useColorScheme();
+
+  const size = Layout.spacing(Layout.window.height > 600 ? 4.5 : 4);
+
   const dynamicContainerStyle: ViewStyle = {
     backgroundColor: Colors[scheme].background,
     borderColor: Colors[scheme].textRGBA(0.3),
+    width: size,
+    height: size,
     ...style,
   };
 
@@ -36,8 +41,6 @@ export default ShareButton;
 
 const styles = StyleSheet.create({
   container: {
-    width: Layout.spacing(5),
-    height: Layout.spacing(5),
     padding: Layout.baseRadius,
     borderRadius: Layout.baseRadius,
     borderWidth: 1,

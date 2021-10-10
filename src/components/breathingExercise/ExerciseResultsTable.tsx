@@ -31,6 +31,10 @@ const ExerciseResultsTable = ({
   const scheme = useColorScheme();
   const averageTime = calculateAverage(exercise.rounds);
 
+  const cellFontSize = Layout.spacing(
+    Layout.window.height > 700 ? 2.3 : exercise.rounds.length > 3 ? 1.7 : 2,
+  );
+
   return (
     <>
       <Text style={styles.completeDateText}>
@@ -56,18 +60,26 @@ const ExerciseResultsTable = ({
                 },
               ]}
               key={idx}>
-              <Text style={styles.cellHeader}>
+              <Text style={[styles.cellHeader, { fontSize: cellFontSize }]}>
                 {selectedRounds ? (selectedRounds[idx] ? '✔' : '➖') + ' ' : null}
                 {t('ex.summary.round_with_num', [idx + 1])}
               </Text>
-              <Text style={styles.cellText}>{time} s</Text>
+              <Text
+                style={[
+                  styles.cellText,
+                  {
+                    fontSize: cellFontSize,
+                  },
+                ]}>
+                {time} s
+              </Text>
             </TouchableOpacity>
           );
         }}
       />
 
       <View style={styles.averageContainer}>
-        <Text style={styles.averageText}>
+        <Text style={{ fontSize: cellFontSize }}>
           {t('ex.summary.averageTime')}{' '}
           <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text>{' '}
           {t('ex.summary.seconds', {
@@ -90,21 +102,16 @@ const styles = StyleSheet.create({
     paddingVertical: Layout.spacing(),
   },
   cellHeader: {
-    fontSize: Layout.spacing(2.5),
     fontWeight: 'bold',
     paddingRight: Layout.spacing(),
   },
   cellText: {
     textAlign: 'right',
-    fontSize: Layout.spacing(2.5),
     paddingLeft: Layout.spacing(),
     width: 120,
   },
   averageContainer: {
     marginVertical: Layout.spacing(2),
-  },
-  averageText: {
-    fontSize: Layout.spacing(2.5),
   },
   completeDateText: { textAlign: 'center' },
 });

@@ -15,7 +15,7 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
   const color = Colors[scheme].textRGBA(0.7);
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       {roundInfo && <Text style={[styles.roundInfo, { color }]}>{roundInfo}</Text>}
       {children}
@@ -24,8 +24,11 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: Layout.window.height > 600 ? 0 : -Layout.spacing(),
+  },
   title: {
-    fontSize: Layout.spacing(Layout.window.height < 600 ? 4 : 5),
+    fontSize: Layout.spacing(Layout.window.height > 600 ? 5 : 3.8),
     fontWeight: 'bold',
     textAlign: 'center',
   },

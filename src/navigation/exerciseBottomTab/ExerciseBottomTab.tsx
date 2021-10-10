@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   customTitleText: {
     fontSize: Layout.spacing(4),
-    marginBottom: Layout.spacing(),
+    marginBottom: Layout.window.height > 600 ? Layout.spacing() : 0,
     paddingBottom: Layout.spacing(),
     textAlign: 'center',
     color: '#fff',
