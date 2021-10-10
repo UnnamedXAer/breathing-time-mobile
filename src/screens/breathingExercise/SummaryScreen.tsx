@@ -121,7 +121,10 @@ export default function SummaryScreen({ navigation }: Props) {
             }
           />
           <View style={styles.saveContainer}>
-            <Text>{t('ex.summary.only_checked_will_save')}</Text>
+            <Text>
+              {t('ex.summary.only_checked_will_save')} (
+              {selectedRounds.filter((x) => x).length}/{holdTimes.length})
+            </Text>
             <AppButton
               title={t(
                 resultsSaved ? 'ex.summary.save_success' : 'ex.summary.save_results',
