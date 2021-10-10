@@ -131,6 +131,7 @@ const pl: LocaleMessages = {
     end_date_placeholder: 'Data końcowa',
     no_results: 'Nie znaleziono żadnych wyników.',
     no_results_for_range: 'Nie znaleziono wyników dla tego zakresu dat.',
+    no_results_at_all: 'Nie masz żadnych zapisanych wyników.',
     session_rounds_count: 'Rund: %{0}',
     session_avr_time: 'Średni czas: %{0}s',
     read_results_error: 'Przepraszam, niew udało się wczytać wyników',

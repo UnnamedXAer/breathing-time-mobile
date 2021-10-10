@@ -29,6 +29,15 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
     to: new Date(),
   });
 
+  const getEmptyListText = (noTable?: boolean) => {
+    if (noTable) {
+      return t('overview.no_results_at_all');
+    }
+    return t('overview.no_results' + (dates.from || dates.to ? '_for_range' : ''));
+  };
+
+  const [emptyListText, setEmptyListText] = useState(getEmptyListText());
+
   const dateOptions = getDateOptions();
 
   const getResultsOverview = async () => {
@@ -42,6 +51,9 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
       const r = await readResultsOverview(dates);
       setResults(r);
     } catch (err) {
+      if ((err as SQLError).message.includes('no such table: exercise')) {
+        return setEmptyListText(getEmptyListText(true));
+      }
       setError(__DEV__ ? (err as SQLError).message : t('overview.read_results_error'));
     }
     setLoading(false);
@@ -107,11 +119,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
             flex: results.length === 0 ? 1 : void 0,
           }}
           ListEmptyComponent={
-            !error ? (
-              <Text style={styles.noResultsText}>
-                {t('overview.no_results' + (dates.from || dates.to ? '_for_range' : ''))}
-              </Text>
-            ) : null
+            !error ? <Text style={styles.noResultsText}>{emptyListText}</Text> : null
           }
         />
       </View>
