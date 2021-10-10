@@ -73,7 +73,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
             <WarningNote
               style={styles.warningNote}
               textSize={Layout.spacing(
-                Layout.window.height < 600 ? 1 : Layout.window.height < 700 ? 1.8 : 2.2,
+                Layout.window.height < 600 ? 1.3 : Layout.window.height < 700 ? 1.8 : 2.2,
               )}
             />
             <View style={styles.startBtnWrapper}>
