@@ -8,7 +8,12 @@ import { RootStackScreenProps } from '../navigation/types';
 import { t } from 'i18n-js';
 import { useTranslationChange } from '../hooks/useTranslationChange';
 import Headline from '../components/ui/Headline';
-import { Exercise, readResultsOverview } from '../../storage/sqlite';
+import {
+  Exercise,
+  getExercisesList,
+  getOverviewStatistics,
+  OverviewStatistics,
+} from '../../storage/sqlite';
 import { SQLError } from 'expo-sqlite';
 import { DatesFromTo } from '../types/types';
 import { format } from 'date-fns';
@@ -23,7 +28,9 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
 
   const [results, setResults] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [exercisesListError, setExercisesListError] = useState<string | null>(null);
+  const [statisticsError, setStatisticsError] = useState<string | null>(null);
+  const [statistics, setStatistics] = useState<OverviewStatistics | null>(null);
   const [dates, setDates] = useState<DatesFromTo>({
     from: startDatePlaceholder,
     to: new Date(),
@@ -40,27 +47,41 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
 
   const dateOptions = getDateOptions();
 
-  const getResultsOverview = async () => {
+  const getExercises = async () => {
     if (dates.from && dates.to && dates.from > dates.to) {
-      return setError(t('overview.incorrect_dates'));
+      return setExercisesListError(t('overview.incorrect_dates'));
     }
 
     setLoading(true);
-    setError(null);
+    setExercisesListError(null);
     try {
-      const r = await readResultsOverview(dates);
+      const r = await getExercisesList(dates);
       setResults(r);
     } catch (err) {
       if ((err as SQLError).message.includes('no such table: exercise')) {
         return setEmptyListText(getEmptyListText(true));
       }
-      setError(__DEV__ ? (err as SQLError).message : t('overview.read_results_error'));
+      setExercisesListError(
+        __DEV__ ? (err as SQLError).message : t('overview.read_results_error'),
+      );
     }
     setLoading(false);
   };
 
+  const getStatistic = async () => {
+    try {
+      const statistics = await getOverviewStatistics(dates);
+      setStatistics(statistics);
+    } catch (err) {
+      setStatisticsError(
+        __DEV__ ? (err as SQLError).message : t('overview.read_results_error'),
+      );
+    }
+  };
+
   useEffect(() => {
-    void getResultsOverview();
+    void getExercises();
+    void getStatistic();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dates]);
 
@@ -101,13 +122,13 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
           {t('overview.title')}
         </Headline>
         <DatesFilter dates={dates} onDateChange={dateChangeHandler} scheme={scheme} />
-        {error && (
+        {exercisesListError && (
           <Alert
             type={'error'}
-            content={error || ''}
+            content={exercisesListError || ''}
             hideIcon
             textStyle={{ textAlign: 'auto' }}>
-            {error}
+            {exercisesListError}
           </Alert>
         )}
         <FlatList
@@ -119,7 +140,9 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
             flex: results.length === 0 ? 1 : void 0,
           }}
           ListEmptyComponent={
-            !error ? <Text style={styles.noResultsText}>{emptyListText}</Text> : null
+            !exercisesListError ? (
+              <Text style={styles.noResultsText}>{emptyListText}</Text>
+            ) : null
           }
         />
       </View>

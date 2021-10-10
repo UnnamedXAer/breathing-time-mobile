@@ -10,7 +10,7 @@ import { useTranslationChange } from '../hooks/useTranslationChange';
 import Headline from '../components/ui/Headline';
 import {
   ExerciseWithRounds,
-  readExerciseResults,
+  getExerciseDetails,
   removeRound,
   Round,
 } from '../../storage/sqlite';
@@ -29,11 +29,11 @@ export default function ExerciseDetails({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getResultsOverview = async () => {
+  const getExercise = async () => {
     setLoading(true);
     setError(null);
     try {
-      const exercise = await readExerciseResults(route.params.id);
+      const exercise = await getExerciseDetails(route.params.id);
       setExercise(exercise);
     } catch (err) {
       setError((err as SQLError).message);
@@ -42,7 +42,7 @@ export default function ExerciseDetails({
   };
 
   useEffect(() => {
-    void getResultsOverview();
+    void getExercise();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,7 +125,7 @@ export default function ExerciseDetails({
           <Text>{t('details.exercise_not_found')}</Text>
         )}
       </View>
-      {__DEV__ && <Button onPress={getResultsOverview} mode="text" title="refresh" />}
+      {__DEV__ && <Button onPress={getExercise} mode="text" title="refresh" />}
     </View>
   );
 }

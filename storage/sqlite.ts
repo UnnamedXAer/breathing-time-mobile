@@ -32,6 +32,24 @@ interface RoundRecord {
   round_time: number;
 }
 
+interface OverviewStatisticsRecord {
+  total_ex_cnt: number;
+  total_round_cnt: number;
+  total_avg_round_time: number;
+  range_ex_cnt: number;
+  range_round_cnt: number;
+  range_avg_round_time: number;
+}
+
+export interface OverviewStatistics {
+  totalExCnt: number;
+  totalRoundCnt: number;
+  totalAvgRoundTime: number;
+  rangeExCnt: number;
+  rangeRoundCnt: number;
+  rangeAvgRoundTime: number;
+}
+
 export interface Exercise {
   id: number;
   date: Date;
@@ -58,8 +76,8 @@ export async function createTables() {
   try {
     const trx = await getTransaction('create tables');
     await Promise.all([
-      // executeSql(trx, 'delete from round;'),
-      // executeSql(trx, 'delete from exercise;'),
+      //   executeSql(trx, 'delete from round;'),
+      //   executeSql(trx, 'delete from exercise;'),
       executeSql(trx, createExTableSql),
       executeSql(trx, createRoundsTableSql),
     ]);
@@ -86,7 +104,7 @@ function createExercise(rounds: number[], date: Date): Promise<SQLResultSet> {
     void getTransaction('create exercise').then((trx) => {
       trx.executeSql(
         createExSql,
-        [date.getTime()],
+        [date.getTime() / 1000],
         (trx, res) => {
           pushRounds(trx, res);
         },
@@ -130,29 +148,71 @@ function createPushRoundsFn(
   };
 }
 
-export async function readResultsOverview(dates: DatesFromTo) {
-  const params = [];
-  let where = '';
-  if (dates.from) {
-    let from = dates.from;
-    from = new Date(from.getFullYear(), from.getMonth(), from.getDate(), 0, 0, 0, 0);
-    params.push(from.getTime().toString());
-    where += 'x.date_time > ?';
+export async function getOverviewStatistics(
+  dates: DatesFromTo,
+): Promise<OverviewStatistics> {
+  const { where, params } = getDatesWhere(dates);
+
+  let sql = `SELECT * FROM 
+	(SELECT 
+		count(*) cnt_total,
+		count(distinct x.Id) total_ex_cnt,
+		count(r.id) total_round_cnt,
+		avg(round_time) total_avg_round_time
+	FROM round r
+	JOIN exercise x
+		ON r.exId = x.id )`;
+
+  if (params.length > 0) {
+    const dateRangeSql = `(SELECT
+		count(*) cnt_range,
+    		count(distinct x.Id) range_ex_cnt,
+    		count(r.id) range_round_cnt,
+    		avg(round_time) range_avg_round_time
+    	  FROM round r
+    	  JOIN exercise x
+    		ON r.exId = x.id ${where})`;
+
+    sql += ',\n' + dateRangeSql;
   }
 
-  if (dates.to) {
-    let to = dates.to;
-    to = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59, 999);
-    params.push(to.getTime().toString());
-    where += (where.length > 0 ? ' and ' : '') + 'x.date_time < ?';
-  }
+  //   console.log('--------\n\n', sql, '\n\n-------------');
+  try {
+    const trx = await getTransaction('get exercises summary');
+    const res = await executeSql(trx, sql, params);
 
-  if (where.length > 0) {
-    where = ' where ' + where;
+    const { _array: rows } =
+      res.rows as ResultsSetListWithArray<OverviewStatisticsRecord>;
+
+    if (rows.length === 0) {
+      throw new Error('no data exist');
+    }
+
+    const record = rows[0];
+    const statistics: OverviewStatistics = {
+      totalExCnt: record.total_ex_cnt,
+      totalRoundCnt: record.total_round_cnt,
+      totalAvgRoundTime: record.total_avg_round_time,
+      rangeExCnt: record.range_ex_cnt,
+      rangeRoundCnt: record.range_round_cnt,
+      rangeAvgRoundTime: record.range_avg_round_time,
+    };
+
+    // @todo: add average rounds per exercise
+    console.log('statistics:', statistics);
+
+    return statistics;
+  } catch (err) {
+    __DEV__ && console.log('get exercises summary:', err);
+    throw err;
   }
+}
+
+export async function getExercisesList(dates: DatesFromTo) {
+  const { where, params } = getDatesWhere(dates);
 
   try {
-    const trx = await getTransaction('read exercise details');
+    const trx = await getTransaction('get exercises list');
     const r = await executeSql(
       trx,
       `select x.id id, x.date_time, count(r.id) rounds_count, round(avg(r.round_time),1) average_time from exercise x join round r on x.id = r.exId ${where} group by x.id order by r.exId desc;`,
@@ -167,21 +227,21 @@ export async function readResultsOverview(dates: DatesFromTo) {
 
     const exercises: Exercise[] = rows.map((r) => ({
       id: r.id,
-      date: new Date(r.date_time),
+      date: new Date(r.date_time * 1000),
       roundsCnt: r.rounds_count,
       averageTime: r.average_time,
     }));
 
     return exercises;
   } catch (err) {
-    __DEV__ && console.log('read overview:', err);
+    __DEV__ && console.log('get exercises list:', err);
     throw err;
   }
 }
 
-export async function readExerciseResults(id: number) {
+export async function getExerciseDetails(id: number) {
   try {
-    const trx = await getTransaction('read exercises overview');
+    const trx = await getTransaction('get exercise details');
     const r = await executeSql(
       trx,
       'select x.date_time, r.id round_id, r.round_time from round r join exercise x on x.id = r.exId where x.id = ? order by x.date_time desc',
@@ -196,7 +256,7 @@ export async function readExerciseResults(id: number) {
 
     const exercise: ExerciseWithRounds = {
       id,
-      date: new Date(rows[0].date_time),
+      date: new Date(rows[0].date_time * 1000),
       rounds: rows.map((r) => ({
         id: r.round_id,
         time: r.round_time,
@@ -204,7 +264,7 @@ export async function readExerciseResults(id: number) {
     };
     return exercise;
   } catch (err) {
-    __DEV__ && console.log('read exercise:', err);
+    __DEV__ && console.log('get exercise details:', err);
     throw err;
   }
 }
@@ -212,7 +272,7 @@ export async function readExerciseResults(id: number) {
 export function removeRound(id: Round['id']) {
   return new Promise((resolve, reject) => {
     const errCb = (_: SQLTransaction, err: SQLError) => {
-      console.log('delete round:', err);
+      console.log('remove round:', err);
       reject(err);
       return true;
     };
@@ -307,4 +367,34 @@ function executeSql(
       },
     );
   });
+}
+
+function getDatesWhere(dates: DatesFromTo): {
+  where: string;
+  params: number[];
+} {
+  const params = [];
+  let where = '';
+  if (dates.from) {
+    let from = dates.from;
+    from = new Date(from.getFullYear(), from.getMonth(), from.getDate(), 0, 0, 0, 0);
+    params.push(from.getTime() / 1000);
+    where += 'x.date_time > ?';
+  }
+
+  if (dates.to) {
+    let to = dates.to;
+    to = new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59, 999);
+    params.push(to.getTime() / 1000);
+    where += (where.length > 0 ? ' and ' : '') + 'x.date_time < ?';
+  }
+
+  if (where.length > 0) {
+    where = ' where ' + where;
+  }
+
+  return {
+    where,
+    params,
+  };
 }
