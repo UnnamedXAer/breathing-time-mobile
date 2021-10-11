@@ -155,20 +155,18 @@ export async function getOverviewStatistics(
 
   let sql = `SELECT * FROM 
 	(SELECT 
-		count(*) cnt_total,
 		count(distinct x.Id) total_ex_cnt,
 		count(r.id) total_round_cnt,
-		avg(round_time) total_avg_round_time
+		round(avg(round_time), 1) total_avg_round_time
 	FROM round r
 	JOIN exercise x
 		ON r.exId = x.id )`;
 
   if (params.length > 0) {
     const dateRangeSql = `(SELECT
-		count(*) cnt_range,
     		count(distinct x.Id) range_ex_cnt,
     		count(r.id) range_round_cnt,
-    		avg(round_time) range_avg_round_time
+    		round(avg(round_time), 1) range_avg_round_time
     	  FROM round r
     	  JOIN exercise x
     		ON r.exId = x.id ${where})`;
@@ -198,7 +196,9 @@ export async function getOverviewStatistics(
       rangeAvgRoundTime: record.range_avg_round_time,
     };
 
-    // @todo: add average rounds per exercise
+    // @todo: add average rounds per exerciser
+    // greatest time
+    // greatest average
     console.log('statistics:', statistics);
 
     return statistics;

@@ -131,6 +131,7 @@ export default {
     session_rounds_count: 'Rounds: %{0}',
     session_avr_time: 'Average time: %{0}s',
     read_results_error: 'Sorry, failed load the results.',
+    read_settings_error: 'Sorry, failed load the settings.',
     incorrect_dates: 'Incorrect dates range.',
   },
   details: {

@@ -135,6 +135,7 @@ const pl: LocaleMessages = {
     session_rounds_count: 'Rund: %{0}',
     session_avr_time: 'Średni czas: %{0}s',
     read_results_error: 'Przepraszam, niew udało się wczytać wyników',
+    read_settings_error: 'Przepraszam, niew udało się wczytać statystyk.',
     incorrect_dates: 'Niepoprawny zakres dat.',
   },
   details: {

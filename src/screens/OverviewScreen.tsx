@@ -8,18 +8,14 @@ import { RootStackScreenProps } from '../navigation/types';
 import { t } from 'i18n-js';
 import { useTranslationChange } from '../hooks/useTranslationChange';
 import Headline from '../components/ui/Headline';
-import {
-  Exercise,
-  getExercisesList,
-  getOverviewStatistics,
-  OverviewStatistics,
-} from '../../storage/sqlite';
+import { Exercise, getExercisesList } from '../../storage/sqlite';
 import { SQLError } from 'expo-sqlite';
 import { DatesFromTo } from '../types/types';
 import { format } from 'date-fns';
 import { getDateOptions } from '../helpers/date';
 import DatesFilter from '../components/overview/DatesFilter';
 import Alert from '../components/ui/Alert';
+import Statistics from '../components/overview/Statistics';
 
 const startDatePlaceholder = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
 export default function OverviewScreen({ navigation }: RootStackScreenProps<'Overview'>) {
@@ -29,8 +25,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
   const [results, setResults] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
   const [exercisesListError, setExercisesListError] = useState<string | null>(null);
-  const [statisticsError, setStatisticsError] = useState<string | null>(null);
-  const [statistics, setStatistics] = useState<OverviewStatistics | null>(null);
+
   const [dates, setDates] = useState<DatesFromTo>({
     from: startDatePlaceholder,
     to: new Date(),
@@ -68,20 +63,8 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
     setLoading(false);
   };
 
-  const getStatistic = async () => {
-    try {
-      const statistics = await getOverviewStatistics(dates);
-      setStatistics(statistics);
-    } catch (err) {
-      setStatisticsError(
-        __DEV__ ? (err as SQLError).message : t('overview.read_results_error'),
-      );
-    }
-  };
-
   useEffect(() => {
     void getExercises();
-    void getStatistic();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dates]);
 
@@ -138,6 +121,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
           keyExtractor={({ id }) => id.toString()}
           contentContainerStyle={{
             flex: results.length === 0 ? 1 : void 0,
+            paddingBottom: Layout.spacing(3),
           }}
           ListEmptyComponent={
             !exercisesListError ? (
@@ -145,6 +129,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
             ) : null
           }
         />
+        <Statistics dates={dates} />
       </View>
     </View>
   );
@@ -158,7 +143,8 @@ const styles = StyleSheet.create({
     paddingBottom: Layout.spacing(1),
   },
   container: {
-    padding: Layout.spacing(),
+    paddingTop: Layout.spacing(),
+    paddingHorizontal: Layout.spacing(),
     flex: 1,
   },
   titleText: { textAlign: 'center' },
