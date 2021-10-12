@@ -36,18 +36,22 @@ interface OverviewStatisticsRecord {
   total_ex_cnt: number;
   total_round_cnt: number;
   total_avg_round_time: number;
+  total_max_round_time: number;
   range_ex_cnt: number;
   range_round_cnt: number;
   range_avg_round_time: number;
+  range_max_round_time: number;
 }
 
+interface RangeStatistics {
+  exCnt: number;
+  roundCnt: number;
+  avgRoundTime: number;
+  maxRoundTime: number;
+}
 export interface OverviewStatistics {
-  totalExCnt: number;
-  totalRoundCnt: number;
-  totalAvgRoundTime: number;
-  rangeExCnt: number;
-  rangeRoundCnt: number;
-  rangeAvgRoundTime: number;
+  total: RangeStatistics;
+  range: RangeStatistics;
 }
 
 export interface Exercise {
@@ -153,28 +157,23 @@ export async function getOverviewStatistics(
 ): Promise<OverviewStatistics> {
   const { where, params } = getDatesWhere(dates);
 
-  let sql = `SELECT * FROM 
-	(SELECT 
-		count(distinct x.Id) total_ex_cnt,
-		count(r.id) total_round_cnt,
-		round(avg(round_time), 1) total_avg_round_time
+  const getSelect = (rangeName: 'range' | 'total') => `SELECT 
+		count(distinct x.Id) ${rangeName}_ex_cnt,
+		count(r.id) ${rangeName}_round_cnt,
+		round(avg(round_time), 1) ${rangeName}_avg_round_time,
+		max(round_time) ${rangeName}_max_round_time
 	FROM round r
 	JOIN exercise x
-		ON r.exId = x.id )`;
+	ON r.exId = x.id `;
+
+  let sql = `SELECT * FROM (${getSelect('total')})`;
 
   if (params.length > 0) {
-    const dateRangeSql = `(SELECT
-    		count(distinct x.Id) range_ex_cnt,
-    		count(r.id) range_round_cnt,
-    		round(avg(round_time), 1) range_avg_round_time
-    	  FROM round r
-    	  JOIN exercise x
-    		ON r.exId = x.id ${where})`;
+    const dateRangeSql = `(${getSelect('range')} ${where})`;
 
     sql += ',\n' + dateRangeSql;
   }
 
-  //   console.log('--------\n\n', sql, '\n\n-------------');
   try {
     const trx = await getTransaction('get exercises summary');
     const res = await executeSql(trx, sql, params);
@@ -188,18 +187,23 @@ export async function getOverviewStatistics(
 
     const record = rows[0];
     const statistics: OverviewStatistics = {
-      totalExCnt: record.total_ex_cnt,
-      totalRoundCnt: record.total_round_cnt,
-      totalAvgRoundTime: record.total_avg_round_time,
-      rangeExCnt: record.range_ex_cnt,
-      rangeRoundCnt: record.range_round_cnt,
-      rangeAvgRoundTime: record.range_avg_round_time,
+      total: {
+        exCnt: record.total_ex_cnt,
+        roundCnt: record.total_round_cnt,
+        avgRoundTime: record.total_avg_round_time,
+        maxRoundTime: record.total_max_round_time,
+      },
+      range: {
+        exCnt: record.range_ex_cnt,
+        roundCnt: record.range_round_cnt,
+        avgRoundTime: record.range_avg_round_time,
+        maxRoundTime: record.range_max_round_time,
+      },
     };
 
     // @todo: add average rounds per exerciser
-    // greatest time
-    // greatest average
-    console.log('statistics:', statistics);
+    // @todo: greatest average
+    // console.log('statistics:', statistics);
 
     return statistics;
   } catch (err) {
