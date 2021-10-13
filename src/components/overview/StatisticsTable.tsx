@@ -74,11 +74,13 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'baseline',
+    flexWrap: 'wrap',
   },
   hCell: {
-    minWidth: '70%',
+    width: 110,
   },
   vCell: {
-    width: '25%',
+    flex: 1,
   },
 });
