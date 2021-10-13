@@ -51,7 +51,7 @@ interface RangeStatistics {
 }
 export interface OverviewStatistics {
   total: RangeStatistics;
-  range: RangeStatistics;
+  range?: RangeStatistics;
 }
 
 export interface Exercise {
@@ -160,8 +160,8 @@ export async function getOverviewStatistics(
   const getSelect = (rangeName: 'range' | 'total') => `SELECT 
 		count(distinct x.Id) ${rangeName}_ex_cnt,
 		count(r.id) ${rangeName}_round_cnt,
-		round(avg(round_time), 1) ${rangeName}_avg_round_time,
-		max(round_time) ${rangeName}_max_round_time
+		ifNull(round(avg(round_time), 1), 0) ${rangeName}_avg_round_time,
+		ifNull(max(round_time), 0) ${rangeName}_max_round_time
 	FROM round r
 	JOIN exercise x
 	ON r.exId = x.id `;
@@ -193,13 +193,16 @@ export async function getOverviewStatistics(
         avgRoundTime: record.total_avg_round_time,
         maxRoundTime: record.total_max_round_time,
       },
-      range: {
+    };
+
+    if (params.length > 0) {
+      statistics.range = {
         exCnt: record.range_ex_cnt,
         roundCnt: record.range_round_cnt,
         avgRoundTime: record.range_avg_round_time,
         maxRoundTime: record.range_max_round_time,
-      },
-    };
+      };
+    }
 
     // @todo: add average rounds per exerciser
     // @todo: greatest average

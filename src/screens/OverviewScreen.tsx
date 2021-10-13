@@ -31,40 +31,33 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
     to: new Date(),
   });
 
-  const getEmptyListText = (noTable?: boolean) => {
-    if (noTable) {
-      return t('overview.no_results_at_all');
-    }
-    return t('overview.no_results' + (dates.from || dates.to ? '_for_range' : ''));
-  };
-
-  const [emptyListText, setEmptyListText] = useState(getEmptyListText());
-
   const dateOptions = getDateOptions();
 
-  const getExercises = async () => {
-    if (dates.from && dates.to && dates.from > dates.to) {
+  const getExercises = async (currentDates: DatesFromTo) => {
+    if (currentDates.from && currentDates.to && currentDates.from > currentDates.to) {
       return setExercisesListError(t('overview.incorrect_dates'));
     }
 
     setLoading(true);
     setExercisesListError(null);
     try {
-      const r = await getExercisesList(dates);
+      const r = await getExercisesList(currentDates);
+
       setResults(r);
     } catch (err) {
       if ((err as SQLError).message.includes('no such table: exercise')) {
-        return setEmptyListText(getEmptyListText(true));
+        return setResults([]);
       }
       setExercisesListError(
         __DEV__ ? (err as SQLError).message : t('overview.read_results_error'),
       );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    void getExercises();
+    void getExercises(dates);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dates]);
 
@@ -125,7 +118,9 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
           }}
           ListEmptyComponent={
             !exercisesListError ? (
-              <Text style={styles.noResultsText}>{emptyListText}</Text>
+              <Text style={styles.noResultsText}>
+                {t('overview.no_results' + (dates.from || dates.to ? '_for_range' : ''))}
+              </Text>
             ) : null
           }
         />

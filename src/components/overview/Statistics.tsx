@@ -10,6 +10,7 @@ import useColorScheme from '../../hooks/useColorScheme';
 import { DatesFromTo } from '../../types/types';
 import Alert from '../ui/Alert';
 import { Text } from '../ui/Themed';
+import StatisticsTable from './StatisticsTable';
 
 interface Props {
   dates: DatesFromTo;
@@ -38,11 +39,23 @@ export default function Statistics({ dates }: Props) {
       }
 
       setStatistics(statistics);
-      setLoading(false);
     } catch (err) {
       if (datesForStats.current) {
+        if ((err as SQLError).message.includes('no such table')) {
+          setStatistics({
+            total: {
+              avgRoundTime: 0,
+              exCnt: 0,
+              maxRoundTime: 0,
+              roundCnt: 0,
+            },
+          });
+          return;
+        }
         setError(__DEV__ ? (err as SQLError).message : t('overview.read_settings_error'));
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,30 +109,7 @@ export default function Statistics({ dates }: Props) {
         ) : loading ? (
           <ActivityIndicator color={Colors[scheme].primary} />
         ) : (
-          expanded && (
-            <View style={styles.statistics}>
-              {statistics && (
-                <>
-                  <View style={{ marginRight: Layout.spacing(1) }}>
-                    <Text>Total:</Text>
-                    <Text>Sessions: {statistics.total.exCnt} </Text>
-                    <Text>Rounds: {statistics.total.roundCnt}</Text>
-                    <Text>Avg round time: {statistics.total.avgRoundTime}s</Text>
-                    <Text>Max round time: {statistics.total.maxRoundTime}s</Text>
-                  </View>
-                  {statistics.range && (
-                    <View style={{ marginLeft: Layout.spacing(1) }}>
-                      <Text>Selected date range:</Text>
-                      <Text>Sessions: {statistics.range.exCnt} </Text>
-                      <Text>Rounds: {statistics.range.roundCnt}</Text>
-                      <Text>Avg round time: {statistics.range.avgRoundTime}s</Text>
-                      <Text>Max round time: {statistics.range.maxRoundTime}s</Text>
-                    </View>
-                  )}
-                </>
-              )}
-            </View>
-          )
+          expanded && <StatisticsTable statistics={statistics} />
         )}
       </View>
     </Pressable>
@@ -133,9 +123,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: Layout.spacing(),
-  },
-  statistics: {
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
 });
