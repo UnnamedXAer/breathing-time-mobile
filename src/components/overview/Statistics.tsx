@@ -14,9 +14,10 @@ import StatisticsTable from './StatisticsTable';
 
 interface Props {
   dates: DatesFromTo;
+  refresh: boolean;
 }
 
-export default function Statistics({ dates }: Props) {
+export default function Statistics({ dates, refresh }: Props) {
   const scheme = useColorScheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +73,7 @@ export default function Statistics({ dates }: Props) {
 
     void getStatistic(dates);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dates, expanded]);
+  }, [dates, expanded, refresh]);
 
   const triggerExpand = () => {
     if (expanded) {

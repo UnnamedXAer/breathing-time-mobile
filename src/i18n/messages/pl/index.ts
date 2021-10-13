@@ -147,6 +147,7 @@ const pl: LocaleMessages = {
     delete_question_includes_exercise:
       '\n\n! Nie zostanie więcej wyników, dlatego wpis o sesji również zostanie usunięty.',
     delete_success: 'Runda usunięta.',
+    delete_success_with_exercise: 'Runda i wpis o sesji zostały usunięte',
     delete_failure: 'Nie udało się usunąć rundy.\nOdśwież i spróbuj ponownie.',
     exercise_not_found: 'Przepraszam. Nie udało się znaleźć tego ćwiczenia.',
   },

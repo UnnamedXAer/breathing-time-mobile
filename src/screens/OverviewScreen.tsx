@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, ListRenderItem, Pressable } from 'react-native';
 import { Text } from '../components/ui/Themed';
 import Layout from '../constants/Layout';
@@ -16,6 +16,7 @@ import { getDateOptions } from '../helpers/date';
 import DatesFilter from '../components/overview/DatesFilter';
 import Alert from '../components/ui/Alert';
 import Statistics from '../components/overview/Statistics';
+import { useFocusEffect } from '@react-navigation/core';
 
 const startDatePlaceholder = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
 export default function OverviewScreen({ navigation }: RootStackScreenProps<'Overview'>) {
@@ -25,6 +26,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
   const [results, setResults] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
   const [exercisesListError, setExercisesListError] = useState<string | null>(null);
+  const [refreshStats, setRefreshStats] = useState(false);
 
   const [dates, setDates] = useState<DatesFromTo>({
     from: startDatePlaceholder,
@@ -56,10 +58,12 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
     }
   };
 
-  useEffect(() => {
-    void getExercises(dates);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dates]);
+  useFocusEffect(
+    useCallback(() => {
+      void getExercises(dates);
+      setRefreshStats((pv) => !pv);
+    }, [dates]),
+  );
 
   const renderItem: ListRenderItem<Exercise> = ({ item, index }) => {
     return (
@@ -124,7 +128,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
             ) : null
           }
         />
-        <Statistics dates={dates} />
+        <Statistics dates={dates} refresh={refreshStats} />
       </View>
     </View>
   );

@@ -140,9 +140,10 @@ export default {
     delete_question:
       'Do you really want to delete this round ( %{0}s ), it is irreversible?',
     delete_question_includes_exercise:
-      '\n\n! There will be no remaining rounds, therefore the exercise entry will be removed as well.',
+      '\n\n! There will be no remaining rounds, therefore the session entry will be removed as well.',
     delete_confirm: 'Yes, delete',
     delete_success: 'Round removed.',
+    delete_success_with_exercise: 'Round & session entry removed.',
     delete_failure: "Could't remove the round.\nRefresh and try again.",
     exercise_not_found: "Sorry. Couldn't find that exercise.",
   },

@@ -74,8 +74,12 @@ export default function ExerciseDetails({
   const deleteRound = async (id: Round['id']) => {
     try {
       await removeRound(id);
-      ToastAndroid.show(t('details.delete_success'), ToastAndroid.SHORT);
-      if (exercise!.rounds.length <= 1) {
+      const exerciseRemoved = exercise!.rounds.length <= 1;
+      ToastAndroid.show(
+        t('details.delete_success' + (exerciseRemoved ? '_with_exercise' : '')),
+        ToastAndroid.SHORT,
+      );
+      if (exerciseRemoved) {
         navigation.goBack();
         return;
       }
