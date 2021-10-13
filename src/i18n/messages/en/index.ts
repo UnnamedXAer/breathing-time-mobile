@@ -126,7 +126,7 @@ export default {
     start_date_placeholder: 'Start date',
     end_date_placeholder: 'End date',
     no_results: 'No results found.',
-    no_results_for_range: 'No results found for the this dates range.',
+    no_results_for_range: 'No results found for this dates range.',
     no_results_at_all: "You don't have any saved results at all.",
     session_rounds_count: 'Rounds: %{0}',
     session_avr_time: 'Average time: %{0}s',
