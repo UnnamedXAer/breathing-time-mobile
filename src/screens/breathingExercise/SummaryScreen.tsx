@@ -79,9 +79,9 @@ export default function SummaryScreen({ navigation }: Props) {
         setSelectedRounds(Array(newHoldTimes.length).fill(true));
 
         // throw new Error(t('ex.summary.save_error'));
-        // setResultsSaved(true);
         i++;
-      } while (__DEV__ && i < 100);
+      } while (__DEV__ && i < 1);
+      setResultsSaved(true);
       ToastAndroid.show(t('ex.summary.rounds_saved_toast'), ToastAndroid.SHORT);
     } catch (err) {
       setSavingError(__DEV__ ? (err as SQLError).message : t('ex.summary.save_error'));

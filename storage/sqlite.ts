@@ -70,6 +70,23 @@ export type ExerciseWithRounds = Omit<Exercise, 'roundsCnt' | 'averageTime'> & {
   rounds: Round[];
 };
 
+export async function checkTables__DEV() {
+  if (!__DEV__) {
+    return null;
+  }
+  try {
+    const trx = await getTransaction('checkTables__DEV');
+    const r = await executeSql(
+      trx,
+      'select * from exercise x left join round r on r.exId = x.id',
+    );
+
+    console.log(r);
+  } catch (err) {
+    console.log('checkTables__DEV', err);
+  }
+}
+
 export async function createTables() {
   console.log('\n\n\nStart creating tables.');
 
@@ -82,6 +99,8 @@ export async function createTables() {
     await Promise.all([
       //   executeSql(trx, 'delete from round;'),
       //   executeSql(trx, 'delete from exercise;'),
+      //   executeSql(trx, 'drop table round;'),
+      //   executeSql(trx, 'drop table exercise;'),
       executeSql(trx, createExTableSql),
       executeSql(trx, createRoundsTableSql),
     ]);
