@@ -93,7 +93,7 @@ export default function Statistics({ dates, refresh }: Props) {
       })}
       onPress={triggerExpand}>
       <View style={styles.expandIndicator}>
-        <Text>{!expanded && 'Expand'}</Text>
+        <Text>{!expanded && t('overview.stats_expand')}</Text>
         <Entypo
           name={expanded ? 'chevron-thin-down' : 'chevron-thin-up'}
           size={expanded ? 15 : 24}

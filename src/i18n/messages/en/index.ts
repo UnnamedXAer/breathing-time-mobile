@@ -139,6 +139,7 @@ export default {
     stats_rounds: 'Rounds: ',
     stats_avg_round_time: 'Avg round time: ',
     stats_max_round_time: 'Max round time: ',
+    stats_expand: 'Expand',
   },
   details: {
     title: 'Session results',
