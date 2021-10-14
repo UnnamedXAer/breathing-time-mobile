@@ -38,8 +38,8 @@ export default function SummaryScreen({ navigation }: Props) {
   const [savingError, setSavingError] = useState<null | string>(null);
   const [resultsSaved, setResultsSaved] = useState(false);
 
-  //   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
-  const [holdTimes, setHoldTimes] = useState(getRandomResults());
+  const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
+  //   const [holdTimes, setHoldTimes] = useState(getRandomResults());
   const [selectedRounds, setSelectedRounds] = useState<boolean[]>(
     Array(holdTimes.length).fill(true),
   );
@@ -74,9 +74,9 @@ export default function SummaryScreen({ navigation }: Props) {
             completeDate.current.getTime() - 1000 * (60 + i) * (60 + i / 10) * 24 * i,
           ),
         );
-        const newHoldTimes = getRandomResults();
-        setHoldTimes(newHoldTimes);
-        setSelectedRounds(Array(newHoldTimes.length).fill(true));
+        // const newHoldTimes = getRandomResults();
+        // setHoldTimes(newHoldTimes);
+        // setSelectedRounds(Array(newHoldTimes.length).fill(true));
 
         // throw new Error(t('ex.summary.save_error'));
         i++;
