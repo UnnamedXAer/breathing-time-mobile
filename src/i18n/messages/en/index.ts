@@ -133,6 +133,12 @@ export default {
     read_results_error: 'Sorry, failed load the results.',
     read_settings_error: 'Sorry, failed load the settings.',
     incorrect_dates: 'Incorrect dates range.',
+    stats_title_total: 'Total:',
+    stats_title_range: 'Selected date range:',
+    stats_sessions: 'Sessions: ',
+    stats_rounds: 'Rounds: ',
+    stats_avg_round_time: 'Avg round time: ',
+    stats_max_round_time: 'Max round time: ',
   },
   details: {
     title: 'Session results',

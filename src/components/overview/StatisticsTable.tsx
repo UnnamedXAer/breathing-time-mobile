@@ -1,3 +1,4 @@
+import { t } from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { OverviewStatistics } from '../../../storage/sqlite';
@@ -14,12 +15,16 @@ export default function StatisticsTable({ statistics }: Props) {
       <View style={styles.statistics}>
         {statistics && (
           <>
-            <StatisticsTableColumn side="left" data={statistics.total} title="Total:" />
+            <StatisticsTableColumn
+              side="left"
+              data={statistics.total}
+              title={t('overview.stats_title_total')}
+            />
             {statistics.range && (
               <StatisticsTableColumn
                 side="right"
                 data={statistics.range}
-                title="Selected date range:"
+                title={t('overview.stats_title_range')}
               />
             )}
           </>
@@ -45,19 +50,19 @@ function StatisticsTableColumn({ data, title, side }: ColumnProps) {
       }}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.row}>
-        <Text style={styles.hCell}>Sessions: </Text>
+        <Text style={styles.hCell}>{t('overview.stats_sessions')}</Text>
         <Text style={styles.vCell}>{data.exCnt}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.hCell}>Rounds: </Text>
+        <Text style={styles.hCell}>{t('overview.stats_rounds')}</Text>
         <Text style={styles.vCell}>{data.roundCnt}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.hCell}>Avg round time: </Text>
+        <Text style={styles.hCell}>{t('overview.stats_avg_round_time')}</Text>
         <Text style={styles.vCell}>{data.avgRoundTime} s</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.hCell}>Max round time: </Text>
+        <Text style={styles.hCell}>{t('overview.stats_max_round_time')}</Text>
         <Text style={styles.vCell}>{data.maxRoundTime} s</Text>
       </View>
     </View>

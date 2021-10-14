@@ -137,6 +137,13 @@ const pl: LocaleMessages = {
     read_results_error: 'Przepraszam, niew udało się wczytać wyników',
     read_settings_error: 'Przepraszam, niew udało się wczytać statystyk.',
     incorrect_dates: 'Niepoprawny zakres dat.',
+
+    stats_title_total: 'Ogółem:',
+    stats_title_range: 'Wybrany zakres dat:',
+    stats_sessions: 'Sesje: ',
+    stats_rounds: 'Rundy: ',
+    stats_avg_round_time: 'Śr. czas rundy: ',
+    stats_max_round_time: 'Maks. czas rundy: ',
   },
   details: {
     title: 'Wyniki sesji',
