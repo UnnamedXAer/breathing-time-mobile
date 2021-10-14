@@ -3,7 +3,7 @@
 		"name": "Breathing Time",
 		"slug": "breathing-time",
 		"scheme": "breathing-time",
-		"version": "1.0.0",
+		"version": "2.0.0",
 		"description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
 		"orientation": "portrait",
 		"platforms": [
