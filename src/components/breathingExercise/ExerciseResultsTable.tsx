@@ -79,7 +79,7 @@ const ExerciseResultsTable = ({
       />
 
       <View style={styles.averageContainer}>
-        <Text style={{ fontSize: cellFontSize }}>
+        <Text style={{ fontSize: cellFontSize, textAlign: 'center' }}>
           {t('ex.summary.averageTime')}{' '}
           <Text style={{ fontWeight: 'bold' }}> {averageTime}</Text>{' '}
           {t('ex.summary.seconds', {
