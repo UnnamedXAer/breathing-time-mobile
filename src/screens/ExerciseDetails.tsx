@@ -129,7 +129,6 @@ export default function ExerciseDetails({
           <Text>{t('details.exercise_not_found')}</Text>
         )}
       </View>
-      {__DEV__ && <Button onPress={getExercise} mode="text" title="refresh" />}
     </View>
   );
 }
@@ -139,9 +138,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   scrollContent: {
-    paddingBottom: Layout.spacing(1),
+    paddingBottom: Layout.spacing(Layout.window.height > 600 ? 3 : 1),
     alignItems: 'center',
-    justifyContent: 'center',
   },
   container: {
     padding: Layout.spacing(2),

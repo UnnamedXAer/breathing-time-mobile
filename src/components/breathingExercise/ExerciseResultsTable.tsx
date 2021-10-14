@@ -43,7 +43,7 @@ const ExerciseResultsTable = ({
         ])}
       </Text>
       <FlatList
-        style={{ marginTop: Layout.spacing(2) }}
+        style={styles.list}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={<SummaryResultsHeader onPress={share} />}
         data={exercise.rounds}
@@ -94,6 +94,7 @@ const ExerciseResultsTable = ({
 export default ExerciseResultsTable;
 
 const styles = StyleSheet.create({
+  list: { marginTop: Layout.spacing(2) },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
   },
   averageContainer: {
     marginVertical: Layout.spacing(2),
+    flexGrow: 1,
   },
   completeDateText: { textAlign: 'center' },
 });

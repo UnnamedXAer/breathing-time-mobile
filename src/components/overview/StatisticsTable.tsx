@@ -70,10 +70,12 @@ function StatisticsTableColumn({ data, title, side }: ColumnProps) {
 }
 
 const fontSize = (() => {
-  let factor = 1.6;
-  if (Layout.window.width < 350) factor = 1.4;
-  else if (Layout.window.width < 600) factor = 1.8;
+  let factor: number;
+  if (Layout.window.width < 365) factor = 1.4;
+  else if (Layout.window.width < 501) factor = 1.6;
+  else if (Layout.window.width < 701) factor = 1.8;
   else factor = 2.5;
+
   return Layout.spacing(factor);
 })();
 
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
   hCell: {
     fontSize,
-    width: Layout.window.width < 350 ? 90 : Layout.window.width < 410 ? 110 : 130,
+    width: Layout.window.width < 350 ? 90 : Layout.window.width < 420 ? 110 : 130,
   },
   vCell: {
     fontSize,
