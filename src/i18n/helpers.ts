@@ -17,12 +17,13 @@ function findLocaleInSystems() {
   if (matchedLang) {
     return matchedLang;
   }
+
   return null;
 }
 
 export function updateLocale(newLocale: Locale) {
   const locale =
     newLocale === Locales.Default ? findLocaleInSystems() || Locales.EN : newLocale;
-  console.log('new locale: ', newLocale, 'setting locale to:', locale);
+
   I18n.locale = locale;
 }

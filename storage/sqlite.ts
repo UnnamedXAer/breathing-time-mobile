@@ -296,7 +296,7 @@ export async function getExerciseDetails(id: number) {
 export function removeRound(id: Round['id']) {
   return new Promise((resolve, reject) => {
     const errCb = (_: SQLTransaction, err: SQLError) => {
-      console.log('remove round:', err);
+      __DEV__ && console.log('remove round:', err);
       reject(err);
       return true;
     };
