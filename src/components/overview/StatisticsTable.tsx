@@ -43,7 +43,7 @@ function StatisticsTableColumn({ data, title, side }: ColumnProps) {
         flex: 0.5,
         alignItems: 'center',
       }}>
-      <Text>{title}</Text>
+      <Text style={styles.title}>{title}</Text>
       <View style={styles.row}>
         <Text style={styles.hCell}>Sessions: </Text>
         <Text style={styles.vCell}>{data.exCnt}</Text>
@@ -63,6 +63,14 @@ function StatisticsTableColumn({ data, title, side }: ColumnProps) {
     </View>
   );
 }
+console.log(Layout.window.width, Layout.window.height);
+const fontSize = (() => {
+  let factor = 1.6;
+  if (Layout.window.width < 350) factor = 1.4;
+  else if (Layout.window.width < 600) factor = 1.8;
+  else factor = 2.5;
+  return Layout.spacing(factor);
+})();
 
 const styles = StyleSheet.create({
   container: {
@@ -70,7 +78,10 @@ const styles = StyleSheet.create({
   },
   statistics: {
     flexDirection: 'row',
-    maxWidth: 400,
+    maxWidth: 430,
+  },
+  title: {
+    fontSize,
   },
   row: {
     flexDirection: 'row',
@@ -78,9 +89,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   hCell: {
-    width: 110,
+    fontSize,
+    width: Layout.window.width < 350 ? 90 : Layout.window.width < 410 ? 110 : 130,
   },
   vCell: {
+    fontSize,
     flex: 1,
   },
 });
