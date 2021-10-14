@@ -17,7 +17,6 @@ import {
 import { SQLError } from 'expo-sqlite';
 import ExerciseResultsTable from '../components/breathingExercise/ExerciseResultsTable';
 import { shareExerciseResults } from '../helpers/share';
-import Button from '../components/ui/Button';
 
 export default function ExerciseDetails({
   navigation,
