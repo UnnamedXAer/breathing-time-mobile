@@ -68,7 +68,7 @@ function StatisticsTableColumn({ data, title, side }: ColumnProps) {
     </View>
   );
 }
-console.log(Layout.window.width, Layout.window.height);
+
 const fontSize = (() => {
   let factor = 1.6;
   if (Layout.window.width < 350) factor = 1.4;

@@ -88,8 +88,6 @@ export async function checkTables__DEV() {
 }
 
 export async function createTables() {
-  console.log('\n\n\nStart creating tables.');
-
   const createExTableSql =
     'create table if not exists exercise (id integer primary key not null, date_time integer not null);';
   const createRoundsTableSql =
