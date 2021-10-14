@@ -33,7 +33,11 @@ export default function HomeScreen({ navigation }: RootStackScreenProps<'Home'>)
           <CoughingSvg fillColor={fillColor} />
         </Card>
         <Card label={t('home.overview')} onPress={() => navigation.navigate('Overview')}>
-          <SimpleLineIcons name="chart" size={48} color={fillColor} />
+          <SimpleLineIcons
+            name="chart"
+            size={Layout.window.width < 350 ? 32 : 48}
+            color={fillColor}
+          />
         </Card>
         <Card
           label={t('home.exercise_instructions')}
