@@ -19,27 +19,12 @@ import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
 
-function getRandomResults() {
-  const len = Math.floor(Math.random() * (5 - 1 + 1) + 1);
-  const out = [
-    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
-    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
-    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
-    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
-    Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
-  ];
-
-  out.length = len;
-  return out;
-}
-
 export default function SummaryScreen({ navigation }: Props) {
   const [saving, setSaving] = useState(false);
   const [savingError, setSavingError] = useState<null | string>(null);
   const [resultsSaved, setResultsSaved] = useState(false);
 
   const holdTimes = useSelector((state: RootState) => state.exercise.holdTimes);
-  //   const [holdTimes, setHoldTimes] = useState(getRandomResults());
   const [selectedRounds, setSelectedRounds] = useState<boolean[]>(
     Array(holdTimes.length).fill(true),
   );
@@ -64,23 +49,9 @@ export default function SummaryScreen({ navigation }: Props) {
 
     setSaving(true);
     setSavingError(null);
-    let i = 0;
     try {
       await createTables();
-      do {
-        await saveRounds(
-          toSave,
-          new Date(
-            completeDate.current.getTime() - 1000 * (60 + i) * (60 + i / 10) * 24 * i,
-          ),
-        );
-        // const newHoldTimes = getRandomResults();
-        // setHoldTimes(newHoldTimes);
-        // setSelectedRounds(Array(newHoldTimes.length).fill(true));
-
-        // throw new Error(t('ex.summary.save_error'));
-        i++;
-      } while (__DEV__ && i < 1);
+      await saveRounds(toSave, new Date(completeDate.current.getTime()));
       setResultsSaved(true);
       ToastAndroid.show(t('ex.summary.rounds_saved_toast'), ToastAndroid.SHORT);
     } catch (err) {
