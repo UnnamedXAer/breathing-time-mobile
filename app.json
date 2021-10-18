@@ -3,7 +3,7 @@
 		"name": "Breathing Time",
 		"slug": "breathing-time",
 		"scheme": "breathing-time",
-		"version": "2.0.1",
+		"version": "2.0.2",
 		"description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
 		"orientation": "portrait",
 		"platforms": [
@@ -36,7 +36,7 @@
 		},
 		"ios": {
 			"bundleIdentifier": "com.unnamedxaer.breathingtime",
-			"buildNumber": "2.0.1",
+			"buildNumber": "2.0.2",
 			"userInterfaceStyle": "automatic",
 			"supportsTablet": true
 		},
