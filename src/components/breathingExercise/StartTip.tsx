@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontSize: Layout.window.height * 0.06,
+    fontSize: Layout.window.height * 0.05,
     marginBottom: Layout.window.height * 0.1,
   },
 });
