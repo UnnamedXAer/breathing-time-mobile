@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet, ToastAndroid } from 'react-native';
 import { Text, View } from '../../components/ui/Themed';
 import Layout from '../../constants/Layout';
 import Breathing from '../../screens/breathingExercise/BreathingScreen';
@@ -14,12 +14,30 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ExerciseTabParamList } from './types';
 import { t } from 'i18n-js';
 import { Fonts } from '../../constants/fonts';
+import { RootState } from '../../store/types';
+import { useSelector } from 'react-redux';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
 export function BreathingExerciseTabNavigator() {
   const scheme = useColorScheme();
   const backgroundColor = Colors[scheme].background;
+  const exerciseStarted = useSelector((state: RootState) => state.exercise.started);
+  console.log(exerciseStarted);
+  React.useEffect(() => {
+    if (!exerciseStarted) {
+      return;
+    }
+    activateKeepAwake();
+    ToastAndroid.show('--> keep awake Activated', ToastAndroid.SHORT);
+    console.log('--> keep awake Activated', Date());
+    return () => {
+      deactivateKeepAwake();
+      ToastAndroid.show('--> keep awake Deactivated', ToastAndroid.SHORT);
+      console.log('--> keep awake Deactivated', Date());
+    };
+  }, [exerciseStarted]);
 
   return (
     <View style={{ flex: 1, backgroundColor }}>
