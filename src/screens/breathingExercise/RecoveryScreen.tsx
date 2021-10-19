@@ -1,7 +1,7 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { AppState, AppStateStatus, Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
@@ -19,6 +19,16 @@ import { RootState } from '../../store/types';
 import { TimeoutReturn } from '../../types/types';
 
 let lastPressedAt = 0;
+
+function calculateCounter(screenStartTime: number, recoveryTime: number): number {
+  const screenTime = (Date.now() - screenStartTime) / 1000;
+
+  if (recoveryTime - screenTime <= 1) {
+    return 1;
+  }
+  const newCounter = recoveryTime - Math.floor(screenTime);
+  return newCounter;
+}
 
 export default function RecoveryScreen({
   navigation,
@@ -50,6 +60,20 @@ export default function RecoveryScreen({
     }
     navigation.jumpTo(nextScreenName);
   }, [focused, isLastRound, navigation]);
+
+  const appStateChangeHandler = (appState: AppStateStatus) => {
+    if (appState === 'active' && startIntervalTime.current > 0) {
+      setCounter(calculateCounter(startIntervalTime.current, recoveryTime));
+    }
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', appStateChangeHandler);
+    return () => {
+      AppState.removeEventListener('change', appStateChangeHandler);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (userForcedNextScreen) {
