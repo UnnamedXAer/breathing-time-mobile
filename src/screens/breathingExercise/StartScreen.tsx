@@ -10,10 +10,13 @@ import Layout from '../../constants/Layout';
 import Header from '../../components/breathingExercise/Header';
 import WarningNote from '../../components/WarningNote';
 import { t } from 'i18n-js';
+import { useDispatch } from 'react-redux';
+import { startExercise as startExerciseAction } from '../../store/exercise';
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
 const StartScreen: React.FC<Props> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const countdownTime = __DEV__ ? 0 : 3;
   const [count, setCount] = useState(false);
   const timeoutRef = useRef<TimeoutReturn>(void 0);
@@ -26,13 +29,14 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
     if (started && counter <= 0) {
       setCount(false);
       const timeout = setTimeout(() => {
+        dispatch(startExerciseAction());
         navigation.jumpTo('Breathing');
       }, 999);
       return () => {
         clearTimeout(timeout);
       };
     }
-  }, [counter, navigation, started]);
+  }, [counter, dispatch, navigation, started]);
 
   useEffect(() => {
     if (!count) {
