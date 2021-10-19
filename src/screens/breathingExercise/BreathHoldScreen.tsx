@@ -1,7 +1,15 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Vibration, View } from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Vibration,
+  View,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
@@ -19,6 +27,12 @@ import { addHoldTime } from '../../store/exercise';
 
 let lastPressedAt = 0;
 
+function calculateCounter(screenStartTime: number): number {
+  const screenTimeMs = Date.now() - screenStartTime;
+  const newCounter = Math.floor(screenTimeMs / 1000);
+  return newCounter;
+}
+
 export default function BreathHoldScreen({
   navigation,
 }: ExerciseTabScreenProps<'BreathHold'>) {
@@ -33,8 +47,10 @@ export default function BreathHoldScreen({
   useOverrideHardwareBack(navigation as any);
 
   const pushHoldTime = () => {
-    dispatch(addHoldTime((Date.now() - startIntervalTime.current) / 1000));
-    // __devCheckActualTime(startIntervalTime.current, counter);
+    const endTime = Date.now();
+    const holdTime = (endTime - startIntervalTime.current) / 1000;
+    dispatch(addHoldTime(holdTime));
+    // __devCheckActualTime(counter, startIntervalTime.current, endTime);
     startIntervalTime.current = -1;
   };
 
@@ -44,6 +60,20 @@ export default function BreathHoldScreen({
     navigation.jumpTo('Recovery');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
+
+  const appStateChangeHandler = (appState: AppStateStatus) => {
+    if (appState === 'active' && startIntervalTime.current > 0) {
+      setCounter(calculateCounter(startIntervalTime.current));
+    }
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', appStateChangeHandler);
+    return () => {
+      AppState.removeEventListener('change', appStateChangeHandler);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!focused) {
@@ -154,20 +184,19 @@ const styles = StyleSheet.create({
   },
 });
 
-function __devCheckActualTime(startIntervalTime: number, counter: number) {
+function __devCheckActualTime(counter: number, startTime: number, endTime: number) {
   if (__DEV__) {
-    const realTime = (Date.now() - startIntervalTime) / 1000;
-    const counterTime = counter / 1000;
+    const realTime = (endTime - startTime) / 1000;
 
-    console.log('Breath Hold (->', realTime, '|', counterTime, '|', counter);
-    if (realTime - counterTime >= 1) {
+    console.log('Breath Hold (->', realTime, '|', counter);
+    if (realTime - counter >= 1) {
       const msg = `
 			  Actual screen time is greater than counter time for more than 1s.
-			  recoveryTime: ${counter};
-			  startTime: ${startIntervalTime}
-			  counter: ${realTime};
-			  counterTime: ${counterTime};
-			  difference: ${realTime - counterTime};
+			  startTime: ${startTime}
+			  endTime: ${endTime}
+			  counter: ${counter};
+			  realTime: ${realTime};
+			  difference: ${realTime - counter};
 			  ---------------------------------------`;
       console.warn(msg);
     }
