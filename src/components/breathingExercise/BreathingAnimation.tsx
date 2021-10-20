@@ -60,6 +60,7 @@ const BreathingAnimation: React.FC<Props> = ({ counter, duration, disableAnimati
     const animHandler = Animated.timing(anim, {
       toValue: animEndValue,
       duration,
+      // @todo: #6 check if useNativeDriver set to true improve performance
       useNativeDriver: false,
     });
 
