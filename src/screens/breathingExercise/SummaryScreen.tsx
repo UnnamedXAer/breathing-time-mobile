@@ -19,6 +19,19 @@ import { RootState } from '../../store/types';
 
 interface Props extends ExerciseTabScreenProps<'Summary'> {}
 
+// function getRandomResults() {
+//   const len = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+//   const out = [
+//     Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+//     Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+//     Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+//     Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+//     Math.floor(Math.random() * (256000 - 30000 + 1) + 30000) / 1000,
+//   ];
+//   out.length = len;
+//   return out;
+// }
+
 export default function SummaryScreen({ navigation }: Props) {
   const [saving, setSaving] = useState(false);
   const [savingError, setSavingError] = useState<null | string>(null);

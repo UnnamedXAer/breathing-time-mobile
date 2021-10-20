@@ -97,8 +97,8 @@ export async function createTables() {
     await Promise.all([
       //   executeSql(trx, 'delete from round;'),
       //   executeSql(trx, 'delete from exercise;'),
-      //   executeSql(trx, 'drop table round;'),
-      //   executeSql(trx, 'drop table exercise;'),
+      //   executeSql(trx, 'drop table if exists round;'),
+      //   executeSql(trx, 'drop table if exists exercise;'),
       executeSql(trx, createExTableSql),
       executeSql(trx, createRoundsTableSql),
     ]);
