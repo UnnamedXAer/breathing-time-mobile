@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   statistics: {
     flexDirection: 'row',
-    maxWidth: 430,
+    maxWidth: Layout.window.width > 700 ? 600 : 430,
   },
   title: {
     fontSize,
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   },
   hCell: {
     fontSize,
+    // @TODO: #5 fix for 700+ width screens
     width: Layout.window.width < 350 ? 90 : Layout.window.width < 420 ? 110 : 130,
   },
   vCell: {
