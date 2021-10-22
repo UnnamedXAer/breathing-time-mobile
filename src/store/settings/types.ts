@@ -12,6 +12,7 @@ export const Themes = {
   Light: 'light',
   Dark: 'dark',
   Bluish: 'bluish',
+  Greenish: 'greenish',
 } as const;
 
 export const Locales = {
