@@ -7,6 +7,7 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
+import { releaseChannel } from 'expo-updates';
 import Headline from '../components/ui/Headline';
 import { Text } from '../components/ui/Themed';
 import Colors from '../constants/Colors';
@@ -62,10 +63,14 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
         <View style={styles.footerContainer}>
           <Text
             style={{
+              textAlign: 'center',
               color: Colors[scheme].textRGBA(0.7),
             }}>
             {(t('about.app_version'), [Constants.manifest?.version])}
-            {__DEV__ ? ' __DEV__' : null}
+            {__DEV__ ? '\n __DEV__' : null}
+            {releaseChannel === 'production'
+              ? null
+              : `\nrelease channel: ${releaseChannel as string}`}
           </Text>
         </View>
       </View>
