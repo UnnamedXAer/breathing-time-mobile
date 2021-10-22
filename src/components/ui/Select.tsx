@@ -48,6 +48,18 @@ export default function Select<T extends DataRow>({
       </View>
       <View style={styles.selectContainer}>
         <ModalSelector
+          optionTextStyle={{
+            color: Colors[scheme].text,
+          }}
+          overlayStyle={{
+            backgroundColor:
+              Colors[scheme].statusBarStyle === 'dark'
+                ? Colors[scheme].textRGBA(0.5)
+                : Colors.dark.textRGBA(0.1),
+          }}
+          optionContainerStyle={{
+            backgroundColor: Colors[scheme].backgroundRGBA(0.9),
+          }}
           initValue={initValue}
           data={data}
           backdropPressToClose
