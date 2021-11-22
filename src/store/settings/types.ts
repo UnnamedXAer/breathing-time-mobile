@@ -13,6 +13,7 @@ export const Themes = {
   Dark: 'dark',
   Bluish: 'bluish',
   Greenish: 'greenish',
+  Reddish: 'reddish',
 } as const;
 
 export const Locales = {
