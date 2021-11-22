@@ -52,10 +52,7 @@ export default function Select<T extends DataRow>({
             color: Colors[scheme].text,
           }}
           overlayStyle={{
-            backgroundColor:
-              Colors[scheme].statusBarStyle === 'dark'
-                ? Colors[scheme].textRGBA(0.5)
-                : Colors.dark.textRGBA(0.1),
+            backgroundColor: Colors[scheme].textRGBA(0.5),
           }}
           optionContainerStyle={{
             backgroundColor: Colors[scheme].backgroundRGBA(0.9),
