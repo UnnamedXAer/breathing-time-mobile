@@ -12,6 +12,7 @@ import WarningNote from '../../components/WarningNote';
 import { t } from 'i18n-js';
 import { useDispatch } from 'react-redux';
 import { startExercise as startExerciseAction } from '../../store/exercise';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
@@ -68,18 +69,20 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
     setStarted(true);
   };
 
+  const warningTextSize = Layout.spacing(
+    Layout.window.height < 600 ? 1.3 : Layout.window.height < 700 ? 1.8 : 2.2,
+  );
+
   return (
     <View style={styles.container}>
       <Header title={t('ex.start.title')} />
       <View style={styles.content}>
         {!started ? (
           <>
-            <WarningNote
-              style={styles.warningNote}
-              textSize={Layout.spacing(
-                Layout.window.height < 600 ? 1.3 : Layout.window.height < 700 ? 1.8 : 2.2,
-              )}
-            />
+            <ScrollView>
+              <WarningNote style={styles.warningNote} textSize={warningTextSize} />
+            </ScrollView>
+
             <View style={styles.startBtnWrapper}>
               <AppButton
                 onPress={startExercise}

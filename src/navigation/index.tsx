@@ -54,6 +54,7 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
           title: Constants.manifest!.name,
           headerTitle: (props) => (
             <Text
+              adjustsFontSizeToFit
               {...props}
               style={{
                 color: props.tintColor,

@@ -8,8 +8,8 @@ import {
   Pressable,
   StyleSheet,
   Vibration,
-  View,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
@@ -122,8 +122,8 @@ export default function BreathHoldScreen({
   };
 
   return (
-    <Pressable style={styles.pressable} onPress={screenPressHandler}>
-      <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Pressable style={styles.pressable} onPress={screenPressHandler}>
         <Header
           title={t('ex.hold.title')}
           roundInfo={!started || showAlert ? void 0 : t('ex.hold.round_info')}
@@ -149,6 +149,7 @@ export default function BreathHoldScreen({
               mode="contained"
               containerStyle={styles.btnContainer}
               textStyle={styles.btnText}
+              allowFontScaling={false}
             />
 
             <Footer
@@ -157,19 +158,19 @@ export default function BreathHoldScreen({
               onLeaveConfirm={pushHoldTime}></Footer>
           </>
         )}
-      </View>
-    </Pressable>
+      </Pressable>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   pressable: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  container: {
+    flexGrow: 1,
   },
   title: {
     fontSize: 20,

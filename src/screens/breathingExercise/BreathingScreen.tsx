@@ -1,7 +1,8 @@
 import { useIsFocused } from '@react-navigation/core';
 import { t } from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import BreathingAnimation from '../../components/breathingExercise/BreathingAnimation';
 import Footer from '../../components/breathingExercise/Footer';
@@ -109,8 +110,8 @@ export default function BreathingScreen({
   };
 
   return (
-    <Pressable style={styles.pressable} onPress={screenPressHandler}>
-      <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Pressable style={styles.pressable} onPress={screenPressHandler}>
         <Header title={t('ex.breathing.title')} />
         {!started ? (
           <StartTip text={t('ex.breathing.start_tip')} />
@@ -129,19 +130,19 @@ export default function BreathingScreen({
               navigation={navigation}></Footer>
           </>
         )}
-      </View>
-    </Pressable>
+      </Pressable>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   pressable: {
     flex: 1,
-  },
-  container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  container: {
+    flexGrow: 1,
   },
 });
 

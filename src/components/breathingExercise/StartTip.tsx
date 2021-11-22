@@ -20,7 +20,9 @@ const StartTip: React.FC<Props> = ({ text }) => {
           backgroundColor: Colors[scheme].backgroundRGBA(0.6),
         },
       ]}>
-      <Text style={styles.text}>{text}</Text>
+      <Text style={styles.text} adjustsFontSizeToFit>
+        {text}
+      </Text>
     </View>
   );
 };

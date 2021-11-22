@@ -40,7 +40,9 @@ export function BreathingExerciseTabNavigator() {
       <LinearGradient
         style={styles.gradient}
         colors={[Colors[scheme].primary, backgroundColor]}>
-        <Text style={styles.customTitleText}>{t('ex.title')}</Text>
+        <Text style={styles.customTitleText} numberOfLines={1} adjustsFontSizeToFit>
+          {t('ex.title')}
+        </Text>
       </LinearGradient>
 
       <BottomTab.Navigator

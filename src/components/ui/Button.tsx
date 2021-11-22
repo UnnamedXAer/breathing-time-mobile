@@ -29,6 +29,7 @@ interface Props {
   color?: string;
   containerStyle?: ViewStyle;
   textStyle?: TextStyle;
+  allowFontScaling?: boolean;
 }
 
 const fontSizeMap = {
@@ -49,6 +50,7 @@ export default function Button({
   color,
   containerStyle,
   textStyle,
+  allowFontScaling,
 }: Props) {
   let colorScheme = useColorScheme();
   if (theme) {
@@ -135,7 +137,10 @@ export default function Button({
           </View>
         )}
         {title && (
-          <Text style={[styles.text, textStyle]} selectable={false}>
+          <Text
+            style={[styles.text, textStyle]}
+            allowFontScaling={allowFontScaling}
+            selectable={false}>
             {title}
           </Text>
         )}

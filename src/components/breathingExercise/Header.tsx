@@ -16,7 +16,13 @@ const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text
+        style={styles.title}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        allowFontScaling={false}>
+        {title}
+      </Text>
       {roundInfo && <Text style={[styles.roundInfo, { color }]}>{roundInfo}</Text>}
       {children}
     </View>

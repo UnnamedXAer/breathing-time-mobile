@@ -24,7 +24,9 @@ const Counter: React.FC<Props> = ({
   return (
     <View style={[styles.container, containerStyle]}>
       {text && <Text style={[styles.text]}>{text}</Text>}
-      <Text style={[styles.value, { fontSize }]}>{value}</Text>
+      <Text style={[styles.value, { fontSize }]} allowFontScaling={false}>
+        {value}
+      </Text>
     </View>
   );
 };
