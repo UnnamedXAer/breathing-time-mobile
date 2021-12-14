@@ -58,6 +58,7 @@ export const getSavedSettings = createAsyncThunk<SavedSettings>(
       return settings;
     } catch (err) {
       __DEV__ && console.log('Could note read settings due to:', err);
+      // @TODO: #9 look into case when something was thrown;
       throw err;
     }
   },
