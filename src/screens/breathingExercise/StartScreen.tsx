@@ -11,7 +11,10 @@ import Header from '../../components/breathingExercise/Header';
 import WarningNote from '../../components/WarningNote';
 import { t } from 'i18n-js';
 import { useDispatch } from 'react-redux';
-import { startExercise as startExerciseAction } from '../../store/exercise';
+import {
+  loadBreathSound,
+  startExercise as startExerciseAction,
+} from '../../store/exercise';
 import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
@@ -67,6 +70,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   const startExercise = () => {
     setCount(true);
     setStarted(true);
+    dispatch(loadBreathSound());
   };
 
   const warningTextSize = Layout.spacing(

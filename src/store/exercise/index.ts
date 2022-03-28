@@ -1,18 +1,24 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Audio } from 'expo-av';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
+  BreathPace,
   ExerciseCustomizableProps,
   ExerciseCustomizableState,
   ExerciseState,
   SavedPreferences,
+  SoundAndStatus,
   UpdatePreferencesPayload,
 } from './types';
 import { productionExerciseDefaultState } from './defaultState';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState } from '../types';
 import { ToastAndroid } from 'react-native';
+import { Asset } from 'expo-asset';
 
 const devInitialState: ExerciseState = {
   started: false,
+  disableBreathing: true,
   disableAnimation: true,
   disableStartTips: true,
   numberOfRounds: 3,
@@ -20,6 +26,8 @@ const devInitialState: ExerciseState = {
   recoveryTime: 5,
   breathTime: 2 * 1000,
   holdTimes: [] as number[],
+  breathSoundFetched: false,
+  breathSound: null,
 };
 
 export const sliceName = 'exercise' as const;
@@ -32,8 +40,34 @@ export const customizableExerciseStateProps = [
   'recoveryTime',
   'breathTime',
   'disableAnimation',
+  'disableBreathing',
   'disableStartTips',
 ] as ReadonlyArray<ExerciseCustomizableProps>;
+
+export const loadBreathSound = createAsyncThunk<
+  SoundAndStatus | null,
+  void,
+  { state: RootState }
+>(sliceName + '/loadBreathSound', async (payload, { getState }) => {
+  const { exercise: state } = getState();
+  //   if (state.breathSoundFetched) {
+  //     return null;
+  //   }
+
+  const sounds = {
+    [BreathPace.fast]: require('../../assets/sounds/breath_1400.wav') as Asset,
+    [BreathPace.normal]: require('../../assets/sounds/breath_2000.wav') as Asset,
+    [BreathPace.slow]: require('../../assets/sounds/breath_2600.wav') as Asset,
+  };
+  try {
+    const sound = await Audio.Sound.createAsync(sounds[state.breathTime]);
+    console.log('Is Loaded: ' + sound.status.isLoaded.toString());
+    return sound;
+  } catch (err) {
+    __DEV__ && console.log(`loadBreathSound: ${(err as Error).toString()}`);
+    throw err;
+  }
+});
 
 export const updatePreferences = createAsyncThunk<
   void,
@@ -155,6 +189,22 @@ const exerciseSlice = createSlice({
         "Error. Couldn't load your preferences.\nPlease verify them.",
         ToastAndroid.LONG,
       );
+    });
+
+    builder.addCase(loadBreathSound.pending, (state) => {
+      if (!state.breathSoundFetched) {
+        state.breathSoundFetched = true;
+      }
+    });
+
+    builder.addCase(loadBreathSound.fulfilled, (state, { payload: sound }) => {
+      if (sound !== null) {
+        state.breathSound = sound;
+      }
+    });
+
+    builder.addCase(loadBreathSound.rejected, () => {
+      ToastAndroid.show("Error. Couldn't load the breath sound.", ToastAndroid.SHORT);
     });
   },
 });

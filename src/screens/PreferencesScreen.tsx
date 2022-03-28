@@ -212,6 +212,14 @@ export default function PreferencesScreen({
           />
 
           <Switch
+            label={t('preferences.disable_breathing')}
+            value={exerciseConfig.disableBreathing}
+            onChange={(value) => {
+              dispatch(updatePreferences({ propName: 'disableBreathing', value }));
+            }}
+          />
+
+          <Switch
             label={t('preferences.disable_animation')}
             value={exerciseConfig.disableAnimation}
             onChange={(value) => {
