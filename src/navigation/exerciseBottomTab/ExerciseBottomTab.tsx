@@ -57,7 +57,11 @@ export function BreathingExerciseTabNavigator() {
           headerShown: false,
         }}>
         <BottomTab.Screen name="Start" component={Start} />
-        <BottomTab.Screen name="Breathing" component={Breathing} />
+        <BottomTab.Screen
+          name="Breathing"
+          component={Breathing}
+          initialParams={{ sound: { XXX: 'My sound!' } }}
+        />
         <BottomTab.Screen name="BreathHold" component={BreathHold} />
         <BottomTab.Screen name="Recovery" component={Recovery} />
         <BottomTab.Screen name="Summary" component={Summary} />

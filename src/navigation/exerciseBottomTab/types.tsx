@@ -5,7 +5,7 @@ import { RootStackParamList } from '../types';
 
 export type ExerciseTabParamList = {
   Start: undefined;
-  Breathing: undefined;
+  Breathing: { sound: { XXX: string } };
   BreathHold: undefined;
   Recovery: undefined;
   Summary: undefined;
