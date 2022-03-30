@@ -17,6 +17,9 @@ import { Fonts } from '../../constants/fonts';
 import { RootState } from '../../store/types';
 import { useSelector } from 'react-redux';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { SoundContext } from './SoundsContext';
+import { Audio } from 'expo-av';
+import { BreathPace, Sounds } from '../../constants/sounds';
 
 const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
@@ -24,6 +27,58 @@ export function BreathingExerciseTabNavigator() {
   const scheme = useColorScheme();
   const backgroundColor = Colors[scheme].background;
   const exerciseStarted = useSelector((state: RootState) => state.exercise.started);
+  const breathTime = useSelector((state: RootState) => state.exercise.breathTime);
+
+  const [breathSound, setBreathSound] = React.useState<{
+    sound: Audio.Sound | null;
+    pace: BreathPace;
+  }>({ sound: null, pace: breathTime });
+
+  React.useEffect(() => {
+    if (!exerciseStarted) {
+      console.log(
+        'effect load sound - skipped',
+        exerciseStarted,
+        // breathTime,
+        // breathSound.sound === null ? 'sound is empty ' : 'sound object',
+      );
+      return;
+    }
+
+    void (async () => {
+      console.log('about to create sound');
+      try {
+        const sound = (await Audio.Sound.createAsync(Sounds[breathTime])).sound;
+        console.log('sound created', sound._loaded);
+        setBreathSound((pV) => ({ ...pV, sound: sound }));
+      } catch (err) {
+        __DEV__ && console.log('createSound: ERROR: ' + (err as Error).toString());
+      }
+    })();
+  }, [breathTime, exerciseStarted]);
+
+  //   console.log('sound: ', breathSound.sound !== null);
+
+  React.useEffect(() => {
+    if (!exerciseStarted && breathSound.sound !== null) {
+      () => {
+        console.log('sound cleanup');
+        if (breathSound.sound == null) {
+          console.log('effect cleanup - skipped');
+          return;
+        }
+        breathSound.sound
+          .unloadAsync()
+          .then(() => {
+            console.log('sound unloaded');
+            setBreathSound((pv) => ({ ...pv, sound: null }));
+          })
+          .catch((err) => {
+            __DEV__ && console.log('unloadSound: ' + (err as Error).toString());
+          });
+      };
+    }
+  }, [breathSound.sound, exerciseStarted]);
 
   React.useEffect(() => {
     if (!exerciseStarted) {
@@ -36,37 +91,35 @@ export function BreathingExerciseTabNavigator() {
   }, [exerciseStarted]);
 
   return (
-    <View style={{ flex: 1, backgroundColor }}>
-      <LinearGradient
-        style={styles.gradient}
-        colors={[Colors[scheme].primary, backgroundColor]}>
-        <Text style={styles.customTitleText} numberOfLines={1} adjustsFontSizeToFit>
-          {t('ex.title')}
-        </Text>
-      </LinearGradient>
+    <SoundContext.Provider value={breathSound.sound}>
+      <View style={{ flex: 1, backgroundColor }}>
+        <LinearGradient
+          style={styles.gradient}
+          colors={[Colors[scheme].primary, backgroundColor]}>
+          <Text style={styles.customTitleText} numberOfLines={1} adjustsFontSizeToFit>
+            {t('ex.title')}
+          </Text>
+        </LinearGradient>
 
-      <BottomTab.Navigator
-        initialRouteName="Start"
-        sceneContainerStyle={{
-          padding: Layout.spacing(),
-          backgroundColor,
-        }}
-        screenOptions={{
-          tabBarStyle: styles.tabBar,
-          unmountOnBlur: true,
-          headerShown: false,
-        }}>
-        <BottomTab.Screen name="Start" component={Start} />
-        <BottomTab.Screen
-          name="Breathing"
-          component={Breathing}
-          initialParams={{ sound: { XXX: 'My sound!' } }}
-        />
-        <BottomTab.Screen name="BreathHold" component={BreathHold} />
-        <BottomTab.Screen name="Recovery" component={Recovery} />
-        <BottomTab.Screen name="Summary" component={Summary} />
-      </BottomTab.Navigator>
-    </View>
+        <BottomTab.Navigator
+          initialRouteName="Start"
+          sceneContainerStyle={{
+            padding: Layout.spacing(),
+            backgroundColor,
+          }}
+          screenOptions={{
+            tabBarStyle: styles.tabBar,
+            unmountOnBlur: true,
+            headerShown: false,
+          }}>
+          <BottomTab.Screen name="Start" component={Start} />
+          <BottomTab.Screen name="Breathing" component={Breathing} />
+          <BottomTab.Screen name="BreathHold" component={BreathHold} />
+          <BottomTab.Screen name="Recovery" component={Recovery} />
+          <BottomTab.Screen name="Summary" component={Summary} />
+        </BottomTab.Navigator>
+      </View>
+    </SoundContext.Provider>
   );
 }
 

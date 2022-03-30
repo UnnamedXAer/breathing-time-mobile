@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/core';
 import { t } from 'i18n-js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { RootState } from '../../store/types';
 
@@ -41,6 +42,8 @@ export default function BreathingScreen({
     setNextStep(true);
   }
 
+  const breathSound = useContext(SoundContext);
+
   const completeScreen = useCallback(() => {
     __devCheckActualBreathingTime(
       startIntervalTime.current,
@@ -51,34 +54,6 @@ export default function BreathingScreen({
     startIntervalTime.current = -1;
     navigation.jumpTo('BreathHold');
   }, [breathTime, breathsPerRound, counter, navigation]);
-
-  // //   async function loadSound() {
-  // //     __DEV__ && console.log('Loading Sound');
-  // //     const { sound } = await Audio.Sound.createAsync(
-  // //       // eslint-disable-next-line @typescript-eslint/no-var-requires
-  // //       require('../../assets/sounds/breath_1400.wav'),
-  // //     );
-  // //     setSound(sound);
-  // //   }
-
-  //   useEffect(() => {
-  //     void loadSound();
-  //   }, []);
-
-  //   useEffect(() => {
-  //     if (!sound) {
-  //       return;
-  //     }
-
-  //     return () => {
-  //       __DEV__ && console.log('Unloading Sound');
-  //       sound
-  //         .unloadAsync()
-  //         .catch(
-  //           (err) => __DEV__ && console.log(`Unload sound: ${(err as Error).toString()}`),
-  //         );
-  //     };
-  //   }, [sound]);
 
   useEffect(() => {
     if (!focused) {
@@ -107,7 +82,7 @@ export default function BreathingScreen({
   }, [breathTime, completeScreen, nextStep, userForcedNextStep]);
 
   useEffect(() => {
-    if (nextStep || !focused || !started /*|| !sound*/) {
+    if (nextStep || !focused || !started) {
       return;
     }
 
@@ -115,20 +90,22 @@ export default function BreathingScreen({
       startIntervalTime.current = Date.now();
     }
     const interval = setIntervalWithTimeout(() => {
-      //   try {
-      //     __DEV__ && console.log('Playing Sound');
-      //     //   void sound.replayAsync();
-      //     if (sound !== null) {
-      //       sound.sound
-      //         .replayAsync()
-      //         //   .playAsync()
-      //         .catch(
-      //           (err) => __DEV__ && console.log('Play sound: ' + (err as Error).toString()),
-      //         );
-      //     }
-      //   } catch (err) {
-      //     __DEV__ && console.log('SOUND_PLAYER: ' + (err as Error).toString());
-      //   }
+      if (breathSound !== null) {
+        try {
+          //   void sound.replayAsync();
+          __DEV__ && console.log('Playing Sound');
+          // @TODO: play it on first second
+          breathSound
+            .replayAsync()
+            .catch(
+              (err) => __DEV__ && console.log('Play sound: ' + (err as Error).toString()),
+            );
+        } catch (err) {
+          __DEV__ && console.log('SOUND_PLAYER: ' + (err as Error).toString());
+        }
+      } else {
+        __DEV__ && console.log('Sound is null', breathSound);
+      }
 
       setCounter((prev) => prev + 1);
     }, breathTime);
@@ -136,7 +113,7 @@ export default function BreathingScreen({
     return () => {
       interval.clear();
     };
-  }, [breathTime, focused, nextStep, /*sound,*/ started]);
+  }, [breathSound, breathTime, focused, nextStep, started]);
 
   const screenPressHandler = () => {
     if (!started) {
