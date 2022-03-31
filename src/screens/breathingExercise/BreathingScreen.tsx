@@ -1,4 +1,5 @@
 import { useIsFocused } from '@react-navigation/core';
+import { Sound } from 'expo-av/build/Audio';
 import { t } from 'i18n-js';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -9,6 +10,7 @@ import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
+import { BreathPace } from '../../constants/sounds';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
@@ -22,7 +24,7 @@ let lastPressedAt = 0;
 export default function BreathingScreen({
   navigation,
 }: ExerciseTabScreenProps<'Breathing'>) {
-  const [started, setStarted] = useCounterStarted(2000);
+  const [started, setStarted] = useCounterStarted(BreathPace.normal);
   const [counter, setCounter] = useState(1);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
@@ -37,12 +39,11 @@ export default function BreathingScreen({
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
+  const { sounds } = useContext(SoundContext);
 
   if (counter >= breathsPerRound && !nextStep) {
     setNextStep(true);
   }
-
-  const breathSound = useContext(SoundContext);
 
   const completeScreen = useCallback(() => {
     __devCheckActualBreathingTime(
@@ -54,6 +55,21 @@ export default function BreathingScreen({
     startIntervalTime.current = -1;
     navigation.jumpTo('BreathHold');
   }, [breathTime, breathsPerRound, counter, navigation]);
+
+  const playSound = useCallback((sound: Sound | null) => {
+    if (sound !== null) {
+      try {
+        __DEV__ && console.log('Playing Sound');
+        sound
+          .replayAsync()
+          .catch((err) => __DEV__ && console.log('Play sound: ', err as Error));
+      } catch (err) {
+        __DEV__ && console.log('SOUND_PLAYER: ', err as Error);
+      }
+    } else {
+      __DEV__ && console.log('Sound is null');
+    }
+  }, []);
 
   useEffect(() => {
     if (!focused) {
@@ -89,31 +105,21 @@ export default function BreathingScreen({
     if (startIntervalTime.current === -1) {
       startIntervalTime.current = Date.now();
     }
+    playSound(sounds.breathing);
+
     const interval = setIntervalWithTimeout(() => {
-      if (breathSound !== null) {
-        try {
-          //   void sound.replayAsync();
-          __DEV__ && console.log('Playing Sound');
-          // @TODO: play it on first second
-          breathSound
-            .replayAsync()
-            .catch(
-              (err) => __DEV__ && console.log('Play sound: ' + (err as Error).toString()),
-            );
-        } catch (err) {
-          __DEV__ && console.log('SOUND_PLAYER: ' + (err as Error).toString());
-        }
-      } else {
-        __DEV__ && console.log('Sound is null', breathSound);
-      }
+      playSound(sounds.breathing);
 
       setCounter((prev) => prev + 1);
     }, breathTime);
 
     return () => {
+      sounds.breathing?.stopAsync().catch((err) => {
+        __DEV__ && console.log('breathing: breathSound.stopAsync: ERROR:', err);
+      });
       interval.clear();
     };
-  }, [breathSound, breathTime, focused, nextStep, started]);
+  }, [sounds.breathing, breathTime, focused, nextStep, playSound, started]);
 
   const screenPressHandler = () => {
     if (!started) {
