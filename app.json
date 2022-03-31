@@ -1,47 +1,48 @@
 {
-	"expo": {
-		"name": "Breathing Time",
-		"slug": "breathing-time",
-		"scheme": "breathing-time",
-		"version": "4.0.1",
-		"description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
-		"orientation": "portrait",
-		"platforms": [
-			"android"
-		],
-		"userInterfaceStyle": "automatic",
-		"backgroundColor": "#121212",
-		"primaryColor": "#fdfdfd",
-		"icon": "./src/assets/images/icon.png",
-		"splash": {
-			"image": "./src/assets/images/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#121212"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 60000
-		},
-		"assetBundlePatterns": [
-			"**/*"
-		],
-		"android": {
-			"package": "com.unnamedxaer.breathingtime",
-			"versionCode": 4,
-			"userInterfaceStyle": "automatic",
-			"adaptiveIcon": {
-				"foregroundImage": "./src/assets/images/adaptive-icon.png",
-				"backgroundColor": "#121212"
-			},
-			"permissions": []
-		},
-		"ios": {
-			"bundleIdentifier": "com.unnamedxaer.breathingtime",
-			"buildNumber": "4.0.1",
-			"userInterfaceStyle": "automatic",
-			"supportsTablet": true
-		},
-		"web": {
-			"favicon": "./src/assets/images/favicon.png"
-		}
-	}
+  "expo": {
+    "name": "Breathing Time",
+    "slug": "breathing-time",
+    "scheme": "breathing-time",
+    "version": "4.0.1",
+    "description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
+    "orientation": "portrait",
+    "platforms": [
+      "android"
+    ],
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#121212",
+    "primaryColor": "#fdfdfd",
+    "icon": "./src/assets/images/icon.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 60000
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.unnamedxaer.breathingtime",
+      "versionCode": 4,
+      "userInterfaceStyle": "automatic",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "backgroundColor": "#121212"
+      },
+      "permissions": []
+    },
+    "ios": {
+      "bundleIdentifier": "com.unnamedxaer.breathingtime",
+      "buildNumber": "4.0.1",
+      "userInterfaceStyle": "automatic",
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "sdkVersion": "42.0.0"
+  }
 }
