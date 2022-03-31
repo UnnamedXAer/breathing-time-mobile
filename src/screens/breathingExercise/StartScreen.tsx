@@ -13,6 +13,11 @@ import { t } from 'i18n-js';
 import { useDispatch } from 'react-redux';
 import { startExercise as startExerciseAction } from '../../store/exercise';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
+
+const warningTextSize = Layout.spacing(
+  Layout.window.height < 600 ? 1.3 : Layout.window.height < 700 ? 1.8 : 2.2,
+);
 
 interface Props extends ExerciseTabScreenProps<'Start'> {}
 
@@ -25,6 +30,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   const [counter, setCounter] = useState(countdownTime);
   const [started, setStarted] = useState(false);
   const startTime = useRef(Date.now());
+  const { loadSounds } = React.useContext(SoundContext);
 
   useEffect(() => {
     if (started && counter <= 0) {
@@ -64,14 +70,11 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
     };
   }, [count]);
 
-  const startExercise = () => {
+  const startExercise = async () => {
     setCount(true);
+    await loadSounds();
     setStarted(true);
   };
-
-  const warningTextSize = Layout.spacing(
-    Layout.window.height < 600 ? 1.3 : Layout.window.height < 700 ? 1.8 : 2.2,
-  );
 
   return (
     <View style={styles.container}>

@@ -18,8 +18,7 @@ import { RootState } from '../../store/types';
 import { useSelector } from 'react-redux';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { SoundContext, SoundsContextState } from './SoundsContext';
-import { Audio, AVPlaybackStatus } from 'expo-av';
-import { SoundName, Sounds } from '../../constants/sounds';
+import { createSoundsAsync, unloadSoundsAsync } from '../../helpers/sounds';
 
 const BottomTab = createBottomTabNavigator<ExerciseTabParamList>();
 
@@ -28,107 +27,45 @@ export function BreathingExerciseTabNavigator() {
   const backgroundColor = Colors[scheme].background;
   const exerciseStarted = useSelector((state: RootState) => state.exercise.started);
   const breathTime = useSelector((state: RootState) => state.exercise.breathTime);
+  const [soundsLoadStatus, setSoundsLoaded] = React.useState<
+    'idle' | 'pending' | 'finished'
+  >('idle');
 
   const [breathSounds, setBreathSounds] = React.useState<SoundsContextState>({
     sounds: { breathing: null, breathIn: null, breathOut: null },
+    loadSounds: async () => {
+      setSoundsLoaded('pending');
+      __DEV__ && console.log('about to create sounds');
+      const now_b = Date.now();
+      const sounds = await createSoundsAsync(breathTime);
+      __DEV__ && console.log(`sounds created in ${Date.now() - now_b}ms.`);
+      setSoundsLoaded('finished');
+      if (sounds === null) {
+        return;
+      }
+
+      setBreathSounds((pV) => ({
+        ...pV,
+        sounds: {
+          breathing: sounds[0].status.isLoaded ? sounds[0] : null,
+          breathIn: sounds[1].status.isLoaded ? sounds[1] : null,
+          breathOut: sounds[2].status.isLoaded ? sounds[2] : null,
+        },
+      }));
+    },
   });
 
-  __DEV__ && console.log('started: ', exerciseStarted);
-
   React.useEffect(() => {
-    if (!exerciseStarted) {
-      __DEV__ && console.log('effect create sounds - skipped', exerciseStarted);
+    if (!exerciseStarted || soundsLoadStatus !== 'finished') {
       return;
     }
 
-    void (async () => {
-      __DEV__ && console.log('about to create sounds');
-      try {
-        const now_b = Date.now();
-        // let sounds: [
-        //   {
-        //     sound: Audio.Sound;
-        //     status: AVPlaybackStatus;
-        //   },
-        //   {
-        //     sound: Audio.Sound;
-        //     status: AVPlaybackStatus;
-        //   },
-        //   {
-        //     sound: Audio.Sound;
-        //     status: AVPlaybackStatus;
-        //   },
-        // ];
-        // if (__DEV__ && false) {
-        //   sounds = await Promise.all([
-        //     Audio.Sound.createAsync(Sounds[SoundName.DebugBreathSound]),
-        //     Audio.Sound.createAsync(Sounds[SoundName.DebugBreathSound]),
-        //     Audio.Sound.createAsync(Sounds[SoundName.DebugBreathSound]),
-        //   ]);
-        // } else {
-        //   sounds = await Promise.all([
-        //     Audio.Sound.createAsync(Sounds[breathTime]),
-        //     Audio.Sound.createAsync(Sounds[SoundName.breathIn]),
-        //     Audio.Sound.createAsync(Sounds[SoundName.breathOut]),
-        //   ]);
-        // }
-
-        const sounds = await Promise.all([
-          Audio.Sound.createAsync(Sounds[breathTime]),
-          Audio.Sound.createAsync(Sounds[SoundName.breathIn]),
-          Audio.Sound.createAsync(Sounds[SoundName.breathOut]),
-        ]);
-
-        __DEV__ && console.log(`sounds created in ${Date.now() - now_b}ms.`);
-
-        __DEV__ &&
-          console.log(
-            'sounds created, is there any sound?',
-            breathSounds.sounds.breathing !== null,
-            breathSounds.sounds.breathIn !== null,
-            breathSounds.sounds.breathOut !== null,
-          );
-        setBreathSounds({
-          sounds: {
-            breathing: sounds[0].status.isLoaded ? sounds[0].sound : null,
-            breathIn: sounds[1].status.isLoaded ? sounds[1].sound : null,
-            breathOut: sounds[2].status.isLoaded ? sounds[2].sound : null,
-          },
-        });
-      } catch (err) {
-        __DEV__ && console.log('createSound: ERROR: ' + (err as Error).toString());
-      }
-    })();
-  }, [breathSounds.sounds, breathTime, exerciseStarted]);
-
-  //   console.log('sound: ', breathSound.sound !== null);
-
-  React.useEffect(() => {
-    if (!exerciseStarted) {
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      __DEV__ && console.log('sounds CLEANUP', Promise.allSettled);
-      Promise.all([
-        breathSounds.sounds.breathing?.unloadAsync(),
-        breathSounds.sounds.breathIn?.unloadAsync(),
-        breathSounds.sounds.breathOut?.unloadAsync(),
-      ])
-        .then(() => {
-          __DEV__ && console.log('sounds unloaded');
-          //   setBreathSounds((pv) => ({
-          //     ...pv,
-          //     sounds: {
-          //       breathIn: null,
-          //       breathOut: null,
-          //       breathing: null,
-          //     },
-          //   }));
-        })
-        .catch((err) => {
-          __DEV__ && console.log('unloadSounds: ' + (err as Error).toString());
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exerciseStarted]); // skipped breathSounds.sounds
+    __DEV__ && console.log('🔌 register sounds cleanup callback');
+    return () => {
+      console.log('🧹 CLEANUP');
+      void unloadSoundsAsync(breathSounds.sounds);
+    };
+  }, [breathSounds.sounds, soundsLoadStatus, exerciseStarted]);
 
   React.useEffect(() => {
     if (!exerciseStarted) {

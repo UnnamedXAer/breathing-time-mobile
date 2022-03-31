@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AppState, AppStateStatus, Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
@@ -8,9 +8,11 @@ import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
 import Layout from '../../constants/Layout';
+import { playSound, stopSound } from '../../helpers/sounds';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import {
   ExerciseTabParamList,
   ExerciseTabScreenProps,
@@ -45,6 +47,7 @@ export default function RecoveryScreen({
   const exitTimeoutRef = useRef<TimeoutReturn>(void 0);
   const lastTick = useRef(0);
   const [userForcedNextScreen, setUserForcedNextScreen] = useState(false);
+  const { sounds } = useContext(SoundContext);
 
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
@@ -114,6 +117,14 @@ export default function RecoveryScreen({
       setCount(true);
     }
   }, [focused, recoveryTime, started]);
+
+  useEffect(() => {
+    void playSound(sounds.breathOut);
+
+    return () => {
+      void stopSound(sounds.breathOut);
+    };
+  }, [sounds.breathOut]);
 
   useEffect(() => {
     if (!count) {

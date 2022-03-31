@@ -21,7 +21,6 @@ const devInitialState: ExerciseState = {
   recoveryTime: 5,
   breathTime: 2 * 1000,
   holdTimes: [] as number[],
-  breathSoundFetched: false,
 };
 
 export const sliceName = 'exercise' as const;

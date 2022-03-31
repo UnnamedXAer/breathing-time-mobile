@@ -1,5 +1,4 @@
 import { useIsFocused } from '@react-navigation/native';
-import { Sound } from 'expo-av/build/Audio';
 import { t } from 'i18n-js';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
@@ -19,7 +18,7 @@ import Counter from '../../components/Counter';
 import Alert from '../../components/ui/Alert';
 import AppButton from '../../components/ui/Button';
 import Layout from '../../constants/Layout';
-import { BreathPace } from '../../constants/sounds';
+import { BreathPace } from '../../constants/breathing';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
@@ -27,6 +26,7 @@ import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
 import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { addHoldTime } from '../../store/exercise';
+import { playSound, stopSound } from '../../helpers/sounds';
 
 let lastPressedAt = 0;
 
@@ -80,35 +80,12 @@ export default function BreathHoldScreen({
   }, []);
 
   useEffect(() => {
-    if (!started) {
-      return;
-    }
-
-    const playSound = (sound: Sound | null) => {
-      if (sound !== null) {
-        try {
-          __DEV__ && console.log('BreathHold: Playing Sound');
-          sound
-            .replayAsync()
-            .catch(
-              (err) => __DEV__ && console.log('BreathHold: Play sound: ', err as Error),
-            );
-        } catch (err) {
-          __DEV__ && console.log('BreathHold: SOUND_PLAYER: ', err as Error);
-        }
-      } else {
-        __DEV__ && console.log('BreathHold: Sound is null');
-      }
-    };
-
-    playSound(sounds.breathIn);
+    void playSound(sounds.breathIn);
 
     return () => {
-      void sounds.breathIn?.stopAsync().catch((err) => {
-        __DEV__ && console.log('BreathHold: breathIn.stopAsync: ERROR:', err);
-      });
+      void stopSound(sounds.breathIn);
     };
-  }, [sounds.breathIn, started]);
+  }, [sounds.breathIn]);
 
   useEffect(() => {
     if (!focused) {

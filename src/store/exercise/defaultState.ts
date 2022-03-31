@@ -1,4 +1,4 @@
-import { BreathPace } from '../../constants/sounds';
+import { BreathPace } from '../../constants/breathing';
 
 export const productionExerciseDefaultState = {
   started: false,
@@ -10,5 +10,4 @@ export const productionExerciseDefaultState = {
   recoveryTime: 15,
   breathTime: BreathPace.normal,
   holdTimes: [] as number[],
-  breathSoundFetched: false,
 };
