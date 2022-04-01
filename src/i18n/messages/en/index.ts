@@ -121,7 +121,6 @@ export default {
       content: 'Leave exercise? Progress will be lost.',
       yes: 'Yes, leave',
     },
-    sound_load_fail: "Sounds effects couldn't be loaded.",
   },
   overview: {
     title: 'Results overview',
@@ -169,4 +168,8 @@ export default {
     app_version: 'App version: %{0}',
   },
   instructions,
+  sounds: {
+    load_fail: "Sounds effects couldn't be loaded.",
+    toggle_muted_fail: "Couldn't toggle sounds.",
+  },
 };

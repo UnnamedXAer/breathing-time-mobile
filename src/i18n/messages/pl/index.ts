@@ -125,7 +125,6 @@ const pl: LocaleMessages = {
       content: 'Przerwać ćwiczenie? Progres zostanie utracony.',
       yes: 'Tak, przerwij',
     },
-    sound_load_fail: 'Nie udało się wczytać efektów dźwiękowych.',
   },
   overview: {
     title: 'Przegląd wyników',
@@ -173,6 +172,10 @@ const pl: LocaleMessages = {
     app_version: 'Wersja applikacji: %{0}',
   },
   instructions,
+  sounds: {
+    load_fail: 'Nie udało się wczytać efektów dźwiękowych.',
+    toggle_muted_fail: 'Nie udało się włączyć/wyłączyć dźwięków',
+  },
 };
 
 export default pl;

@@ -4,11 +4,11 @@ export enum BreathPace {
   slow = 2400,
 }
 
-export enum SoundName {
-  DebugBreathSound = -1,
-  breathSoundFast = BreathPace.fast,
-  breathSoundNormal = BreathPace.normal,
-  breathSoundSlow = BreathPace.slow,
-  breathIn = BreathPace.slow + 1,
-  breathOut = BreathPace.slow + 2,
-}
+export const SoundName = {
+  DebugBreathSound: -1,
+  breathIn: 1,
+  breathOut: 2,
+  breathSoundFast: BreathPace.fast,
+  breathSoundNormal: BreathPace.normal,
+  breathSoundSlow: BreathPace.slow,
+} as const;

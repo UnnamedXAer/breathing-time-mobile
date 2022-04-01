@@ -1,10 +1,8 @@
-import { AVPlaybackStatus } from 'expo-av';
 import { Sound } from 'expo-av/build/Audio';
 import React from 'react';
 
 export type SoundData = {
   sound: Sound;
-  status: AVPlaybackStatus;
 };
 
 export type SoundsContextState = {
