@@ -45,10 +45,9 @@ export function createSoundsAsync(breathTime: BreathPace) {
         return v;
       })
       .catch((err) => {
-        // @TODO: add translation
-        ToastAndroid.show('Internal error.', ToastAndroid.SHORT);
-        __DEV__ && console.log('createSoundsAsync: ⭕:', err);
-        return null;
+      ToastAndroid.show(t('ex.sound_load_fail'), ToastAndroid.SHORT);
+      __DEV__ && console.log('createSoundsAsync: ⭕:', err);
+      return null;
       })
   );
 }

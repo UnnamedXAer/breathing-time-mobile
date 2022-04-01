@@ -121,6 +121,7 @@ export default {
       content: 'Leave exercise? Progress will be lost.',
       yes: 'Yes, leave',
     },
+    sound_load_fail: "Sounds effects couldn't be loaded.",
   },
   overview: {
     title: 'Results overview',
@@ -144,7 +145,7 @@ export default {
   },
   details: {
     title: 'Session results',
-    read_exercise_error: "Could'd load the data. Please refresh and try again.",
+    read_exercise_error: "Couldn't load the data. Please refresh and try again.",
     delete_question:
       'Do you really want to delete this round ( %{0}s ), it is irreversible?',
     delete_question_includes_exercise:
@@ -152,7 +153,7 @@ export default {
     delete_confirm: 'Yes, delete',
     delete_success: 'Round removed.',
     delete_success_with_exercise: 'Round & session entry removed.',
-    delete_failure: "Could't remove the round.\nRefresh and try again.",
+    delete_failure: "Couldn't remove the round.\nRefresh and try again.",
     exercise_not_found: "Sorry. Couldn't find that exercise.",
   },
   about: {
