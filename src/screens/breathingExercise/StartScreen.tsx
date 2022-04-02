@@ -133,22 +133,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   warningNote: {
     marginHorizontal: Layout.spacing(),
   },
   startBtnWrapper: {
     marginVertical: Layout.spacing(),
-    flex: 2,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    maxHeight: 110,
+    flexBasis: 115,
+    flexGrow: 0,
   },
   startBtnContainer: {
-    flex: 1,
-    minHeight: 60,
-    padding: Layout.spacing(2),
+    paddingHorizontal: Layout.spacing(2),
+    paddingVertical: Layout.spacing(2),
   },
   startBtnText: {
     fontSize: Layout.spacing(Layout.window.height < 600 ? 3.5 : 5),
