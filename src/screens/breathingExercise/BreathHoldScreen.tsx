@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
   AppState,
   AppStateStatus,
@@ -10,7 +10,7 @@ import {
   Vibration,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
@@ -18,12 +18,16 @@ import Counter from '../../components/Counter';
 import Alert from '../../components/ui/Alert';
 import AppButton from '../../components/ui/Button';
 import Layout from '../../constants/Layout';
+import { BreathPace } from '../../constants/breathing';
 import setIntervalWithTimeout from '../../helpers/setInterval';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { addHoldTime } from '../../store/exercise';
+import { playSound, stopSound } from '../../helpers/sounds';
+import { RootState } from '../../store/types';
 
 let lastPressedAt = 0;
 
@@ -38,13 +42,18 @@ export default function BreathHoldScreen({
 }: ExerciseTabScreenProps<'BreathHold'>) {
   const dispatch = useDispatch();
   const [showAlert, setShowAlert] = useState(false);
-  const [started, setStarted] = useCounterStarted(2000);
+  const [started, setStarted] = useCounterStarted(BreathPace.normal);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
+  const { disableBreathing, disableStartTips } = useSelector(
+    (state: RootState) => state.exercise,
+  );
   const startIntervalTime = useRef(-1);
+  const soundTimeout = useRef<NodeJS.Timeout | null>(null);
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
+  const { sounds } = useContext(SoundContext);
 
   const pushHoldTime = () => {
     const endTime = Date.now();
@@ -74,6 +83,26 @@ export default function BreathHoldScreen({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (disableBreathing || disableStartTips) {
+      return;
+    }
+    let playing = false;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    soundTimeout.current = setTimeout(async () => {
+      soundTimeout.current = null;
+      playing = true;
+      await playSound(sounds.breathInOut);
+      playing = false;
+    }, 550);
+
+    return () => {
+      if (playing) {
+        void stopSound(sounds.breathInOut);
+      }
+    };
+  }, [disableBreathing, disableStartTips, sounds.breathInOut]);
 
   useEffect(() => {
     if (!focused) {
@@ -109,6 +138,10 @@ export default function BreathHoldScreen({
 
   const screenPressHandler = () => {
     if (!started) {
+      if (soundTimeout.current) {
+        clearTimeout(soundTimeout.current);
+        soundTimeout.current = null;
+      }
       setStarted(true);
       return;
     }

@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/core';
 import { t } from 'i18n-js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
@@ -9,10 +9,13 @@ import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
+import { BreathPace } from '../../constants/breathing';
 import setIntervalWithTimeout from '../../helpers/setInterval';
+import { playSound, stopSound } from '../../helpers/sounds';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { RootState } from '../../store/types';
 
@@ -21,21 +24,18 @@ let lastPressedAt = 0;
 export default function BreathingScreen({
   navigation,
 }: ExerciseTabScreenProps<'Breathing'>) {
-  const [started, setStarted] = useCounterStarted(2000);
+  const [started, setStarted] = useCounterStarted(BreathPace.normal);
   const [counter, setCounter] = useState(1);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
-  const disableAnimation = useSelector(
-    (state: RootState) => state.exercise.disableAnimation,
+  const { breathTime, breathsPerRound, disableAnimation, disableBreathing } = useSelector(
+    (state: RootState) => state.exercise,
   );
-  const breathsPerRound = useSelector(
-    (state: RootState) => state.exercise.breathsPerRound,
-  );
-  const breathTime = useSelector((state: RootState) => state.exercise.breathTime);
   const startIntervalTime = useRef(-1);
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
+  const { sounds } = useContext(SoundContext);
 
   if (counter >= breathsPerRound && !nextStep) {
     setNextStep(true);
@@ -70,13 +70,22 @@ export default function BreathingScreen({
       completeScreen();
       return;
     }
-
+    if (!disableBreathing) {
+      void playSound(sounds.breathing);
+    }
     const timeout = setTimeout(completeScreen, breathTime);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [breathTime, completeScreen, nextStep, userForcedNextStep]);
+  }, [
+    breathTime,
+    completeScreen,
+    nextStep,
+    userForcedNextStep,
+    disableBreathing,
+    sounds.breathing,
+  ]);
 
   useEffect(() => {
     if (nextStep || !focused || !started) {
@@ -86,14 +95,24 @@ export default function BreathingScreen({
     if (startIntervalTime.current === -1) {
       startIntervalTime.current = Date.now();
     }
+
     const interval = setIntervalWithTimeout(() => {
       setCounter((prev) => prev + 1);
+      if (!disableBreathing) {
+        void playSound(sounds.breathing);
+      }
     }, breathTime);
 
+    if (!disableBreathing) {
+      void playSound(sounds.breathing); // on counter = 1;
+    }
     return () => {
+      if (!disableBreathing) {
+        void stopSound(sounds.breathing);
+      }
       interval.clear();
     };
-  }, [breathTime, focused, nextStep, started]);
+  }, [sounds.breathing, breathTime, focused, nextStep, started, disableBreathing]);
 
   const screenPressHandler = () => {
     if (!started) {

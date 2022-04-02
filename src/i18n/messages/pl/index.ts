@@ -38,6 +38,7 @@ const pl: LocaleMessages = {
     breathing_pace_moderate: 'umiarkowany',
     breathing_pace_slow: 'wolno',
     recovery_time: 'Czas regeneracji:',
+    disable_breathing: 'Wyłącz dźwięk oddechu',
     disable_animation: 'Wyłącz animacje',
     disable_start_tips: 'Wyłącz początkowe podpowiedzi',
     restore_default: 'Przywróć Domyślne',
@@ -171,6 +172,10 @@ const pl: LocaleMessages = {
     app_version: 'Wersja applikacji: %{0}',
   },
   instructions,
+  sounds: {
+    load_fail: 'Nie udało się wczytać efektów dźwiękowych.',
+    toggle_muted_fail: 'Nie udało się włączyć/wyłączyć dźwięków',
+  },
 };
 
 export default pl;

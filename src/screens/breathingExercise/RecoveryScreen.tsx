@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { t } from 'i18n-js';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { AppState, AppStateStatus, Pressable, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
@@ -8,9 +8,11 @@ import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
 import Counter from '../../components/Counter';
 import Layout from '../../constants/Layout';
+import { playSound, stopSound } from '../../helpers/sounds';
 import useAskBeforeLeave from '../../hooks/useAskBeforeLeave';
 import useCounterStarted from '../../hooks/useCounterStarted';
 import { useOverrideHardwareBack } from '../../hooks/useOverrideHardwareBack';
+import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import {
   ExerciseTabParamList,
   ExerciseTabScreenProps,
@@ -33,9 +35,8 @@ function calculateCounter(screenStartTime: number, recoveryTime: number): number
 export default function RecoveryScreen({
   navigation,
 }: ExerciseTabScreenProps<'Recovery'>) {
-  const { recoveryTime, numberOfRounds, holdTimes } = useSelector(
-    (state: RootState) => state.exercise,
-  );
+  const { recoveryTime, numberOfRounds, holdTimes, disableBreathing, disableStartTips } =
+    useSelector((state: RootState) => state.exercise);
   const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
@@ -44,7 +45,9 @@ export default function RecoveryScreen({
   const timeoutRef = useRef<TimeoutReturn>(void 0);
   const exitTimeoutRef = useRef<TimeoutReturn>(void 0);
   const lastTick = useRef(0);
+  const soundTimeout = useRef<NodeJS.Timeout | null>(null);
   const [userForcedNextScreen, setUserForcedNextScreen] = useState(false);
+  const { sounds } = useContext(SoundContext);
 
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
@@ -116,6 +119,26 @@ export default function RecoveryScreen({
   }, [focused, recoveryTime, started]);
 
   useEffect(() => {
+    if (disableBreathing || disableStartTips) {
+      return;
+    }
+    let playing = false;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    soundTimeout.current = setTimeout(async () => {
+      soundTimeout.current = null;
+      playing = true;
+      await playSound(sounds.breathIn);
+      playing = false;
+    }, 550);
+
+    return () => {
+      if (playing) {
+        void stopSound(sounds.breathIn);
+      }
+    };
+  }, [disableBreathing, disableStartTips, sounds.breathIn]);
+
+  useEffect(() => {
     if (!count) {
       return;
     }
@@ -142,6 +165,10 @@ export default function RecoveryScreen({
 
   const screenPressHandler = () => {
     if (!started) {
+      if (soundTimeout.current) {
+        clearTimeout(soundTimeout.current);
+        soundTimeout.current = null;
+      }
       setStarted(true);
       return;
     }

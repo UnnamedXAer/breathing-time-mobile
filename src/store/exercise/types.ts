@@ -10,6 +10,7 @@ export type ExerciseCustomizableState = Pick<
   | 'recoveryTime'
   | 'breathTime'
   | 'disableAnimation'
+  | 'disableBreathing'
 >;
 
 export type ExerciseCustomizableProps = keyof ExerciseCustomizableState;

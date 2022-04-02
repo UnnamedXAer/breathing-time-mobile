@@ -13,6 +13,7 @@ import { ToastAndroid } from 'react-native';
 
 const devInitialState: ExerciseState = {
   started: false,
+  disableBreathing: true,
   disableAnimation: true,
   disableStartTips: true,
   numberOfRounds: 3,
@@ -32,6 +33,7 @@ export const customizableExerciseStateProps = [
   'recoveryTime',
   'breathTime',
   'disableAnimation',
+  'disableBreathing',
   'disableStartTips',
 ] as ReadonlyArray<ExerciseCustomizableProps>;
 
