@@ -70,13 +70,22 @@ export default function BreathingScreen({
       completeScreen();
       return;
     }
-
+    if (!disableBreathing) {
+      void playSound(sounds.breathing);
+    }
     const timeout = setTimeout(completeScreen, breathTime);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [breathTime, completeScreen, nextStep, userForcedNextStep]);
+  }, [
+    breathTime,
+    completeScreen,
+    nextStep,
+    userForcedNextStep,
+    disableBreathing,
+    sounds.breathing,
+  ]);
 
   useEffect(() => {
     if (nextStep || !focused || !started) {
