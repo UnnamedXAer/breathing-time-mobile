@@ -28,13 +28,9 @@ export default function BreathingScreen({
   const [counter, setCounter] = useState(1);
   const [nextStep, setNextStep] = useState(false);
   const [userForcedNextStep, setUserForcedNextStep] = useState(false);
-  const disableAnimation = useSelector(
-    (state: RootState) => state.exercise.disableAnimation,
+  const { breathTime, breathsPerRound, disableAnimation, disableBreathing } = useSelector(
+    (state: RootState) => state.exercise,
   );
-  const breathsPerRound = useSelector(
-    (state: RootState) => state.exercise.breathsPerRound,
-  );
-  const breathTime = useSelector((state: RootState) => state.exercise.breathTime);
   const startIntervalTime = useRef(-1);
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
@@ -55,8 +51,6 @@ export default function BreathingScreen({
     startIntervalTime.current = -1;
     navigation.jumpTo('BreathHold');
   }, [breathTime, breathsPerRound, counter, navigation]);
-
-  console.log('🛠 rebuild breathing screen :(');
 
   useEffect(() => {
     if (!focused) {
@@ -95,15 +89,21 @@ export default function BreathingScreen({
 
     const interval = setIntervalWithTimeout(() => {
       setCounter((prev) => prev + 1);
-      void playSound(sounds.breathing);
+      if (!disableBreathing) {
+        void playSound(sounds.breathing);
+      }
     }, breathTime);
 
-    void playSound(sounds.breathing); // on counter = 1;
+    if (!disableBreathing) {
+      void playSound(sounds.breathing); // on counter = 1;
+    }
     return () => {
-      void stopSound(sounds.breathing);
+      if (!disableBreathing) {
+        void stopSound(sounds.breathing);
+      }
       interval.clear();
     };
-  }, [sounds.breathing, breathTime, focused, nextStep, started]);
+  }, [sounds.breathing, breathTime, focused, nextStep, started, disableBreathing]);
 
   const screenPressHandler = () => {
     if (!started) {

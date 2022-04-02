@@ -35,9 +35,8 @@ function calculateCounter(screenStartTime: number, recoveryTime: number): number
 export default function RecoveryScreen({
   navigation,
 }: ExerciseTabScreenProps<'Recovery'>) {
-  const { recoveryTime, numberOfRounds, holdTimes } = useSelector(
-    (state: RootState) => state.exercise,
-  );
+  const { recoveryTime, numberOfRounds, holdTimes, disableBreathing, disableStartTips } =
+    useSelector((state: RootState) => state.exercise);
   const [started, setStarted] = useCounterStarted(2000);
   const [counter, setCounter] = useState(recoveryTime);
   const startIntervalTime = useRef(-1);
@@ -46,6 +45,7 @@ export default function RecoveryScreen({
   const timeoutRef = useRef<TimeoutReturn>(void 0);
   const exitTimeoutRef = useRef<TimeoutReturn>(void 0);
   const lastTick = useRef(0);
+  const soundTimeout = useRef<NodeJS.Timeout | null>(null);
   const [userForcedNextScreen, setUserForcedNextScreen] = useState(false);
   const { sounds } = useContext(SoundContext);
 
@@ -119,12 +119,24 @@ export default function RecoveryScreen({
   }, [focused, recoveryTime, started]);
 
   useEffect(() => {
-    void playSound(sounds.breathOut);
+    if (disableBreathing || disableStartTips) {
+      return;
+    }
+    let playing = false;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    soundTimeout.current = setTimeout(async () => {
+      soundTimeout.current = null;
+      playing = true;
+      await playSound(sounds.breathIn);
+      playing = false;
+    }, 550);
 
     return () => {
-      void stopSound(sounds.breathOut);
+      if (playing) {
+        void stopSound(sounds.breathIn);
+      }
     };
-  }, [sounds.breathOut]);
+  }, [disableBreathing, disableStartTips, sounds.breathIn]);
 
   useEffect(() => {
     if (!count) {
@@ -153,6 +165,10 @@ export default function RecoveryScreen({
 
   const screenPressHandler = () => {
     if (!started) {
+      if (soundTimeout.current) {
+        clearTimeout(soundTimeout.current);
+        soundTimeout.current = null;
+      }
       setStarted(true);
       return;
     }

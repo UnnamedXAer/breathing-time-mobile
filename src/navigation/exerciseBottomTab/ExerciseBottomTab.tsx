@@ -39,13 +39,12 @@ export function BreathingExerciseTabNavigator() {
   const [soundsMuted, setSoundsMuted] = React.useState(false);
 
   const [breathSounds, setBreathSounds] = React.useState<SoundsContextState>({
-    sounds: { breathing: null, breathIn: null, breathOut: null },
+    sounds: { breathing: null, breathIn: null, breathInOut: null },
     loadSounds: async () => {
       setSoundsLoaded('pending');
-      __DEV__ && console.log('about to create sounds');
-      const now_b = Date.now();
+
       const sounds = await createSoundsAsync(breathTime);
-      __DEV__ && console.log(`sounds created in ${Date.now() - now_b}ms.`);
+
       setSoundsLoaded('finished');
       if (sounds === null) {
         return;
@@ -56,7 +55,7 @@ export function BreathingExerciseTabNavigator() {
         sounds: {
           breathing: sounds[0].status.isLoaded ? sounds[0] : null,
           breathIn: sounds[1].status.isLoaded ? sounds[1] : null,
-          breathOut: sounds[2].status.isLoaded ? sounds[2] : null,
+          breathInOut: sounds[2].status.isLoaded ? sounds[2] : null,
         },
       }));
     },
@@ -67,9 +66,7 @@ export function BreathingExerciseTabNavigator() {
       return;
     }
 
-    __DEV__ && console.log('🔌 register sounds cleanup callback');
     return () => {
-      console.log('🧹 CLEANUP');
       void unloadSoundsAsync(breathSounds.sounds);
     };
   }, [breathSounds.sounds, soundsLoadStatus, exerciseStarted]);

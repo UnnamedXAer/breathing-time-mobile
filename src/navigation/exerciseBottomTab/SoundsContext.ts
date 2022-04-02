@@ -10,7 +10,7 @@ export type SoundsContextState = {
   sounds: {
     breathing: SoundData | null;
     breathIn: SoundData | null;
-    breathOut: SoundData | null;
+    breathInOut: SoundData | null;
   };
 };
 

@@ -10,7 +10,7 @@ import {
   Vibration,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';
 import StartTip from '../../components/breathingExercise/StartTip';
@@ -27,6 +27,7 @@ import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { addHoldTime } from '../../store/exercise';
 import { playSound, stopSound } from '../../helpers/sounds';
+import { RootState } from '../../store/types';
 
 let lastPressedAt = 0;
 
@@ -44,7 +45,11 @@ export default function BreathHoldScreen({
   const [started, setStarted] = useCounterStarted(BreathPace.normal);
   const [counter, setCounter] = useState(0);
   const [nextStep, setNextStep] = useState(false);
+  const { disableBreathing, disableStartTips } = useSelector(
+    (state: RootState) => state.exercise,
+  );
   const startIntervalTime = useRef(-1);
+  const soundTimeout = useRef<NodeJS.Timeout | null>(null);
   const focused = useIsFocused();
   useAskBeforeLeave(focused, navigation as any);
   useOverrideHardwareBack(navigation as any);
@@ -80,12 +85,24 @@ export default function BreathHoldScreen({
   }, []);
 
   useEffect(() => {
-    void playSound(sounds.breathIn);
+    if (disableBreathing || disableStartTips) {
+      return;
+    }
+    let playing = false;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    soundTimeout.current = setTimeout(async () => {
+      soundTimeout.current = null;
+      playing = true;
+      await playSound(sounds.breathInOut);
+      playing = false;
+    }, 550);
 
     return () => {
-      void stopSound(sounds.breathIn);
+      if (playing) {
+        void stopSound(sounds.breathInOut);
+      }
     };
-  }, [sounds.breathIn]);
+  }, [disableBreathing, disableStartTips, sounds.breathInOut]);
 
   useEffect(() => {
     if (!focused) {
@@ -121,6 +138,10 @@ export default function BreathHoldScreen({
 
   const screenPressHandler = () => {
     if (!started) {
+      if (soundTimeout.current) {
+        clearTimeout(soundTimeout.current);
+        soundTimeout.current = null;
+      }
       setStarted(true);
       return;
     }

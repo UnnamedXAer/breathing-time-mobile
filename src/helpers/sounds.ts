@@ -16,40 +16,35 @@ type RequiredSounds = {
 };
 
 const Sounds: RequiredSounds = {
-  [SoundName.DebugBreathSound]: require('../assets/sounds/oneTwo_1400.mp3') as Asset,
-
-  [SoundName.breathSoundFast]: require('../assets/sounds/breath_1400.wav') as Asset,
-  [SoundName.breathSoundNormal]: require('../assets/sounds/breath_2000.wav') as Asset,
-  [SoundName.breathSoundSlow]: require('../assets/sounds/breath_2600.wav') as Asset,
-  // @TODO: replace/add sounds
-  [SoundName.breathIn]: require('../assets/sounds/breath_2000.wav') as Asset,
-  [SoundName.breathOut]: require('../assets/sounds/breath_2000.wav') as Asset,
-
-  // @TODO  comment following lines
-  //   [SoundName.breathSoundFast]: require('../assets/sounds/oneTwo_1400.mp3') as Asset,
-  //   [SoundName.breathSoundNormal]: require('../assets/sounds/oneTwo_2000.mp3') as Asset,
-  //   [SoundName.breathSoundSlow]: require('../assets/sounds/oneTwo_2600.mp3') as Asset,
-  //   [SoundName.breathIn]: require('../assets/sounds/oneTwo_1400.mp3') as Asset,
-  //   [SoundName.breathOut]: require('../assets/sounds/oneTwo_1400.mp3') as Asset,
+  [SoundName.breathSoundFast]:
+    require('../assets/sounds/default_breath/breath1400.mp3') as Asset,
+  [SoundName.breathSoundNormal]:
+    require('../assets/sounds/default_breath/breath2000.mp3') as Asset,
+  [SoundName.breathSoundSlow]:
+    require('../assets/sounds/default_breath/breath2600.mp3') as Asset,
+  [SoundName.breathIn]: require('../assets/sounds/default_breath/breath_in.mp3') as Asset,
 };
 
-export function createSoundsAsync(breathTime: BreathPace) {
+export async function createSoundsAsync(breathTime: BreathPace) {
   __DEV__ && console.log('createSoundsAsync: creating...');
+  const now_b = Date.now();
 
-  return Promise.all([
-    Audio.Sound.createAsync(Sounds[breathTime]),
-    Audio.Sound.createAsync(Sounds[SoundName.breathIn]),
-    Audio.Sound.createAsync(Sounds[SoundName.breathOut]),
-  ])
-    .then((createdSounds) => {
-      __DEV__ && console.log('createSoundsAsync: ✔ created');
-      return createdSounds;
-    })
-    .catch((err) => {
-      ToastAndroid.show(t('sounds.load_fail'), ToastAndroid.SHORT);
-      __DEV__ && console.log('createSoundsAsync: ⭕:', err);
-      return null;
-    });
+  try {
+    const createdSounds = await Promise.all([
+      Audio.Sound.createAsync(Sounds[breathTime]),
+      Audio.Sound.createAsync(Sounds[SoundName.breathIn]),
+      Audio.Sound.createAsync(Sounds[SoundName.breathSoundNormal]),
+    ]);
+    __DEV__ && console.log('createSoundsAsync: ✔ created');
+    __DEV__ &&
+      Date.now() - now_b > 500 &&
+      console.log(`⚠⚠⚠ sounds creation took ${Date.now() - now_b}ms!`);
+    return createdSounds;
+  } catch (err) {
+    ToastAndroid.show(t('sounds.load_fail'), ToastAndroid.SHORT);
+    __DEV__ && console.log('createSoundsAsync: ⭕:', err);
+    return null;
+  }
 }
 
 export async function unloadSoundsAsync(soundsData: SoundsContextState['sounds']) {
@@ -82,18 +77,16 @@ export const playSound = async (soundData: SoundData | null) => {
 export const stopSound = async (soundData: SoundData | null) => {
   if (soundData !== null) {
     try {
-      __DEV__ && console.log('stopSound: stopping...');
       await soundData.sound.stopAsync();
-      __DEV__ && console.log('stopSound: ✔ stopped');
     } catch (err) {
       __DEV__ && console.log('stopSound: ⭕:', err as Error);
     }
-  } else {
-    __DEV__ && console.log('stopSound: Sound is null');
   }
 };
 
-export async function toggleSoundsMutedAsync(soundsData: SoundsContextState['sounds']) {
+export async function toggleSoundsMutedAsync(
+  soundsData: SoundsContextState['sounds'],
+): Promise<boolean> {
   const sounds = Object.values(soundsData).filter((s) => s != null);
   if (sounds.length === 0) {
     return false;
