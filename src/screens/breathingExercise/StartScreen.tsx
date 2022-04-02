@@ -79,7 +79,7 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header title={t('ex.start.title')} />
-      <View style={styles.content}>
+      <View style={{ flex: 1, justifyContent: started ? 'center' : 'flex-start' }}>
         {!started ? (
           <>
             <ScrollView>
@@ -129,10 +129,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  content: {
-    flex: 1,
     justifyContent: 'space-between',
   },
   warningNote: {
