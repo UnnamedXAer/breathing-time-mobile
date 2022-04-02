@@ -140,11 +140,14 @@ const styles = StyleSheet.create({
   },
   startBtnWrapper: {
     marginVertical: Layout.spacing(),
-    flex: 1,
-    justifyContent: 'center',
+    flex: 2,
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    maxHeight: 110,
   },
   startBtnContainer: {
+    flex: 1,
+    minHeight: 60,
     padding: Layout.spacing(2),
   },
   startBtnText: {
