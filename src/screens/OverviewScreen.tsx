@@ -19,6 +19,7 @@ import Statistics from '../components/overview/Statistics';
 import { useFocusEffect } from '@react-navigation/core';
 
 const startDatePlaceholder = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7);
+startDatePlaceholder.setHours(0, 0, 0, 0);
 export default function OverviewScreen({ navigation }: RootStackScreenProps<'Overview'>) {
   useTranslationChange();
   const scheme = useColorScheme();
@@ -107,9 +108,9 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
             type={'error'}
             content={exercisesListError}
             hideIcon
-            textStyle={{ textAlign: 'auto' }}>
-            {exercisesListError}
-          </Alert>
+            textStyle={{ textAlign: 'auto', paddingVertical: Layout.spacing() }}
+            onPress={() => setExercisesListError(null)}
+          />
         )}
         <FlatList
           refreshing={loading}

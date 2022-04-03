@@ -33,7 +33,14 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
 
     setShowDatePicker(Platform.OS === 'ios');
 
-    onDateChange({ ...dates, [selectedDateInput]: currentDate });
+    selectedDateInput === 'from'
+      ? currentDate?.setHours(0, 0, 0, 0)
+      : currentDate?.setHours(23, 59, 59, 999);
+
+    onDateChange({
+      ...dates,
+      [selectedDateInput]: currentDate,
+    });
   };
 
   return (
