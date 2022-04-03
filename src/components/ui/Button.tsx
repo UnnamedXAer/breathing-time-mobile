@@ -30,6 +30,7 @@ interface Props {
   containerStyle?: ViewStyle;
   textStyle?: TextStyle;
   allowFontScaling?: boolean;
+  accessibilityLabel?: string;
 }
 
 const fontSizeMap = {
@@ -51,6 +52,7 @@ export default function Button({
   containerStyle,
   textStyle,
   allowFontScaling,
+  accessibilityLabel,
 }: Props) {
   let colorScheme = useColorScheme();
   if (theme) {
@@ -122,6 +124,7 @@ export default function Button({
   return (
     <TouchableOpacity
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       accessibilityState={{
         busy: loading,
         disabled,

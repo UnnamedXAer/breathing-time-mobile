@@ -48,6 +48,7 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
         />
       )}
       <AppButton
+        accessibilityLabel={t('overview.start_date_placeholder')}
         onPress={() => {
           setSelectedDateInput('from');
           setShowDatePicker(true);
@@ -62,6 +63,7 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
         containerStyle={styles.dateBtnContainer}
       />
       <AppButton
+        accessibilityLabel={t('overview.end_date_placeholder')}
         onPress={() => {
           setSelectedDateInput('to');
           setShowDatePicker(true);

@@ -105,7 +105,7 @@ export default function OverviewScreen({ navigation }: RootStackScreenProps<'Ove
         {exercisesListError && (
           <Alert
             type={'error'}
-            content={exercisesListError || ''}
+            content={exercisesListError}
             hideIcon
             textStyle={{ textAlign: 'auto' }}>
             {exercisesListError}

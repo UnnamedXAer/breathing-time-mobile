@@ -39,8 +39,8 @@ export default {
     breathing_pace_slow: 'slow',
     recovery_time: 'Recovery time:',
     disable_breathing: 'Disable breathing sound',
-    disable_animation: 'Disable animation:',
-    disable_start_tips: 'Disable start tips before exercise phases:',
+    disable_animation: 'Disable animation',
+    disable_start_tips: 'Disable start tips before exercise phases',
     restore_default: 'Restore Default',
   },
   ex: {
