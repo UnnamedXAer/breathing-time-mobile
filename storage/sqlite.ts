@@ -17,7 +17,11 @@ type DatabaseWithPrivate = WebSQLDatabase & {
 
 let db: DatabaseWithPrivate | undefined;
 
-type ResultsSetListWithArray<Record> = SQLResultSetRowList & { _array: Record[] };
+type _SQLResultSetRowList = Omit<SQLResultSetRowList, '_array'>;
+
+type ResultsSetListWithArray<Record> = _SQLResultSetRowList & {
+  _array: Record[];
+};
 
 interface ExerciseRecord {
   id: number;
@@ -145,10 +149,10 @@ function createPushRoundsFn(
 ) {
   return (trx: SQLTransaction, { insertId }: SQLResultSet) => {
     let sql = 'insert into round (exId, round_time) values (?, ?)';
-    const params = [insertId, rounds[0]];
+    const params = [insertId!, rounds[0]];
     for (let i = 1; i < rounds.length; i++) {
       sql += ', (?, ?)';
-      params.push(insertId, rounds[i]);
+      params.push(insertId!, rounds[i]);
     }
     sql += ';';
 
