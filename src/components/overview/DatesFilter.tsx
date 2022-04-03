@@ -43,7 +43,6 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
           value={dates[selectedDateInput] || new Date()}
           onChange={dateChangeHandler}
           mode="date"
-          display="calendar"
           maximumDate={new Date()}
           neutralButtonLabel={t('common.clear')}
         />
