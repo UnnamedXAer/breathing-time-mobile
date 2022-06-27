@@ -15,5 +15,5 @@ Some features are:
 + Enabling / disabling some feature - some of the features like animation and phases tips can be disabled.
 + Tap to skip - you can double tap on the screen to skip remaining breaths/recovery time and move to the next
 phase.
-+ Different Themes - Light | Dark | Bluish | Greenish | Reddish.
-+ App Language - English | Polish.
++ Different Themes - Light \| Dark \| Bluish \| Greenish \| Reddish.
++ App Language - English \| Polish.
