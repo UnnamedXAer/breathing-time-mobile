@@ -6,10 +6,10 @@ import {
   AppStateStatus,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Vibration,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../components/breathingExercise/Footer';
 import Header from '../../components/breathingExercise/Header';

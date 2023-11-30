@@ -1,7 +1,6 @@
 import { t } from 'i18n-js';
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, StyleSheet } from 'react-native';
 import Headline from '../components/ui/Headline';
 import Separator from '../components/ui/Separator';
 import { Text, View } from '../components/ui/Themed';

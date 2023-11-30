@@ -42,6 +42,7 @@
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png"
-    }
+    },
+    "sdkVersion": "49.0.0"
   }
 }

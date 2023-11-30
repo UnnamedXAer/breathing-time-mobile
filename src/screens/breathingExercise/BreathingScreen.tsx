@@ -1,8 +1,7 @@
 import { useIsFocused } from '@react-navigation/core';
 import { t } from 'i18n-js';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import BreathingAnimation from '../../components/breathingExercise/BreathingAnimation';
 import Footer from '../../components/breathingExercise/Footer';

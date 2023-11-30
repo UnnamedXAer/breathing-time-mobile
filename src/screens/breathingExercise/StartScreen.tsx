@@ -5,14 +5,13 @@ import AppButton from '../../components/ui/Button';
 import Counter from '../../components/Counter';
 import { ExerciseTabScreenProps } from '../../navigation/exerciseBottomTab/types';
 import { TimeoutReturn } from '../../types/types';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Layout from '../../constants/Layout';
 import Header from '../../components/breathingExercise/Header';
 import WarningNote from '../../components/WarningNote';
 import { t } from 'i18n-js';
 import { useDispatch } from 'react-redux';
 import { startExercise as startExerciseAction } from '../../store/exercise';
-import { ScrollView } from 'react-native-gesture-handler';
 import { SoundContext } from '../../navigation/exerciseBottomTab/SoundsContext';
 
 const warningTextSize = Layout.spacing(
