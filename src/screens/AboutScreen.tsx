@@ -70,7 +70,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
             {__DEV__ ? '\n __DEV__' : null}
             {releaseChannel === 'production'
               ? null
-              : `\nrelease channel: ${releaseChannel as string}`}
+              : `\nrelease channel: ${releaseChannel}`}
           </Text>
         </View>
       </View>

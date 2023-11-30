@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { TextStyle } from 'react-native';
 import Layout from '../../constants/Layout';
 import { Text } from './Themed';
@@ -6,6 +6,7 @@ import { Text } from './Themed';
 interface Props {
   variant?: 'h1' | 'h2' | 'h3';
   style?: TextStyle;
+  children: ReactNode;
 }
 
 const Headline: React.FC<Props> = ({ children, variant = 'h1', style }) => {

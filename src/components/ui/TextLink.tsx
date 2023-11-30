@@ -1,11 +1,12 @@
 import { EvilIcons } from '@expo/vector-icons';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Colors from '../../constants/Colors';
 import { Text } from './Themed';
 
 interface Props {
   onPress: () => void;
   external?: boolean;
+  children: ReactNode;
 }
 
 const TextLink: React.FC<Props> = ({ children, onPress, external }) => {

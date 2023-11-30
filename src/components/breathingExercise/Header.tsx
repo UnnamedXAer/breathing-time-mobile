@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Colors from '../../constants/Colors';
 import Layout from '../../constants/Layout';
@@ -8,6 +8,7 @@ import { Text } from '../ui/Themed';
 interface Props {
   title: string;
   roundInfo?: string;
+  children: ReactNode;
 }
 const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
   const scheme = useColorScheme();
