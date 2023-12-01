@@ -7,8 +7,7 @@ import Layout from '../../constants/Layout';
 import { ColorSchemeName } from '../../hooks/useColorScheme';
 import { DatesFromTo } from '../../types/types';
 import DateTimePicker, {
-  AndroidEvent,
-  Event,
+  DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import { getDateOptions } from '../../helpers/date';
 import AppButton from '../ui/Button';
@@ -25,7 +24,7 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
   const [selectedDateInput, setSelectedDateInput] = useState<'from' | 'to'>('from');
   const dateOptions = getDateOptions();
 
-  const dateChangeHandler = (ev: Event | AndroidEvent, selectedDate?: Date) => {
+  const dateChangeHandler = (ev: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate =
       ev.type === 'neutralButtonPressed'
         ? null
@@ -51,7 +50,8 @@ export default function DatesFilter({ dates, scheme, onDateChange }: Props) {
           onChange={dateChangeHandler}
           mode="date"
           maximumDate={new Date()}
-          neutralButtonLabel={t('common.clear')}
+          neutralButton={{ label: t('common.clear') }}
+          // neutralButtonLabel={t('common.clear')}
         />
       )}
       <AppButton

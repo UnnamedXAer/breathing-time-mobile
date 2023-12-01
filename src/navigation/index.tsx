@@ -16,7 +16,8 @@ import { Text } from '../components/ui/Themed';
 import { Pressable } from 'react-native';
 import Layout from '../constants/Layout';
 import SimpleLineIcons from '@expo/vector-icons/build/SimpleLineIcons';
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
+import * as Application from 'expo-application';
 import OverviewScreen from '../screens/OverviewScreen';
 import ExerciseDetails from '../screens/ExerciseDetails';
 
@@ -51,7 +52,8 @@ function RootNavigator({ colorScheme }: { colorScheme: ColorSchemeName }) {
         name="Home"
         component={HomeScreen}
         options={({ navigation }: RootStackScreenProps<'Home'>) => ({
-          title: Constants.manifest!.name,
+          // title: Constants.manifest!.name,
+          title: Application.applicationName,
           headerTitle: (props) => (
             <Text
               adjustsFontSizeToFit

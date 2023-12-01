@@ -3,7 +3,7 @@
     "name": "Breathing Time",
     "slug": "breathing-time",
     "scheme": "breathing-time",
-    "version": "4.2.4",
+    "version": "4.2.5",
     "description": "Application will help you to breath base on Wim Hof Method. App allows you to adjust tempo of the exercise to your preferences.",
     "orientation": "portrait",
     "platforms": [
@@ -26,7 +26,7 @@
     ],
     "android": {
       "package": "com.unnamedxaer.breathingtime",
-      "versionCode": 6,
+      "versionCode": 7,
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
@@ -43,6 +43,14 @@
     "web": {
       "favicon": "./src/assets/images/favicon.png"
     },
-    "sdkVersion": "49.0.0"
+    "sdkVersion": "49.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "c501d47b-caa5-43c1-80f5-1a3b96304f7d"
+      }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }

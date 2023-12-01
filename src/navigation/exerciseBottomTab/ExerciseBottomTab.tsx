@@ -16,7 +16,7 @@ import { t } from 'i18n-js';
 import { Fonts } from '../../constants/fonts';
 import { RootState } from '../../store/types';
 import { useSelector } from 'react-redux';
-import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { SoundContext, SoundsContextState } from './SoundsContext';
 import {
   createSoundsAsync,
@@ -75,10 +75,8 @@ export function BreathingExerciseTabNavigator() {
     if (!exerciseStarted) {
       return;
     }
-    activateKeepAwake();
-    return () => {
-      deactivateKeepAwake();
-    };
+    void activateKeepAwakeAsync();
+    return () => void deactivateKeepAwake();
   }, [exerciseStarted]);
 
   const toggleMuted = (event: GestureResponderEvent) => {

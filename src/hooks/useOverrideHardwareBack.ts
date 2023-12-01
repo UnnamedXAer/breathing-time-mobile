@@ -12,9 +12,9 @@ export function useOverrideHardwareBack(
         navigation.navigate('Home');
         return true;
       };
-      BackHandler.addEventListener('hardwareBackPress', backPressHandler);
+      const sub = BackHandler.addEventListener('hardwareBackPress', backPressHandler);
       return () => {
-        BackHandler.removeEventListener('hardwareBackPress', backPressHandler);
+        sub.remove();
       };
     }, [navigation]),
   );

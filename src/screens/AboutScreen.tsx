@@ -14,6 +14,7 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import useColorScheme from '../hooks/useColorScheme';
 import Constants from 'expo-constants';
+import * as Application from 'expo-application';
 import TextLink from '../components/ui/TextLink';
 import { RootStackScreenProps } from '../navigation/types';
 import Logo from '../assets/images/adaptive-icon.png';
@@ -44,7 +45,7 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
 
           <View>
             <Text style={styles.text}>
-              <Text style={{ fontWeight: 'bold' }}>{Constants.manifest?.name}</Text>{' '}
+              <Text style={{ fontWeight: 'bold' }}>{Application.applicationName}</Text>{' '}
               {t('about.text1')}
               <TextLink onPress={() => navigation.push('Preferences')}>
                 {t('about.preferences')}
@@ -66,7 +67,12 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
               textAlign: 'center',
               color: Colors[scheme].textRGBA(0.7),
             }}>
-            {(t('about.app_version'), [Constants.manifest?.version])}
+            {/* {(t('about.app_version'), [Constants.manifest?.version])} */}
+            {(t('about.app_version'), [Constants.expoConfig?.version])}
+            {'\n'}
+            {(t('about.app_version'), [Application.nativeApplicationVersion])}
+            {'\n'}
+            {(t('about.app_version'), [Application.nativeBuildVersion])}
             {__DEV__ ? '\n __DEV__' : null}
             {releaseChannel === 'production'
               ? null

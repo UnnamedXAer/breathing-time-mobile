@@ -1,6 +1,7 @@
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
 import { t } from 'i18n-js';
 import { ExerciseState } from '../store/exercise/types';
+import * as Application from 'expo-application';
 
 export function calculateAverage(holdTimes: number[]) {
   if (holdTimes.length === 0) {
@@ -16,7 +17,9 @@ export function prepareShareText(date: Date, holdTimes: ExerciseState['holdTimes
   const averageTime = calculateAverage(holdTimes);
 
   const text = [
-    Constants.manifest!.name,
+    // Constants.manifest!.name,
+    // '| ',
+    Application.applicationName,
     '\n_______________________\n',
     t('ex.title'),
     '\n',

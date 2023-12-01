@@ -77,9 +77,9 @@ export default function BreathHoldScreen({
   };
 
   useEffect(() => {
-    AppState.addEventListener('change', appStateChangeHandler);
+    const sub = AppState.addEventListener('change', appStateChangeHandler);
     return () => {
-      AppState.removeEventListener('change', appStateChangeHandler);
+      sub.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

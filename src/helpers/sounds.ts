@@ -12,7 +12,7 @@ import { AVPlaybackStatusLoaded } from '../types/sounds';
 import { allSettled } from './promise';
 
 type RequiredSounds = {
-  [K in typeof SoundName[keyof typeof SoundName]]: Asset;
+  [K in (typeof SoundName)[keyof typeof SoundName]]: Asset;
 };
 
 const Sounds: RequiredSounds = {

@@ -6,9 +6,9 @@ import useColorScheme from '../../hooks/useColorScheme';
 import { Text } from '../ui/Themed';
 
 interface Props {
-  title: string;
+  title?: string;
   roundInfo?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 const Header: React.FC<Props> = ({ children, title, roundInfo }) => {
   const scheme = useColorScheme();
