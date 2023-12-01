@@ -6,6 +6,7 @@ An app which helps you perform breathing exercise based on Wim Hof Method (WHM).
 Breathing tempo and other variables can be tuned to your preferences.
 
 Some features are:
+
 + Breathing pace - how fast will you breath in first phase of the exercise.
 + Breathing animation - an animation to help synchronize breaths to the app's counter.
 + Recovery time - time in the last phase for your recovery after retention.
@@ -16,3 +17,15 @@ phase.
 + Different Themes - Light \| Dark \| Bluish \| Greenish \| Reddish.
 + App Language - English \| Polish.
 
+## Build
+
++ clone
++ install
+  ```npx expo install```
+  ```npm install -g eas-cli```
+
++ build apk locally with profile (`eas.json`) for android
+ ```eas build --profile preview  --platform android --local```
+
++ build aab on the expo
+ ```eas build --platform android```
