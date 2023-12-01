@@ -68,10 +68,8 @@ export default function AboutScreen({ navigation }: RootStackScreenProps<'About'
               color: Colors[scheme].textRGBA(0.7),
             }}>
             {/* {(t('about.app_version'), [Constants.manifest?.version])} */}
-            {(t('about.app_version'), [Constants.expoConfig?.version])}
-            {'\n'}
             {(t('about.app_version'), [Application.nativeApplicationVersion])}
-            {'\n'}
+            {':'}
             {(t('about.app_version'), [Application.nativeBuildVersion])}
             {__DEV__ ? '\n __DEV__' : null}
             {releaseChannel === 'production'
